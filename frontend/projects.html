@@ -1,0 +1,264 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Projects | AARONNOFRAIL.SYS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#000000",
+                        "inverse-primary": "#c8c6c5",
+                        "primary": "#000000",
+                        "secondary": "#5f5f53",
+                        "tertiary-fixed": "#e6e1df",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#ddd9d8",
+                        "primary-fixed": "#e5e2e1",
+                        "error": "#ba1a1a",
+                        "surface-container": "#f1edec",
+                        "on-secondary-fixed-variant": "#47473c",
+                        "on-error-container": "#93000a",
+                        "background": "#fdf8f8",
+                        "surface-container-low": "#f7f3f2",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#858383",
+                        "on-tertiary-container": "#868381",
+                        "tertiary-fixed-dim": "#cac6c3",
+                        "surface-bright": "#fdf8f8",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e5e2e1",
+                        "surface-container-highest": "#e5e2e1",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "on-tertiary-fixed-variant": "#484645",
+                        "on-surface": "#1c1b1b",
+                        "primary-container": "#1c1b1b",
+                        "on-tertiary-fixed": "#1c1b1a",
+                        "secondary-fixed-dim": "#c9c7b9",
+                        "on-background": "#1c1b1b",
+                        "outline-variant": "#c4c7c7",
+                        "error-container": "#ffdad6",
+                        "inverse-on-surface": "#f4f0ef",
+                        "secondary-container": "#e5e3d4",
+                        "surface-tint": "#5f5e5e",
+                        "on-primary-fixed-variant": "#474646",
+                        "on-secondary-container": "#656559",
+                        "inverse-surface": "#313030",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#e5e3d4",
+                        "outline": "#747878",
+                        "on-secondary-fixed": "#1c1c13",
+                        "on-surface-variant": "#444748",
+                        "tertiary-container": "#1c1b1a",
+                        "on-primary-fixed": "#1c1b1b",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#ebe7e6",
+                        "surface": "#fdf8f8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "container-max": "1100px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "64px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["JetBrains Mono"],
+                        "headline-lg": ["JetBrains Mono"],
+                        "label-sm": ["JetBrains Mono"],
+                        "headline-md": ["JetBrains Mono"],
+                        "body-md": ["JetBrains Mono"],
+                        "code": ["JetBrains Mono"],
+                        "body-lg": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0", "fontWeight": "400" }],
+                        "code": ["14px", { "lineHeight": "20px", "letterSpacing": "0", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #fdf8f8;
+            color: #1c1b1b;
+        }
+        .blinking-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1em;
+            background-color: #000000;
+            vertical-align: text-bottom;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .crt-overlay {
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body class="font-code text-code antialiased min-h-screen flex flex-col relative">
+<div class="crt-overlay"></div>
+<!-- TopNavBar -->
+<nav class="bg-background dark:bg-background border-b border-primary dark:border-primary w-full top-0 z-40 relative">
+<div class="flex justify-between items-center max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-6">
+<a class="font-headline-lg text-headline-lg font-bold lowercase text-primary hover:bg-primary hover:text-on-primary transition-all duration-75 px-1" href="home.html">
+                aaronnofrail
+            </a>
+<!-- Desktop Nav -->
+<div class="hidden md:flex space-x-8 font-body-lg text-body-lg uppercase tracking-widest items-center">
+<a class="text-secondary hover:text-primary transition-colors duration-150 px-2 py-1 border-b-2 border-transparent" href="home.html">home</a>
+<a class="text-secondary hover:text-primary transition-colors duration-150 px-2 py-1 border-b-2 border-transparent" href="about.html">about</a>
+<a class="text-secondary hover:text-primary transition-colors duration-150 px-2 py-1 border-b-2 border-transparent" href="experience.html">experience</a>
+<a class="text-primary font-bold border-b-2 border-primary px-2 py-1" href="projects.html">projects</a>
+<a class="text-secondary hover:text-primary transition-colors duration-150 px-2 py-1 border-b-2 border-transparent" href="faq.html">faq</a>
+<a class="text-secondary hover:text-primary transition-colors duration-150 px-2 py-1 border-b-2 border-transparent" href="contact.html">contact</a>
+</div>
+<!-- Mobile Menu Button (Placeholder) -->
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow max-w-container-max mx-auto w-full px-margin-mobile md:px-margin-desktop py-12 md:py-24 z-10 relative">
+<!-- Header -->
+<header class="mb-16">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-4 flex items-center">
+<span class="text-secondary mr-4">&gt;</span>
+                ls -la /PROJECTS
+                <span class="blinking-cursor ml-2"></span>
+</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+                Total 4 directories. Displaying current active developments and archived experiments. System architecture relies heavily on raw performance and minimal dependencies.
+            </p>
+</header>
+<!-- Projects Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Project Card 1: NEXUS_CORE -->
+<article class="border border-primary bg-surface p-6 flex flex-col h-full hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow duration-200 group relative z-20"><div class="mb-4 border border-primary"><img src="https://lh3.googleusercontent.com/aida/AP1WRLujUdaXTtfLzrULtfNkTsoco4YlQ4NhH7go9E8o925BLrl-v9h590lCnEyjb-NfuBnRBjXIbRA6WmAcAS1r0lzUDLepETAFsm_xKz5TgIAKCyieiFSSjpStpfFAmbEk9xt3L5k019uLS4OmOwQRhBo9GKMyeXtg_R20OVuIHwY73NqlfM5qI4wX6nM2t4yT9hwPYYN26aUVkHpgU4bG2cJIvsk6d2K6LYBgASJODDN9Nykxk1a0aUJXZP4" alt="NEXUS_CORE Architecture" class="w-full h-48 object-cover block"></div>
+<div class="border-b border-primary pb-4 mb-4 flex justify-between items-start">
+<div>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-1 block">Active</span>
+<h2 class="font-headline-md text-headline-md text-primary">NEXUS_CORE</h2>
+</div>
+<a class="text-primary hover:bg-primary hover:text-on-primary p-1 border border-transparent hover:border-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="open_in_new">open_in_new</span>
+</a>
+</div>
+<p class="font-body-md text-body-md text-on-surface mb-6 flex-grow">
+                    A high-throughput message broker designed for distributed microservices. Implements custom binary protocols over TCP for sub-millisecond latency. Replaces legacy RabbitMQ infrastructure.
+                </p>
+<!-- Tags -->
+<div class="flex flex-wrap gap-2 mt-auto pt-4 border-t border-primary">
+<span class="font-label-sm text-label-sm border border-primary px-2 py-1 uppercase bg-surface-container-highest">Rust</span>
+<span class="font-label-sm text-label-sm border border-primary px-2 py-1 uppercase bg-surface-container-highest">Redis</span>
+<span class="font-label-sm text-label-sm border border-primary px-2 py-1 uppercase bg-surface-container-highest">gRPC</span>
+</div>
+</article>
+<!-- Project Card 2: TERMINAL_UI -->
+<article class="border border-primary bg-surface p-6 flex flex-col h-full hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow duration-200 group relative z-20"><div class="mb-4 border border-primary"><img src="https://lh3.googleusercontent.com/aida/AP1WRLuv6aKMUp7tXWwhV0MdFgjXoEmN9Gq0BQG3lU61HvnTFk1aYtf-R2qboCk_98cizUDZBUIYCTVvVfpzOh-37yRDdawXS4sOFB6RFLj49wxCv361SOHmTY-yfpc8zccSdYQ9FUADishvJkkyrfZ06vCGjzSuDhPpVllF9z1iH3JyxhbviDUxcbIFvQGtB7AlPCInXMH4S35baRwGoS2iCoTqcO8PunISph4jF_dRf_PRg7lk6DRmWV4hqRX_" alt="TERMINAL_UI Components" class="w-full h-48 object-cover block"></div>
+<div class="border-b border-primary pb-4 mb-4 flex justify-between items-start">
+<div>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-1 block">Completed</span>
+<h2 class="font-headline-md text-headline-md text-primary">TERMINAL_UI</h2>
+</div>
+<a class="text-primary hover:bg-primary hover:text-on-primary p-1 border border-transparent hover:border-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="open_in_new">open_in_new</span>
+</a>
+</div>
+<p class="font-body-md text-body-md text-on-surface mb-6 flex-grow">
+                    A brutalist, keyboard-first React component library simulating vintage terminal interfaces. Focused on accessibility, strict grid systems, and zero-runtime CSS-in-JS.
+                </p>
+<!-- Tags -->
+<div class="flex flex-wrap gap-2 mt-auto pt-4 border-t border-primary">
+<span class="font-label-sm text-label-sm border border-primary px-2 py-1 uppercase bg-surface-container-highest">React</span>
+<span class="font-label-sm text-label-sm border border-primary px-2 py-1 uppercase bg-surface-container-highest">CSS</span>
+<span class="font-label-sm text-label-sm border border-primary px-2 py-1 uppercase bg-surface-container-highest">NPM</span>
+</div>
+</article>
+<!-- Project Card 3: OMEGA_PROTOCOL -->
+<article class="border border-primary bg-surface p-6 flex flex-col h-full hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow duration-200 group relative z-20"><div class="mb-4 border border-primary"><img src="https://lh3.googleusercontent.com/aida/AP1WRLvD6pJpETqeSzfDeaZQ3RSgtvZRazQuwJRqHacU55omwaoW5UbKkncA3w2BGX6JvI6kUoULZnhFslPJHU8J8MN9_APkDmzwPU5Z-vEFP7_G5FAQAL0zfeFy06Td2ggipj943xXRUp-nt_NPhi7gUlTi-_Lf5c24XQSkr0KCtrMe3syHpzOsA6cHAKIcmK_EEHsPM8IrpnnGvVOvOiYFr01AW5NeZ42PWCQNMN9iS2enr6YWuS6RQcDpzM2u" alt="OMEGA_PROTOCOL Security" class="w-full h-48 object-cover block"></div>
+<div class="border-b border-primary pb-4 mb-4 flex justify-between items-start">
+<div>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-1 block">Archived</span>
+<h2 class="font-headline-md text-headline-md text-primary">OMEGA_PROTOCOL</h2>
+</div>
+<a class="text-primary hover:bg-primary hover:text-on-primary p-1 border border-transparent hover:border-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="open_in_new">open_in_new</span>
+</a>
+</div>
+<p class="font-body-md text-body-md text-on-surface mb-6 flex-grow">
+                    Experimental decentralized identity verification system using zero-knowledge proofs. Built during the 2022 Winter Hackathon.
+                </p>
+<!-- Tags -->
+<div class="flex flex-wrap gap-2 mt-auto pt-4 border-t border-primary">
+<span class="font-label-sm text-label-sm border border-primary px-2 py-1 uppercase bg-surface-container-highest">Solidity</span>
+<span class="font-label-sm text-label-sm border border-primary px-2 py-1 uppercase bg-surface-container-highest">Go</span>
+<span class="font-label-sm text-label-sm border border-primary px-2 py-1 uppercase bg-surface-container-highest">Cryptography</span>
+</div>
+</article>
+<!-- Project Card 4: VOID_MAPPER -->
+<article class="border border-primary bg-surface p-6 flex flex-col h-full hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow duration-200 group relative z-20"><div class="mb-4 border border-primary"><img src="https://lh3.googleusercontent.com/aida/AP1WRLuYYtZjJYLj2F15kU_e_X8A8dc5gXQOKNaEwrR7xj2WgVSsJKeMPzXWMWiGquerIySgPmsdCHTyhabeSUm-QMrGrCW8wvwycuiZIqHPw4ITzZOQV9HFUDX632_oRLUxaUU8g2y1EykFQX_i3QHrERHGh8y8hWY91PvXR3DVFx-ufEkkFhsV5EIu--szLKwdgyDB_ijucVzswuE2Er2YWwvj7KSB1lNh4OVBscZgyCBTfduohDBK0PaQqEoi" alt="VOID_MAPPER System Map" class="w-full h-48 object-cover block"></div>
+<div class="border-b border-primary pb-4 mb-4 flex justify-between items-start">
+<div>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-1 block">In Progress</span>
+<h2 class="font-headline-md text-headline-md text-primary">VOID_MAPPER</h2>
+</div>
+<a class="text-primary hover:bg-primary hover:text-on-primary p-1 border border-transparent hover:border-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="open_in_new">open_in_new</span>
+</a>
+</div>
+<p class="font-body-md text-body-md text-on-surface mb-6 flex-grow">
+                    CLI tool for visualizing directory structures and memory allocation using ASCII art generation. Useful for debugging deep file trees.
+                </p>
+<!-- Tags -->
+<div class="flex flex-wrap gap-2 mt-auto pt-4 border-t border-primary">
+<span class="font-label-sm text-label-sm border border-primary px-2 py-1 uppercase bg-surface-container-highest">Python</span>
+<span class="font-label-sm text-label-sm border border-primary px-2 py-1 uppercase bg-surface-container-highest">Bash</span>
+<span class="font-label-sm text-label-sm border border-primary px-2 py-1 uppercase bg-surface-container-highest">CLI</span>
+</div>
+</article>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-background dark:bg-background border-t border-primary dark:border-primary mt-12 w-full bottom-0 z-40 relative">
+<div class="flex flex-col md:flex-row justify-between items-center max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8 gap-6 md:gap-0">
+<div class="font-code text-code font-bold text-primary dark:text-primary mb-4 md:mb-0">
+                © 2026 AARONNOFRAIL — ALL RIGHTS RESERVED
+            </div>
+<div class="flex gap-6 font-code text-code">
+<a class="text-secondary hover:text-primary transition-colors hover:opacity-80 uppercase" href="https://github.com/aaronnofrail">GITHUB</a>
+<a class="text-secondary hover:text-primary transition-colors hover:opacity-80 uppercase" href="https://www.linkedin.com/in/arundaffa/">LINKEDIN</a>
+<a class="text-secondary hover:text-primary transition-colors hover:opacity-80 uppercase" href="https://www.instagram.com/dfnhrr">INSTAGRAM</a>
+</div>
+</div>
+</footer>
+
+
+</body></html>

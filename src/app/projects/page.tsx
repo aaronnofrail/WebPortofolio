@@ -39,7 +39,7 @@ export default function ProjectsPage() {
           {projects.map((project) => (
             <article
               key={project.id}
-              className="border border-primary bg-surface p-6 flex flex-col h-full hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-shadow duration-200 group relative z-20"
+              className="border border-primary bg-surface p-6 flex flex-col h-full project-card-hover transition-shadow duration-200 group relative z-20"
             >
               <div className="mb-4 border border-primary aspect-video overflow-hidden bg-primary-container">
                 <img

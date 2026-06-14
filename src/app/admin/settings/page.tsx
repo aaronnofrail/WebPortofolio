@@ -62,7 +62,7 @@ export default function AdminSettingsPage() {
         <div className="w-12 h-12 opacity-40 grayscale">
           <img
             alt="Mascot"
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain dark:invert"
             src="/assets/01_cat.png"
           />
         </div>
@@ -114,7 +114,7 @@ export default function AdminSettingsPage() {
                 </button>
                 <button
                   type="submit"
-                  className="px-12 py-4 bg-primary text-on-primary font-bold font-code text-body-md border border-primary hover:bg-background hover:text-primary transition-all active:scale-95 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] w-full md:w-80 cursor-pointer uppercase tracking-wider"
+                  className="px-12 py-4 bg-primary text-on-primary font-bold font-code text-body-md border border-primary hover:bg-background hover:text-primary transition-all active:scale-95 settings-save-button w-full md:w-80 cursor-pointer uppercase tracking-wider"
                 >
                   SAVE_CHANGES
                 </button>

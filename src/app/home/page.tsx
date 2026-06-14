@@ -101,7 +101,7 @@ export default function HomePage() {
             <div className="border border-primary bg-surface p-4 flex justify-center items-center aspect-square md:aspect-auto md:h-48 overflow-hidden">
               <img
                 alt="8-bit style black cat mascot"
-                className={`w-full h-full object-cover contrast-125 mix-blend-multiply ${
+                className={`w-full h-full object-cover contrast-125 mix-blend-multiply dark:mix-blend-normal dark:invert ${
                   grayscale ? "grayscale" : ""
                 }`}
                 src="/assets/01_cat.png"

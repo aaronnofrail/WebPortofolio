@@ -111,7 +111,7 @@ export default function AdminFAQPage() {
               <div
                 key={faq.id}
                 className={`border p-4 bg-surface hover:bg-surface-container-low transition-all group ${
-                  isEditing ? "border-2 border-primary shadow-[2px_2px_0px_0px_#000000]" : "border-primary"
+                  isEditing ? "admin-faq-card-editing" : "border-primary"
                 }`}
               >
                 <div className="flex justify-between items-start mb-2 font-code">

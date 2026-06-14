@@ -322,10 +322,10 @@ export default function AdminBioPage() {
             <label className="font-label-sm text-label-sm block uppercase tracking-wider">
               Current Asset Preview
             </label>
-            <div className="border border-primary p-4 bg-[repeating-conic-gradient(#f1edec_0%_25%,#fdf8f8_0%_50%)] bg-[length:20px_20px] aspect-square flex items-center justify-center relative overflow-hidden">
+            <div className="border border-primary p-4 bg-[repeating-conic-gradient(var(--checkerboard-color-1)_0%_25%,var(--checkerboard-color-2)_0%_50%)] bg-[length:20px_20px] aspect-square flex items-center justify-center relative overflow-hidden">
               <img
                 alt="Profile Mascot"
-                className={`max-w-[80%] max-h-[80%] transition-all duration-300 ${
+                className={`max-w-[80%] max-h-[80%] transition-all duration-300 dark:invert ${
                   grayscale ? "grayscale" : ""
                 }`}
                 src="/assets/01_cat.png"

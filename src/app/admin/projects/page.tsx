@@ -170,7 +170,7 @@ export default function AdminProjectsPage() {
             <article
               key={proj.id}
               className={`border transition-all bg-surface ${
-                isEditing ? "border-2 border-primary shadow-[4px_4px_0px_0px_#000000]" : "border-primary hover:shadow-[4px_4px_0px_0px_#000000]"
+                isEditing ? "admin-project-card-editing" : "border-primary admin-project-card-hover"
               }`}
             >
               <div className="aspect-video overflow-hidden border-b border-primary bg-primary-container relative flex items-center justify-center">

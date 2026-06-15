@@ -71,7 +71,7 @@ export const mockExperiences: Experience[] = [
     jobTitle: "Senior Systems Engineer",
     company: "Nexus_Core",
     period: "2021 — PRESENT",
-    status: "ACTIVE_ENTRY [01]",
+    status: "ACTIVE [01]",
     responsibilities: [
       "Architected high-availability microservices serving 2M+ daily requests using Go and Kubernetes.",
       "Reduced latency by 40% through aggressive caching strategies and query optimization in PostgreSQL.",
@@ -84,7 +84,7 @@ export const mockExperiences: Experience[] = [
     jobTitle: "Full Stack Developer",
     company: "Cloud_Sync",
     period: "2018 — 2021",
-    status: "ARCHIVED_ENTRY [02]",
+    status: "ARCHIVED [02]",
     responsibilities: [
       "Developed interactive real-time dashboards utilizing React and WebSockets for enterprise clients.",
       "Migrated legacy monolithic PHP application to a scalable Node.js backend.",
@@ -97,7 +97,7 @@ export const mockExperiences: Experience[] = [
     jobTitle: "Junior Dev",
     company: "Startup_Alpha",
     period: "2016 — 2018",
-    status: "ARCHIVED_ENTRY [03]",
+    status: "ARCHIVED [03]",
     responsibilities: [
       "Built responsive landing pages and marketing sites using semantic HTML, CSS, and vanilla JS.",
       "Assisted in integrating third-party APIs for payment processing and email campaigns.",

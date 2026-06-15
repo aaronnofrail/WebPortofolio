@@ -62,11 +62,11 @@ export default function ContactPage() {
         {/* Header */}
         <header className="flex flex-col gap-4 border-b border-primary pb-8">
           <h1 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg">
-            <span className="text-secondary mr-2">&gt;</span>INITIATE_CONTACT<span className="terminal-caret ml-1"></span>
+            <span className="text-secondary mr-2">&gt;</span>CONTACT<span className="terminal-caret ml-1"></span>
           </h1>
-          <p className="font-body-lg text-body-lg max-w-2xl text-on-surface-variant">
+          {/* <p className="font-body-lg text-body-lg max-w-2xl text-on-surface-variant">
             ESTABLISH A SECURE CONNECTION. SYSTEM IS READY TO RECEIVE TRANSMISSIONS.
-          </p>
+          </p> */}
         </header>
 
         {/* Bento Grid Layout */}
@@ -76,7 +76,7 @@ export default function ContactPage() {
           <div className="md:col-span-8 border border-primary p-6 md:p-8 bg-surface-container-lowest">
             <div className="flex items-center gap-2 border-b border-primary pb-4 mb-6">
               <span className="material-symbols-outlined text-secondary text-sm">terminal</span>
-              <span className="font-code text-code text-secondary">echo $CONTACT_METHODS</span>
+              <span className="font-code text-code text-secondary">Contact</span>
             </div>
             
             {submitted ? (
@@ -93,52 +93,52 @@ export default function ContactPage() {
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col gap-6 font-code text-code">
                 <div className="flex flex-col gap-2">
-                  <label className="text-secondary" htmlFor="name">&gt; input --name</label>
+                  <label className="text-secondary" htmlFor="name">&gt; Name</label>
                   <input
                     className="bg-transparent border-0 border-b border-primary p-2 rounded-none focus:ring-0 focus:border-b-2 text-primary placeholder:opacity-35"
                     id="name"
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="ENTER_IDENTIFIER"
+                    placeholder="username"
                     required
                   />
                 </div>
                 
                 <div className="flex flex-col gap-2">
-                  <label className="text-secondary" htmlFor="email">&gt; input --email</label>
+                  <label className="text-secondary" htmlFor="email">&gt; Email</label>
                   <input
                     className="bg-transparent border-0 border-b border-primary p-2 rounded-none focus:ring-0 focus:border-b-2 text-primary placeholder:opacity-35"
                     id="email"
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="ENTER_ADDRESS"
+                    placeholder="youremail@gmail.com"
                     required
                   />
                 </div>
                 
                 <div className="flex flex-col gap-2">
-                  <label className="text-secondary" htmlFor="subject">&gt; input --subject</label>
+                  <label className="text-secondary" htmlFor="subject">&gt; Subject</label>
                   <input
                     className="bg-transparent border-0 border-b border-primary p-2 rounded-none focus:ring-0 focus:border-b-2 text-primary placeholder:opacity-35"
                     id="subject"
                     type="text"
                     value={formData.subject}
                     onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                    placeholder="ENTER_PROTOCOL"
+                    placeholder="subject"
                   />
                 </div>
                 
                 <div className="flex flex-col gap-2">
-                  <label className="text-secondary" htmlFor="message">&gt; input --message body</label>
+                  <label className="text-secondary" htmlFor="message">&gt; Message</label>
                   <textarea
                     className="bg-transparent border border-primary p-4 rounded-none focus:ring-0 focus:border-2 text-primary resize-none mt-2 placeholder:opacity-35"
                     id="message"
                     rows={5}
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="TYPE_MESSAGE_HERE..."
+                    placeholder="TYPE MESSAGE HERE..."
                     required
                   ></textarea>
                 </div>

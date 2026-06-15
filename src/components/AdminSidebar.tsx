@@ -41,9 +41,9 @@ export default function AdminSidebar() {
             <h1 className="font-headline-md text-headline-md font-bold text-primary">aaronnofrail</h1>
           </div>
         </div>
-        {/* <button className="w-full border border-primary py-2 px-4 font-code text-label-sm hover:bg-primary hover:text-on-primary transition-all duration-75 uppercase tracking-widest font-bold cursor-pointer">
+        <button className="w-full border border-primary py-2 px-4 font-code text-label-sm hover:bg-primary hover:text-on-primary transition-all duration-75 uppercase tracking-widest font-bold cursor-pointer">
           DEPLOY CHANGES
-        </button> */}
+        </button>
       </div>
 
       <nav className="flex-grow py-4 overflow-y-auto">

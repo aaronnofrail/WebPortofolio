@@ -85,13 +85,13 @@ export default function AdminSettingsPage() {
           {/* Security Protocol Section */}
           <section className="mb-8">
             <h3 className="text-headline-md font-headline-md font-bold border-b border-primary/20 pb-2 mb-8">
-              03/ SECURITY
+              SETTINGS
             </h3>
             
             <form onSubmit={handleSave} className="space-y-8">
               <div className="space-y-2">
                 <label className="block font-code text-label-sm uppercase opacity-60">
-                  __ROOT_ACCESS_CODE
+                  New Password
                 </label>
                 <input
                   className="w-full bg-surface border border-primary px-4 py-3 font-code focus:ring-0 outline-none text-body-lg"

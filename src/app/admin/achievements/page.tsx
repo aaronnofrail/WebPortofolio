@@ -130,7 +130,7 @@ export default function AdminAchievementsPage() {
           <div className="border border-primary p-6 bg-surface">
             <header className="border-b border-primary pb-4 mb-8">
               <h2 className="font-headline-md text-headline-md font-bold uppercase tracking-tight">
-                {editingId ? "EDIT_REGISTRY" : "ACHIEVEMENT_REGISTRY"}
+                {editingId ? "EDIT REGISTRY" : "ACHIEVEMENT REGISTRY"}
               </h2>
             </header>
             
@@ -216,7 +216,7 @@ export default function AdminAchievementsPage() {
                   <span className="material-symbols-outlined">
                     {editingId ? "save" : "add_circle"}
                   </span>
-                  {editingId ? "COMMIT_CHANGES" : "COMMIT_TO_REGISTRY"}
+                  {editingId ? "COMMIT CHANGES" : "COMMIT TO REGISTRY"}
                 </button>
                 {editingId && (
                   <button

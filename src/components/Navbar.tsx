@@ -76,10 +76,12 @@ export default function Navbar() {
           {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
-            className="border border-primary px-2 py-0.5 font-label-sm text-label-sm uppercase hover:bg-primary hover:text-on-primary transition-all cursor-pointer font-code select-none ml-2"
+            className="border border-primary p-1.5 hover:bg-primary hover:text-on-primary transition-all cursor-pointer flex items-center justify-center select-none ml-2"
             title="Toggle theme mode"
           >
-            {!mounted ? "[ THEME ]" : theme === "dark" ? "[ LIGHT_MODE ]" : "[ DARK_MODE ]"}
+            <span className="material-symbols-outlined block text-[18px]">
+              {!mounted ? "dark_mode" : theme === "dark" ? "light_mode" : "dark_mode"}
+            </span>
           </button>
         </div>
 
@@ -87,10 +89,12 @@ export default function Navbar() {
         <div className="flex md:hidden items-center gap-3">
           <button
             onClick={toggleTheme}
-            className="border border-primary px-1.5 py-0.5 font-code text-[11px] uppercase hover:bg-primary hover:text-on-primary transition-all cursor-pointer select-none"
+            className="border border-primary p-1.5 hover:bg-primary hover:text-on-primary transition-all cursor-pointer flex items-center justify-center select-none"
             title="Toggle theme mode"
           >
-            {!mounted ? "THEME" : theme === "dark" ? "LIGHT" : "DARK"}
+            <span className="material-symbols-outlined block text-[18px]">
+              {!mounted ? "dark_mode" : theme === "dark" ? "light_mode" : "dark_mode"}
+            </span>
           </button>
 
           <button

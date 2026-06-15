@@ -181,11 +181,10 @@ export default function AdminInboxPage() {
               <div
                 key={msg.id}
                 onClick={() => handleSelectMessage(msg.id)}
-                className={`grid grid-cols-12 border-b border-primary px-4 py-4 font-code text-code cursor-pointer transition-colors ${
-                  isSelected
+                className={`grid grid-cols-12 border-b border-primary px-4 py-4 font-code text-code cursor-pointer transition-colors ${isSelected
                     ? "bg-primary text-on-primary"
                     : "hover:bg-surface-container-high bg-surface"
-                }`}
+                  }`}
               >
                 <div
                   className="col-span-1 flex items-center"
@@ -269,7 +268,7 @@ export default function AdminInboxPage() {
                 <h3 className="text-code font-bold uppercase">SECURE_REPLY</h3>
                 {replySentStatus === "SENT" ? (
                   <div className="border border-primary bg-secondary-container p-4 text-code text-primary font-bold animate-pulse">
-                    &gt; TRANSMISSION_ENCRYPTED_AND_DISPATCHED [OK]
+                    &gt; TRANSMISSION ENCRYPTED AND DISPATCHED [OK]
                   </div>
                 ) : (
                   <form onSubmit={handleSendReply} className="space-y-2">
@@ -287,7 +286,7 @@ export default function AdminInboxPage() {
                         disabled={replySentStatus === "SENDING" || !replyText.trim()}
                         className="flex-1 bg-primary text-on-primary border border-primary py-2 text-code font-bold uppercase hover:bg-surface hover:text-primary transition-all cursor-pointer disabled:opacity-45"
                       >
-                        {replySentStatus === "SENDING" ? "ENCRYPTING..." : "DISPATCH_REPLY"}
+                        {replySentStatus === "SENDING" ? "ENCRYPTING..." : "DISPATCH REPLY"}
                       </button>
                       <button
                         type="button"

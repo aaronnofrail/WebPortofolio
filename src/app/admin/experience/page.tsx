@@ -74,7 +74,7 @@ export default function AdminExperiencePage() {
             period: periodStr,
             responsibilities,
             tags,
-            status: statusVal === "active" ? "ACTIVE_ENTRY" : "ARCHIVED_ENTRY",
+            status: statusVal === "active" ? "ACTIVE" : "ARCHIVED",
           };
           updateExperienceAction(exp.id, updatedNode);
           return updatedNode;
@@ -90,7 +90,7 @@ export default function AdminExperiencePage() {
         jobTitle: jobTitle.trim(),
         company: company.trim(),
         period: periodStr,
-        status: statusVal === "active" ? "ACTIVE_ENTRY" : "ARCHIVED_ENTRY",
+        status: statusVal === "active" ? "ACTIVE" : "ARCHIVED",
         responsibilities,
         tags,
       };
@@ -107,7 +107,7 @@ export default function AdminExperiencePage() {
     setEditingId(exp.id);
     setJobTitle(exp.jobTitle);
     setCompany(exp.company);
-    
+
     // Parse period (e.g., "JAN 2022 — PRESENT")
     const parts = exp.period.split("—");
     if (parts.length === 2) {
@@ -117,7 +117,7 @@ export default function AdminExperiencePage() {
       setStartPeriod(exp.period);
       setEndPeriod("");
     }
-    
+
     setResponsibilitiesText(exp.responsibilities.map((r) => `* ${r}`).join("\n"));
     setTagsText(exp.tags.join(", "));
     setStatusVal(exp.status?.toLowerCase().includes("active") ? "active" : "archived");
@@ -140,7 +140,7 @@ export default function AdminExperiencePage() {
       <section className="w-full md:w-1/2 space-y-8">
         <div>
           <h2 className="font-headline-lg text-headline-lg font-bold text-primary border-b-4 border-primary inline-block mb-4">
-            {editingId ? "EDIT_EXPERIENCE" : "ADD_EXPERIENCE"}
+            {editingId ? "EDIT EXPERIENCE" : "ADD EXPERIENCE"}
           </h2>
           <p className="font-code text-body-md text-on-surface-variant max-w-md">
             {editingId
@@ -152,7 +152,7 @@ export default function AdminExperiencePage() {
         <form onSubmit={handleSubmit} className="space-y-10 max-w-lg font-code">
           <div className="space-y-2">
             <label className="text-label-sm font-bold text-primary block">
-              01_JOB_TITLE
+              JOB TITLE
             </label>
             <input
               className="w-full bg-transparent border-0 border-b border-primary p-2 text-body-lg placeholder:text-surface-dim outline-none focus:border-b-2"
@@ -166,7 +166,7 @@ export default function AdminExperiencePage() {
 
           <div className="space-y-2">
             <label className="text-label-sm font-bold text-primary block">
-              02_COMPANY
+              COMPANY
             </label>
             <input
               className="w-full bg-transparent border-0 border-b border-primary p-2 text-body-lg placeholder:text-surface-dim outline-none focus:border-b-2"
@@ -181,7 +181,7 @@ export default function AdminExperiencePage() {
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-2">
               <label className="text-label-sm font-bold text-primary block">
-                03_START_DATE
+                START DATE
               </label>
               <input
                 className="w-full bg-transparent border-0 border-b border-primary p-2 text-body-lg placeholder:text-surface-dim outline-none focus:border-b-2"
@@ -193,7 +193,7 @@ export default function AdminExperiencePage() {
             </div>
             <div className="space-y-2">
               <label className="text-label-sm font-bold text-primary block">
-                04_END_DATE
+                END DATE
               </label>
               <input
                 className="w-full bg-transparent border-0 border-b border-primary p-2 text-body-lg placeholder:text-surface-dim outline-none focus:border-b-2"
@@ -207,7 +207,7 @@ export default function AdminExperiencePage() {
 
           <div className="space-y-2">
             <label className="text-label-sm font-bold text-primary block">
-              05_STATUS
+              STATUS
             </label>
             <div className="flex gap-4 pt-1">
               <label className="flex items-center gap-2 cursor-pointer select-none">
@@ -237,7 +237,7 @@ export default function AdminExperiencePage() {
 
           <div className="space-y-2">
             <label className="text-label-sm font-bold text-primary block">
-              06_KEY_RESPONSIBILITIES (one per line)
+              KEY RESPONSIBILITIES (one per line)
             </label>
             <textarea
               className="w-full bg-transparent border border-primary p-4 text-body-md placeholder:text-surface-dim resize-none outline-none"
@@ -250,7 +250,7 @@ export default function AdminExperiencePage() {
 
           <div className="space-y-2">
             <label className="text-label-sm font-bold text-primary block">
-              07_TAGS (comma separated)
+              TAGS (comma separated)
             </label>
             <input
               className="w-full bg-transparent border-0 border-b border-primary p-2 text-body-lg placeholder:text-surface-dim outline-none focus:border-b-2"
@@ -266,7 +266,7 @@ export default function AdminExperiencePage() {
               className="inline-flex items-center justify-center px-8 py-4 text-body-md font-bold text-on-primary bg-primary border border-primary hover:bg-surface hover:text-primary transition-all cursor-pointer"
               type="submit"
             >
-              {editingId ? "COMMIT_CHANGES" : "COMMIT_ENTRY"}
+              {editingId ? "COMMIT CHANGES" : "COMMIT ENTRY"}
               <span className="ml-2 material-symbols-outlined text-[18px]">
                 {editingId ? "save" : "add_task"}
               </span>
@@ -289,33 +289,31 @@ export default function AdminExperiencePage() {
         <div className="flex justify-between items-end border-b border-primary pb-4">
           <div>
             <h2 className="font-headline-lg text-headline-lg font-bold text-primary uppercase">
-              EXPERIENCE_LIST
+              EXPERIENCE LIST
             </h2>
             <p className="font-code text-label-sm text-secondary mt-1">
-              TOTAL_RECORDS: [{experiences.length.toString().padStart(2, "0")}]
+              TOTAL RECORDS: [{experiences.length.toString().padStart(2, "0")}]
             </p>
           </div>
         </div>
 
-        <div className="space-y-8 h-[700px] overflow-y-auto pr-2 custom-scrollbar">
+        <div className="space-y-10 h-[700px] overflow-y-auto pr-2 custom-scrollbar">
           {experiences.map((exp, index) => {
             const isEditing = editingId === exp.id;
-            const statusLabel = exp.status || (exp.period.includes("PRESENT") ? "ACTIVE_ENTRY" : "ARCHIVED_ENTRY");
+            const statusLabel = exp.status || (exp.period.includes("PRESENT") ? "ACTIVE" : "ARCHIVED");
             const isActive = statusLabel.toLowerCase().includes("active");
 
             return (
               <article
                 key={exp.id}
-                className={`border bg-surface p-6 relative transition-transform duration-200 hover:-translate-y-1 ${
-                  isEditing ? "border-2 border-primary" : "border-primary"
-                }`}
+                className={`border bg-surface p-6 relative transition-transform duration-200 hover:-translate-y-1 ${isEditing ? "border-2 border-primary" : "border-primary"
+                  }`}
               >
                 <div
-                  className={`absolute -top-3 left-6 px-3 py-1 font-code text-[10px] uppercase border ${
-                    isActive
+                  className={`absolute -top-3 left-6 px-3 py-1 font-code text-[10px] uppercase border ${isActive
                       ? "bg-primary text-on-primary border-primary"
                       : "bg-surface-container-high text-primary border-primary"
-                  }`}
+                    }`}
                 >
                   {statusLabel} [{String(index + 1).padStart(2, "0")}]
                 </div>

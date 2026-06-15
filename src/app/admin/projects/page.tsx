@@ -157,7 +157,8 @@ export default function AdminProjectsPage() {
           className="px-8 py-4 bg-primary text-on-primary border border-primary font-bold text-body-md hover:bg-background hover:text-primary transition-all flex items-center gap-3 cursor-pointer shrink-0"
         >
           <span className="material-symbols-outlined">add</span>
-          ADD_NEW_PROJECT
+          {/* Add New Project */}
+          ADD NEW PROJECTS
         </button>
       </section>
 
@@ -239,7 +240,7 @@ export default function AdminProjectsPage() {
                     <span className="material-symbols-outlined text-[16px]">
                       link
                     </span>{" "}
-                    VIEW_DEMO
+                    VIEW DEMO
                   </span>
                   <span
                     className={`text-label-sm font-bold underline flex items-center gap-1 ${
@@ -286,7 +287,7 @@ export default function AdminProjectsPage() {
               </label>
               <input
                 className="font-body-lg p-2 border-b border-primary focus:border-b-2 outline-none"
-                placeholder="NAME_ENTRY..."
+                placeholder="NAME"
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}

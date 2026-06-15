@@ -110,13 +110,13 @@ export default function AdminSettingsPage() {
                   onClick={handleReset}
                   className="px-8 py-4 border border-primary font-code text-body-md hover:bg-secondary-container transition-all active:scale-95 w-full md:w-64 cursor-pointer font-bold uppercase tracking-wider"
                 >
-                  RESET_TO_DEFAULTS
+                  RESET TO DEFAULTS
                 </button>
                 <button
                   type="submit"
                   className="px-12 py-4 bg-primary text-on-primary font-bold font-code text-body-md border border-primary hover:bg-background hover:text-primary transition-all active:scale-95 settings-save-button w-full md:w-80 cursor-pointer uppercase tracking-wider"
                 >
-                  SAVE_CHANGES
+                  SAVE CHANGES
                 </button>
               </div>
             </form>

@@ -10,6 +10,7 @@ interface TerminalLine {
   type: "command" | "text" | "error" | "help" | "neofetch" | "faq" | "ls";
   text: string;
   faqList?: FAQ[];
+  prompt?: string;
 }
 
 export default function FAQPage() {
@@ -17,12 +18,19 @@ export default function FAQPage() {
   const [inputValue, setInputValue] = useState("");
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
-  const [terminalLines, setTerminalLines] = useState<TerminalLine[]>([
-
-  ]);
+  const [terminalLines, setTerminalLines] = useState<TerminalLine[]>([]);
+  const [clientIp, setClientIp] = useState("127.0.0.1");
+  const [isSubmittingFlag, setIsSubmittingFlag] = useState(false);
 
   const terminalEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    fetch("https://api.ipify.org?format=json")
+      .then((res) => res.json())
+      .then((data) => setClientIp(data.ip))
+      .catch(() => setClientIp("180.251.148.234"));
+  }, []);
 
   useEffect(() => {
     const stored = localStorage.getItem("aaronnofrail_faqs");
@@ -45,17 +53,49 @@ export default function FAQPage() {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       const command = inputValue.trim();
-      if (!command) return;
+      if (!command && !isSubmittingFlag) return;
 
       // Add to history list for up/down arrow indexing
       const newHistory = [...history, command];
       setHistory(newHistory);
       setHistoryIndex(newHistory.length);
 
+      if (isSubmittingFlag) {
+        const updatedLines: TerminalLine[] = [
+          ...terminalLines,
+          { type: "command", text: inputValue, prompt: "aaron@nofrail:~$" },
+        ];
+        setTerminalLines(updatedLines);
+        setInputValue("");
+        setIsSubmittingFlag(false);
+
+        setTimeout(() => {
+          const flagArgCleaned = command.trim();
+          if (flagArgCleaned === "aaron{husnulmawaddah}") {
+            setTerminalLines([
+              ...updatedLines,
+              {
+                type: "text",
+                text: ">>> she's like a part of me i can't let go",
+              },
+            ]);
+          } else {
+            setTerminalLines([
+              ...updatedLines,
+              {
+                type: "error",
+                text: `>>> [error] incorrect flag: '${flagArgCleaned}'. access denied.`,
+              },
+            ]);
+          }
+        }, 100);
+        return;
+      }
+
       // Add entered command line to terminal
       const updatedLines: TerminalLine[] = [
         ...terminalLines,
-        { type: "command", text: command },
+        { type: "command", text: command, prompt: "aaron@nofrail:~$" },
       ];
 
       setTerminalLines(updatedLines);
@@ -120,7 +160,8 @@ export default function FAQPage() {
   help                             - Show this menu
   ls                               - List files in current directory
   cat <filename>                   - Display contents of a file
-  neofetch                         - Display system specifications
+  reveal identity                  - Display system specifications
+  submit <flag>                    - Submit challenge flag
   clear                            - Clear terminal screen
 
 Files available for cat:
@@ -141,11 +182,45 @@ Files available for cat:
             text: "faq    who-are-u    what-keeps-you-up-at-night    what-is-your-fav-in-ctf    what-is-your-fav-tools    how-to-reach-you    are-you-taken",
           },
         ]);
-      } else if (mainCommand === "neofetch") {
+      } else if (
+        (mainCommand === "reveal" && argument === "identity") ||
+        mainCommand === "reveal-identity"
+      ) {
         setTerminalLines([
           ...currentLines,
           { type: "neofetch", text: "" },
         ]);
+      } else if (mainCommand === "submit") {
+        const cleanArg = argument.toLowerCase().trim();
+        if (!argument || cleanArg === "flag") {
+          setIsSubmittingFlag(true);
+          setTerminalLines([
+            ...currentLines,
+            {
+              type: "text",
+              text: "Please type your flag:",
+            },
+          ]);
+        } else {
+          const flagArg = argument.startsWith("flag ") ? argument.slice(5).trim() : argument.trim();
+          if (flagArg === "aaron{husnulmawaddah}") {
+            setTerminalLines([
+              ...currentLines,
+              {
+                type: "text",
+                text: ">>> she's like a part of me i can't let go",
+              },
+            ]);
+          } else {
+            setTerminalLines([
+              ...currentLines,
+              {
+                type: "error",
+                text: `>>> [ERROR] INCORRECT FLAG: '${flagArg}'. ACCESS DENIED.`,
+              },
+            ]);
+          }
+        }
       } else if (mainCommand === "cat") {
         if (!argument) {
           setTerminalLines([
@@ -252,9 +327,12 @@ Files available for cat:
   const renderTerminalLine = (line: TerminalLine, index: number) => {
     switch (line.type) {
       case "command":
+        const promptText = line.prompt || "aaron@nofrail:~$";
         return (
           <div key={index} className="flex flex-wrap items-center gap-2 font-code">
-            <span className="text-secondary select-none">aaron@nofrail:~$</span>
+            <span className="text-secondary select-none">
+              {promptText}
+            </span>
             <span className="text-primary font-bold break-all">{line.text}</span>
           </div>
         );
@@ -300,43 +378,51 @@ Files available for cat:
         );
       case "neofetch":
         return (
-          <div key={index} className="flex flex-col md:flex-row gap-8 items-start max-w-full overflow-x-auto">
+          <div key={index} className="flex flex-col gap-4 font-code text-code max-w-full text-primary select-text">
             {/* ASCII Art */}
-            <pre className="font-code text-code leading-none text-secondary hidden md:block select-none shrink-0">
-              {`    /\\  /\\
-   /  \\/  \\
-  /        \\
- /__________\\
- |   ____   |
- |  |    |  |
- |__|    |__|`}
+            <pre className="leading-tight select-none overflow-x-auto text-primary font-bold">
+              {`                                        __            _ _ 
+  __ _  __ _ _ __ ___  _ __  _ __   ___/ _|_ __ __ _(_) |
+ / _\` |/ _\` | '__/ _ \\| '_ \\| '_ \\ / _ \\ |_| '__/ _\` | | |
+| (_| | (_| | | | (_) | | | | | | |  __/  _| | | (_| | | |
+ \\__,_|\\__,_|_|  \\___/|_| |_|_| |_|\\___|_| |_|  \\__,_|_|_|`}
             </pre>
 
-            {/* System Specs */}
-            <div className="flex flex-col gap-1 w-full max-w-md font-code shrink-0">
-              <div className="flex gap-2">
-                <span className="text-secondary font-bold w-24">OS:</span>
-                <span>aaronnofrail</span>
+            <div className="text-center font-bold tracking-widest text-primary my-2">
+              aaronnofrail / ICC UH
+            </div>
+
+            <div className="flex flex-col gap-3 pl-0 md:pl-4">
+              <p className="opacity-90">Welcome to my hidden profile on the darknet.</p>
+
+              <div className="flex flex-col gap-1 mt-1 font-mono">
+                <div>
+                  <span className="font-bold">Alias:</span> <span className="text-primary opacity-90">aaronnofrail</span>
+                </div>
+                <div>
+                  <span className="font-bold">Affiliation:</span> <span className="text-primary opacity-90">ICC UH / Informatics Hasanuddin University</span>
+                </div>
+                <div>
+                  <span className="font-bold">Specialties:</span> <span className="text-primary opacity-90">Web Exploitation, Cryptography, Forensics, OSINT</span>
+                </div>
+                <div>
+                  <span className="font-bold">Status:</span> <span className="text-primary opacity-90">Seeking Internship / CTF Enjoyer</span>
+                </div>
+                <div>
+                  <span className="font-bold">Contact:</span> <a href="mailto:arundaffa.nahara@gmail.com" className="text-primary underline opacity-90">arundaffa.nahara@gmail.com</a>
+                </div>
+                <div>
+                  <span className="font-bold">Instagram:</span> <a href="https://instagram.com/dfnhrr" target="_blank" rel="noopener noreferrer" className="text-primary underline opacity-90">@dfnhrr</a>
+                </div>
               </div>
-              <div className="flex gap-2">
-                <span className="text-secondary font-bold w-24">Host:</span>
-                <span>Frontend Engineer</span>
-              </div>
-              <div className="flex gap-2">
-                <span className="text-secondary font-bold w-24">Uptime:</span>
-                <span>1 years Experience</span>
-              </div>
-              <div className="flex gap-2">
-                <span className="text-secondary font-bold w-24">Packages:</span>
-                <span>React, NextJS, TypeScript, Tailwind, Node</span>
-              </div>
-              <div className="flex gap-2">
-                <span className="text-secondary font-bold w-24">Shell:</span>
-                <span>bash 5.1.16</span>
-              </div>
-              <div className="flex gap-2">
-                <span className="text-secondary font-bold w-24">Theme:</span>
-                <span>Paper Terminal [Light]</span>
+
+              <p className="mt-2 font-bold">Client IP detected: <span className="text-primary opacity-90 font-normal">{clientIp}</span></p>
+
+              <p className="italic opacity-85 my-1">"When the tide goes out, you don't find your dreams—you find the anchor you actually built."</p>
+
+              <div className="mt-2 p-4 border border-primary/30 bg-primary/5 flex flex-col gap-2 rounded">
+                <span className="font-bold text-primary">The flag is:</span>
+                <span className="opacity-90">{"the flag is my ex name in aaron{} format #iykyk"}</span>
               </div>
             </div>
           </div>

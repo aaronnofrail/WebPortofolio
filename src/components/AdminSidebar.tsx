@@ -7,19 +7,24 @@ export default function AdminSidebar() {
   const pathname = usePathname();
 
   const adminNavItems = [
-    { name: "DASHBOARD", href: "/admin/dashboard", icon: "terminal" },
-    { name: "BIO", href: "/admin/bio", icon: "person_edit" },
-    { name: "EXPERIENCE", href: "/admin/experience", icon: "history_edu" },
-    { name: "ACHIEVEMENTS", href: "/admin/achievements", icon: "military_tech" },
-    { name: "PROJECT", href: "/admin/projects", icon: "account_tree" },
-    { name: "FAQ", href: "/admin/faq", icon: "quiz" },
-    { name: "INBOX", href: "/admin/inbox", icon: "inbox" },
+    { name: "DASHBOARD", href: "/admin/dashboard", iconPath: "/assets/dashboard.svg" },
+    { name: "BIO", href: "/admin/bio", iconPath: "/assets/bio.svg" },
+    { name: "EXPERIENCE", href: "/admin/experience", iconPath: "/assets/experience.svg" },
+    { name: "ACHIEVEMENTS", href: "/admin/achievements", iconPath: "/assets/achievements.png" },
+    { name: "PROJECT", href: "/admin/projects", iconPath: "/assets/projects.svg" },
+    { name: "FAQ", href: "/admin/faq", iconPath: "/assets/faq.svg" },
+    { name: "INBOX", href: "/admin/inbox", iconPath: "/assets/inbox.png" },
   ];
 
   const activeClass =
     "flex items-center text-on-primary bg-primary font-bold px-6 py-3 border-b border-primary font-code text-code border-l-4 transition-all duration-75";
   const inactiveClass =
     "flex items-center text-primary px-6 py-3 hover:bg-secondary-container transition-colors font-code text-code";
+
+  const getIconClass = (isActive: boolean) =>
+    isActive
+      ? "w-5 h-5 mr-3 object-contain invert dark:invert-0"
+      : "w-5 h-5 mr-3 object-contain dark:invert";
 
   return (
     <aside className="hidden md:flex flex-col h-screen w-64 border-r border-primary bg-surface fixed left-0 top-0 z-50">
@@ -36,9 +41,9 @@ export default function AdminSidebar() {
             <h1 className="font-headline-md text-headline-md font-bold text-primary">aaronnofrail</h1>
           </div>
         </div>
-        <button className="w-full border border-primary py-2 px-4 font-code text-label-sm hover:bg-primary hover:text-on-primary transition-all duration-75 uppercase tracking-widest font-bold cursor-pointer">
+        {/* <button className="w-full border border-primary py-2 px-4 font-code text-label-sm hover:bg-primary hover:text-on-primary transition-all duration-75 uppercase tracking-widest font-bold cursor-pointer">
           DEPLOY CHANGES
-        </button>
+        </button> */}
       </div>
 
       <nav className="flex-grow py-4 overflow-y-auto">
@@ -51,7 +56,11 @@ export default function AdminSidebar() {
                 className={isActive ? activeClass : inactiveClass}
                 href={item.href}
               >
-                <span className="material-symbols-outlined mr-3">{item.icon}</span>
+                <img
+                  src={item.iconPath}
+                  alt={`${item.name} icon`}
+                  className={getIconClass(isActive)}
+                />
                 {item.name}
               </Link>
             );
@@ -64,7 +73,11 @@ export default function AdminSidebar() {
           className={pathname === "/admin/settings" ? activeClass : "flex items-center text-primary px-6 py-3 hover:bg-secondary-container transition-colors font-code text-code"}
           href="/admin/settings"
         >
-          <span className="material-symbols-outlined mr-3">settings</span>
+          <img
+            src="/assets/settings.png"
+            alt="SETTINGS icon"
+            className={getIconClass(pathname === "/admin/settings")}
+          />
           SETTINGS
         </Link>
         <Link
@@ -74,7 +87,11 @@ export default function AdminSidebar() {
             sessionStorage.removeItem("admin_authorized");
           }}
         >
-          <span className="material-symbols-outlined mr-3">logout</span>
+          <img
+            src="/assets/logout.png"
+            alt="LOGOUT icon"
+            className={getIconClass(false)}
+          />
           LOGOUT
         </Link>
       </div>

@@ -18,14 +18,7 @@ export default function FAQPage() {
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [terminalLines, setTerminalLines] = useState<TerminalLine[]>([
-    // {
-    //   type: "neofetch",
-    //   text: "",
-    // },
-    // {
-    //   type: "text",
-    //   text: "Welcome to Aaron's interactive terminal database.\nType 'help' to see list of commands, or 'cat frequently_asked_questions.txt' to print the FAQ list.",
-    // },
+
   ]);
 
   const terminalEndRef = useRef<HTMLDivElement>(null);
@@ -93,10 +86,13 @@ export default function FAQPage() {
       if (parts[0] === "cat" && parts[1] !== undefined) {
         const filePrefix = parts[1].toLowerCase();
         const files = [
-          "frequently_asked_questions.txt",
-          "bio.txt",
-          "projects_manifest.json",
-          "experience_timeline.log",
+          "faq",
+          "who-are-u",
+          "what-keeps-you-up-at-night",
+          "what-is-your-fav-in-ctf",
+          "what-is-your-fav-tools",
+          "how-to-reach-you",
+          "are-you-taken",
         ];
         const match = files.find((f) => f.startsWith(filePrefix));
         if (match) {
@@ -128,10 +124,13 @@ export default function FAQPage() {
   clear                            - Clear terminal screen
 
 Files available for cat:
-  frequently_asked_questions.txt   - The FAQ database
-  bio.txt                          - Core profile description
-  projects_manifest.json           - Portfolio projects list
-  experience_timeline.log          - Professional experience logs`,
+  faq                              - The FAQ database
+  who-are-u                        - Core profile description
+  what-keeps-you-up-at-night       - Logical challenges interest
+  what-is-your-fav-in-ctf          - Favorite CTF categories
+  what-is-your-fav-tools           - Favorite tools used
+  how-to-reach-you                 - Contact information
+  are-you-taken                    - Relationship status / interest`,
           },
         ]);
       } else if (mainCommand === "ls") {
@@ -139,7 +138,7 @@ Files available for cat:
           ...currentLines,
           {
             type: "ls",
-            text: "frequently_asked_questions.txt    bio.txt    projects_manifest.json    experience_timeline.log",
+            text: "faq    who-are-u    what-keeps-you-up-at-night    what-is-your-fav-in-ctf    what-is-your-fav-tools    how-to-reach-you    are-you-taken",
           },
         ]);
       } else if (mainCommand === "neofetch") {
@@ -169,71 +168,65 @@ Files available for cat:
               faqList: faqs,
             },
           ]);
-        } else if (argument === "bio.txt" || argument === "bio") {
+        } else if (argument === "who-are-u") {
           const storedBio = localStorage.getItem("aaronnofrail_bio");
           let bioDesc = "";
           if (storedBio) {
             try {
-              bioDesc = JSON.parse(storedBio).description;
+              const parsed = JSON.parse(storedBio);
+              if (parsed.description && parsed.description.includes("Computer Science geek")) {
+                localStorage.removeItem("aaronnofrail_bio");
+              } else {
+                bioDesc = parsed.description;
+              }
             } catch (e) { }
           }
           const finalDesc =
             bioDesc ||
-            "Aaron is a security researcher and frontend developer based in the void.";
+            "aaronnofrail, also known as Arundaffa Nahara, is a Undergraduate Student from the Informatics Engineering department at Universitas Hasanuddin. Currently in his 2nd semester. He is currently looking for internship/freelance opportunities. if you're interested, please contact him via email.";
           setTerminalLines([
             ...currentLines,
             { type: "text", text: finalDesc },
           ]);
-        } else if (
-          argument === "projects_manifest.json" ||
-          argument === "projects"
-        ) {
-          const storedProj = localStorage.getItem("aaronnofrail_projects");
-          let projs = [];
-          if (storedProj) {
-            try {
-              projs = JSON.parse(storedProj);
-            } catch (e) { }
-          }
-          const text =
-            projs.length > 0
-              ? JSON.stringify(
-                projs.map((p: any) => ({
-                  title: p.title,
-                  status: p.status,
-                  tags: p.tags,
-                })),
-                null,
-                2
-              )
-              : "No projects registered in manifest.";
+        } else if (argument === "what-keeps-you-up-at-night") {
           setTerminalLines([
             ...currentLines,
-            { type: "text", text },
+            {
+              type: "text",
+              text: "I enjoy challenges that require logic, carefulness, and creativity. especially Capture the Flag.",
+            },
           ]);
-        } else if (
-          argument === "experience_timeline.log" ||
-          argument === "experience"
-        ) {
-          const storedExp = localStorage.getItem("aaronnofrail_experiences");
-          let exps = [];
-          if (storedExp) {
-            try {
-              exps = JSON.parse(storedExp);
-            } catch (e) { }
-          }
-          const text =
-            exps.length > 0
-              ? exps
-                .map(
-                  (e: any) =>
-                    `* ${e.jobTitle} at ${e.company} (${e.period})`
-                )
-                .join("\n")
-              : "No experience logs recorded.";
+        } else if (argument === "what-is-your-fav-in-ctf") {
           setTerminalLines([
             ...currentLines,
-            { type: "text", text },
+            {
+              type: "text",
+              text: "Web Exploitation, Cryptography, Forensics and OSINT.",
+            },
+          ]);
+        } else if (argument === "what-is-your-fav-tools") {
+          setTerminalLines([
+            ...currentLines,
+            {
+              type: "text",
+              text: "I mostly use Aperisolve, Wireshark, Burp Suite, CyberChef, Dcode, OSINT Framework, Ghidra, IDA, pwntools and custom scripts for solving challenges.",
+            },
+          ]);
+        } else if (argument === "how-to-reach-you") {
+          setTerminalLines([
+            ...currentLines,
+            {
+              type: "text",
+              text: "The best way to reach me is via email at arundaffa.nahara@gmail.com — I'm open to internships, colaborations, projects, and mentorship opportunities.",
+            },
+          ]);
+        } else if (argument === "are-you-taken") {
+          setTerminalLines([
+            ...currentLines,
+            {
+              type: "text",
+              text: "yes, i’m happily married to mai sakurajima — but if you're interested to work with me, feel free to reach me via email at arundaffa.nahara@gmail.com or DM me on instagram @dfnhrr",
+            },
           ]);
         } else {
           setTerminalLines([

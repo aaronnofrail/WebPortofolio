@@ -3,7 +3,7 @@ export default function Footer() {
     <footer className="w-full bottom-0 border-t border-primary bg-background z-40 relative py-6">
       <div className="flex flex-col md:flex-row justify-between items-center max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8 gap-6 md:gap-0">
         <div className="font-code text-code font-bold text-primary">
-          © 2026 AARONNOFRAIL — ALL RIGHTS RESERVED
+          © 2026 AARONNOFRAIL — Contact Me Pls for Intern/Projects
         </div>
         <div className="flex gap-6 font-code text-code">
           <a

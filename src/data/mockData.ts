@@ -55,11 +55,9 @@ export const mockBio: Bio = {
   name: "aaronnofrail",
   role: "Computer Science Specialist",
   terminalText: "> aaronnofrail",
-  description: `Computer Science geek passionate about engineering secure and scalable digital solutions. My technical expertise spans backend architecture, cybersecurity, data science, game development, and the Internet of Things (IoT).
-
-I don't just write code; I build resilient systems. My focus lies in crafting robust backend infrastructure, uncovering security vulnerabilities, and extracting actionable insights from data, alongside exploring game mechanics and smart hardware integration.
-
-I combine technical precision with a proactive mindset. Whether I am securing a network, optimizing APIs, developing interactive game logic, or tinkering with IoT sensors, my goal remains consistent: to deliver high-quality, efficient, and innovative solutions that solve real-world problems.`,
+  description: `Hi, I'm Arundaffa Nahara, mostly known as aaronnofrail in the tech space. I am currently a 2nd-semester Informatics Engineering student at Hasanuddin University. 
+  
+  Outside of my regular classes, I dive deep into cybersecurity as a member of the ICC UH CTF club, where my main areas of focus are Web Exploitation, Cryptography, Forensics, and OSINT.`,
   philosophy: [
     "I build software with a focus on tactile digitalism—interfaces that feel substantial, responsive, and stripped of unnecessary ornament. My approach marries mid-century editorial rigorousness with the raw efficiency of early computing environments.",
     "Every line of code should serve a purpose. I believe in minimalism not as a stylistic choice, but as an engineering principle. By constraining the palette and avoiding modern visual fluff like shadows and blurs, I aim to deliver clarity and performance to the end user."
@@ -186,23 +184,28 @@ export const mockProjects: Project[] = [
 export const mockFAQs: FAQ[] = [
   {
     id: "faq_1",
-    question: "What is your primary tech stack?",
-    answer: "My core stack revolves around the React ecosystem (Next.js, Remix), TypeScript for type safety, and Tailwind CSS for rapid, token-based styling. I'm also proficient in Node.js for mid-tier aggregation and tooling."
+    question: "What keeps you up at night?",
+    answer: "I enjoy challenges that require logic, carefulness, and creativity. especially Capture the Flag."
   },
   {
     id: "faq_2",
-    question: "Do you take on freelance projects?",
-    answer: "Currently, I am focused on full-time roles, but I occasionally accept small-to-medium contracts if the project aligns with my aesthetic (minimalist, structural design) and technical interests."
+    question: "What is your favorite category in CTF?",
+    answer: "Web Exploitation, Cryptography, Forensics and OSINT."
   },
   {
     id: "faq_3",
-    question: "What is your approach to design systems?",
-    answer: "I advocate for strict tokenization. Design systems should be treated like engineering dependencies. A component's margin, color, and typography should derive entirely from a centralized JSON/config file to prevent technical and visual debt."
+    question: "What is your favorite tools?",
+    answer: "I mostly use Aperisolve, Wireshark, Burp Suite, CyberChef, Dcode, OSINT Framework, Ghidra, IDA, pwntools and custom scripts for solving challenges."
   },
   {
     id: "faq_4",
-    question: "Why the terminal aesthetic?",
-    answer: "It minimizes distraction. By relying on pure typography, 1px borders, and high contrast, information density can be maximized without overwhelming the user. It's a return to functionalism."
+    question: "How to reach you?",
+    answer: "The best way to reach me is via email at arundaffa.nahara@gmail.com — I'm open to internships, colaborations, projects, and mentorship opportunities."
+  },
+  {
+    id: "faq_5",
+    question: "Are you taken?",
+    answer: "yes, i’m happily married to mai sakurajima — but if you're interested to work with me, feel free to reach me via email at arundaffa.nahara@gmail.com or DM me on instagram @dfnhrr"
   }
 ];
 

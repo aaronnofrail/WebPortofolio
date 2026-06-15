@@ -16,7 +16,13 @@ export default function HomePage() {
     const stored = localStorage.getItem("aaronnofrail_bio");
     if (stored) {
       try {
-        setBio(JSON.parse(stored));
+        const parsed = JSON.parse(stored);
+        if (parsed.description && parsed.description.includes("arundaffa.nahara@gmail.com")) {
+          localStorage.removeItem("aaronnofrail_bio");
+          setBio(mockBio);
+        } else {
+          setBio(parsed);
+        }
       } catch (e) {}
     }
 
@@ -55,9 +61,9 @@ export default function HomePage() {
           {/* Main Bio Content */}
           <div className="col-span-1 md:col-span-8 flex flex-col gap-6">
             <div className="border border-primary bg-surface p-6 md:p-8 relative">
-              <div className="absolute top-0 right-0 bg-primary text-on-primary font-label-sm text-label-sm px-2 py-1 border-l border-b border-primary">
+              {/* <div className="absolute top-0 right-0 bg-primary text-on-primary font-label-sm text-label-sm px-2 py-1 border-l border-b border-primary">
                 SYSTEM.READY
-              </div>
+              </div> */}
               <h1 className="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg mt-4 mb-2">
                 {bio.terminalText.startsWith(">") ? bio.terminalText : `> ${bio.terminalText}`}
                 <span className="terminal-caret ml-1"></span>

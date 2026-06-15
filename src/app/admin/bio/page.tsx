@@ -16,7 +16,13 @@ export default function AdminBioPage() {
     const stored = localStorage.getItem("aaronnofrail_bio");
     if (stored) {
       try {
-        setBio(JSON.parse(stored));
+        const parsed = JSON.parse(stored);
+        if (parsed.description && parsed.description.includes("arundaffa.nahara@gmail.com")) {
+          localStorage.removeItem("aaronnofrail_bio");
+          setBio(mockBio);
+        } else {
+          setBio(parsed);
+        }
       } catch (e) {
         setBio(mockBio);
       }

@@ -7,6 +7,7 @@ import {
   updateExperienceAction,
   deleteExperienceAction
 } from "@/app/actions/sanityActions";
+import { addActivityLog } from "@/utils/activityLogger";
 
 export default function AdminExperiencePage() {
   const [experiences, setExperiences] = useState<Experience[]>([]);
@@ -77,6 +78,7 @@ export default function AdminExperiencePage() {
             status: statusVal === "active" ? "ACTIVE" : "ARCHIVED",
           };
           updateExperienceAction(exp.id, updatedNode);
+          addActivityLog(`EXPERIENCE: Updated experience configuration for '${updatedNode.jobTitle}' at '${updatedNode.company}'`, "info");
           return updatedNode;
         }
         return exp;
@@ -98,6 +100,7 @@ export default function AdminExperiencePage() {
       const updated = [newExp, ...experiences];
       setExperiences(updated);
       saveToStorage(updated);
+      addActivityLog(`EXPERIENCE: Added experience for '${newExp.jobTitle}' at '${newExp.company}'`, "info");
     }
 
     handleClear();
@@ -125,10 +128,13 @@ export default function AdminExperiencePage() {
 
   const handleDelete = (id: string) => {
     if (!confirm("CONFIRM_DELETION: This action is irreversible.")) return;
+    const deletedExp = experiences.find((e) => e.id === id);
+    const titleStr = deletedExp ? `${deletedExp.jobTitle} at ${deletedExp.company}` : id;
     deleteExperienceAction(id);
     const updated = experiences.filter((exp) => exp.id !== id);
     setExperiences(updated);
     saveToStorage(updated);
+    addActivityLog(`EXPERIENCE: Deleted experience record '${titleStr}'`, "error");
     if (editingId === id) {
       handleClear();
     }

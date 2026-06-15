@@ -5,12 +5,17 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PortfolioGate from "@/components/PortfolioGate";
 import { mockExperiences, mockAchievements, Experience, Achievement } from "@/data/mockData";
+import { translations } from "@/data/translations";
 
 export default function ExperiencePage() {
   const [experiences, setExperiences] = useState<Experience[]>(mockExperiences);
   const [achievements, setAchievements] = useState<Achievement[]>(mockAchievements);
+  const [expandedFolders, setExpandedFolders] = useState<Record<string, boolean>>({
+    exp_1: true, // Expand the first one by default
+  });
 
   useEffect(() => {
+    // Read custom experiences from localStorage
     const storedExp = localStorage.getItem("aaronnofrail_experiences");
     if (storedExp) {
       try {
@@ -18,6 +23,7 @@ export default function ExperiencePage() {
       } catch (e) {}
     }
 
+    // Read custom achievements from localStorage
     const storedAch = localStorage.getItem("aaronnofrail_achievements");
     if (storedAch) {
       try {
@@ -26,62 +32,152 @@ export default function ExperiencePage() {
     }
   }, []);
 
+  const toggleFolder = (id: string) => {
+    setExpandedFolders((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
+  const t = translations.en;
+
   const isIcon = (val: string) => {
     return !val.startsWith("http") && !val.startsWith("/") && !val.includes(".");
+  };
+
+  // Map experience items to specific years for folder display
+  const folderYears: Record<string, string> = {
+    exp_1: "2026",
+    exp_2: "2024",
+    exp_3: "2021",
   };
 
   return (
     <PortfolioGate>
       <Navbar />
-      <main className="flex-grow max-w-container-max mx-auto w-full px-margin-mobile md:px-margin-desktop py-12 md:py-24 z-10 relative">
+      <main className="flex-grow w-full max-w-7xl mx-auto px-6 py-24 md:py-32 font-mono transition-colors duration-300 bg-white dark:bg-black text-black dark:text-white relative">
         
-        {/* Experience Header */}
-        <div className="mb-16 border-b border-primary pb-8">
-          <h1 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary flex items-center gap-2">
-            <span className="text-secondary">&gt;</span> history | grep "experience" <span className="terminal-caret"></span>
-          </h1>
+        {/* Decorative Grid Pattern */}
+        <div className="absolute inset-0 z-0 opacity-[0.02] dark:opacity-[0.03] pointer-events-none" style={{ backgroundImage: "linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px)", backgroundSize: "32px 32px" }}></div>
+
+        {/* Timeline Header */}
+        <div className="mb-16 md:mb-24 text-center relative z-10">
+          <h2 className="text-4xl md:text-8xl font-black uppercase tracking-tighter mb-4 relative inline-block">
+            {t.experience.title}
+          </h2>
+          <p className="text-neutral-500 dark:text-neutral-400 text-sm md:text-lg max-w-xl mx-auto font-medium">
+            {t.experience.subtitle}
+          </p>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400 block mt-6 animate-pulse">
+            [ {t.experience.clickFolder} ]
+          </span>
         </div>
 
-        {/* Timeline Section */}
-        <div className="space-y-12">
-          {experiences.map((exp, index) => {
-            const isLast = index === experiences.length - 1;
-            return (
-              <div key={exp.id} className="relative pl-8 group">
-                {/* Vertical Timeline line */}
-                {!isLast && (
-                  <div className="absolute left-[7px] top-[24px] bottom-[-48px] w-[1px] bg-primary"></div>
-                )}
-                {/* Bullet node */}
-                <div className="absolute left-0 top-1 w-4 h-4 border border-primary bg-background flex items-center justify-center">
-                  <div className="w-2 h-2 bg-primary"></div>
-                </div>
+        {/* Timeline Timeline section */}
+        <div className="relative w-full flex flex-col gap-16 md:gap-24 mb-24 z-10">
+          
+          {/* Vertical dividing line */}
+          <div className="absolute left-[24px] md:left-1/2 top-0 bottom-0 w-[2px] bg-neutral-200 dark:bg-neutral-800 transform md:-translate-x-1/2 rounded-full"></div>
 
-                <div className="border border-primary bg-background p-6 hover:-translate-y-1 transition-transform duration-200">
-                  <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4 border-b border-surface-dim pb-4 gap-2">
-                    <div>
-                      <h2 className="font-headline-md text-headline-md text-primary font-bold">{exp.jobTitle}</h2>
-                      <p className="font-code text-code text-secondary mt-1">@ {exp.company}</p>
-                    </div>
-                    <div className="font-code text-code text-primary bg-surface-container px-3 py-1 border border-primary self-start uppercase">
-                      {exp.period}
-                    </div>
+          {experiences.map((exp, index) => {
+            const isExpanded = !!expandedFolders[exp.id];
+            const year = folderYears[exp.id] || "2020";
+            const isLeft = index % 2 === 0;
+
+            const tRole = t.experience.roles[exp.id as keyof typeof t.experience.roles] || {
+              jobTitle: exp.jobTitle,
+              company: exp.company,
+              period: exp.period,
+              status: exp.status || "ARCHIVED",
+            };
+
+            return (
+              <div
+                key={exp.id}
+                className={`flex flex-col relative w-full items-start md:items-stretch ${
+                  isLeft ? "md:flex-row" : "md:flex-row-reverse"
+                }`}
+              >
+                {/* Timeline Bullet Node */}
+                <div className="absolute left-[18px] md:left-1/2 top-10 w-3 h-3 rounded-full bg-black dark:bg-white border-2 border-white dark:border-black transform md:-translate-x-1/2 z-20"></div>
+
+                {/* Folder Content Wrapper */}
+                <div
+                  className={`w-full md:w-[46%] pl-10 md:pl-0 ${
+                    isLeft ? "md:text-left" : "md:text-left"
+                  }`}
+                >
+                  {/* Folder Tab Header */}
+                  <div
+                    onClick={() => toggleFolder(exp.id)}
+                    className={`inline-block border-2 border-black dark:border-neutral-700 border-b-0 bg-neutral-100 dark:bg-neutral-800 rounded-t-xl px-4 py-1.5 font-bold text-xs uppercase cursor-pointer select-none transition-all shadow-[2px_0px_0px_0px_var(--shadow-color)] ${
+                      isExpanded ? "translate-y-[2px] text-black dark:text-white" : "text-neutral-500"
+                    }`}
+                  >
+                    📁 {year}
                   </div>
 
-                  <ul className="space-y-3 font-code text-code text-on-surface">
-                    {exp.responsibilities.map((resp, rIndex) => (
-                      <li key={rIndex} className="before:content-['>'] before:mr-2 before:text-primary">
-                        {resp}
-                      </li>
-                    ))}
-                  </ul>
+                  {/* Folder Body Card */}
+                  <div
+                    onClick={() => toggleFolder(exp.id)}
+                    className={`border-2 border-black dark:border-neutral-700 bg-white dark:bg-neutral-900 rounded-b-[2rem] rounded-tr-[2rem] p-6 shadow-neo cursor-pointer transition-all duration-300 relative ${
+                      isExpanded ? "border-t-2" : "rounded-tr-[2rem]"
+                    }`}
+                  >
+                    <div className="flex justify-between items-start mb-4 border-b border-neutral-200 dark:border-neutral-800 pb-3">
+                      <div>
+                        <h3 className="font-black text-xl uppercase tracking-tight text-black dark:text-white">
+                          {tRole.jobTitle}
+                        </h3>
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                          @ {tRole.company}
+                        </p>
+                      </div>
+                      
+                      <div className="flex flex-col items-end gap-1.5">
+                        <span className="text-[9px] font-bold px-2 py-0.5 bg-black text-white dark:bg-white dark:text-black rounded-full uppercase">
+                          {tRole.status}
+                        </span>
+                        <span className="text-[9px] font-semibold text-neutral-400">
+                          {tRole.period}
+                        </span>
+                      </div>
+                    </div>
 
-                  <div className="mt-6 flex flex-wrap gap-2">
-                    {exp.tags.map((tag) => (
-                      <span key={tag} className="font-label-sm text-label-sm border border-primary px-2 py-1">
-                        {tag}
-                      </span>
-                    ))}
+                    {/* Expandable Inner Content */}
+                    {isExpanded && (
+                      <div className="space-y-4 animate-fade-in">
+                        <ul className="space-y-2.5 text-xs md:text-sm text-neutral-600 dark:text-neutral-400">
+                          {exp.responsibilities.map((resp, rIdx) => (
+                            <li
+                              key={rIdx}
+                              className="before:content-['>'] before:mr-2 before:text-black dark:before:text-white before:font-bold"
+                            >
+                              {resp}
+                            </li>
+                          ))}
+                        </ul>
+
+                        <div className="flex flex-wrap gap-1.5 pt-4 border-t border-neutral-100 dark:border-neutral-800">
+                          {exp.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="text-[9px] font-bold px-2 py-0.5 border border-black dark:border-neutral-600 rounded bg-white dark:bg-neutral-800 uppercase"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Folder Closed Indicator */}
+                    {!isExpanded && (
+                      <div className="text-[10px] text-neutral-400 dark:text-neutral-500 uppercase tracking-widest text-center py-2">
+                        [ Click to expand ]
+                      </div>
+                    )}
+
                   </div>
                 </div>
               </div>
@@ -89,34 +185,38 @@ export default function ExperiencePage() {
           })}
         </div>
 
-        <div className="mt-16 text-center">
+        {/* Download Resume Bar */}
+        <div className="mt-16 text-center relative z-10">
           <a
-            className="inline-block bg-primary text-on-primary border border-primary px-6 py-3 font-code text-code hover:bg-background hover:text-primary hover:border-2 transition-all cursor-pointer"
+            className="inline-block bg-black dark:bg-white text-white dark:text-black border-2 border-black dark:border-transparent px-8 py-3.5 font-bold text-xs uppercase tracking-widest rounded-full hover:bg-white hover:text-black dark:hover:bg-neutral-100 dark:hover:text-black hover:border-black transition-all shadow-neo cursor-pointer"
             href="#"
           >
-            Download Full Resume .PDF
+            {t.experience.downloadPdf}
           </a>
         </div>
 
         {/* Achievements Section */}
-        <section className="mb-24 mt-24">
-          <h2 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary flex items-center gap-4 pb-8 border-b border-primary">
-            <span className="text-secondary">&gt;</span> history | grep "achievements" <span className="terminal-caret"></span>
-          </h2>
+        <section className="mt-28 relative z-10">
+          <div className="mb-12 border-b-2 border-black dark:border-neutral-800 pb-6">
+            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight">
+              Achievements
+            </h2>
+          </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter mt-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {achievements.map((ach) => {
               const hasIcon = isIcon(ach.image);
 
               return (
                 <article
                   key={ach.id}
-                  className="group border border-primary bg-background flex flex-col hover:-translate-y-1 transition-transform duration-200"
+                  className="group border-2 border-black dark:border-neutral-700 bg-white dark:bg-neutral-900 rounded-[2rem] flex flex-col hover:shadow-neo transition-all duration-300 overflow-hidden"
                 >
-                  <div className="aspect-square border-b border-primary overflow-hidden bg-surface-container-highest flex items-center justify-center p-4 relative">
+                  {/* Banner image or icon wrapper */}
+                  <div className="aspect-square border-b-2 border-black dark:border-neutral-700 overflow-hidden bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center p-6 relative">
                     {hasIcon ? (
                       <span
-                        className="material-symbols-outlined text-7xl text-primary"
+                        className="material-symbols-outlined text-6xl text-black dark:text-white"
                         style={{ fontVariationSettings: "'FILL' 1" }}
                       >
                         {ach.image || "military_tech"}
@@ -124,24 +224,28 @@ export default function ExperiencePage() {
                     ) : (
                       <img
                         alt={ach.title}
-                        className="w-full h-full object-contain filter grayscale"
+                        className="w-full h-full object-contain filter grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
                         src={ach.image}
                       />
                     )}
                   </div>
                   
-                  <div className="p-6 flex-grow flex flex-col">
-                    <h3 className="font-headline-md text-headline-md text-primary font-bold mb-2">
-                      {ach.title}
-                    </h3>
-                    <p className="font-body-md text-body-md text-on-surface-variant mb-6 flex-grow">
-                      {ach.description}
-                    </p>
-                    <div className="mt-auto flex flex-wrap gap-2">
+                  {/* Details */}
+                  <div className="p-6 flex-grow flex flex-col justify-between gap-4">
+                    <div>
+                      <h3 className="font-black text-lg uppercase tracking-tight text-black dark:text-white mb-2 leading-tight">
+                        {ach.title}
+                      </h3>
+                      <p className="text-neutral-500 dark:text-neutral-400 text-xs leading-relaxed">
+                        {ach.description}
+                      </p>
+                    </div>
+                    
+                    <div className="flex flex-wrap gap-1.5 pt-4 border-t border-neutral-100 dark:border-neutral-800">
                       {ach.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="border border-primary px-2 py-1 font-label-sm text-label-sm text-primary uppercase"
+                          className="text-[9px] font-bold px-2 py-0.5 border border-black dark:border-neutral-600 rounded bg-white dark:bg-neutral-800 uppercase"
                         >
                           {tag}
                         </span>

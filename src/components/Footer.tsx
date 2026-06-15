@@ -1,13 +1,14 @@
 export default function Footer() {
   return (
-    <footer className="w-full bottom-0 border-t border-primary bg-background z-40 relative py-6">
-      <div className="flex flex-col md:flex-row justify-between items-center max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-8 gap-6 md:gap-0">
-        <div className="font-code text-code font-bold text-primary">
-          © 2026 AARONNOFRAIL — Contact Me Pls for Intern/Projects
+    <footer className="w-full border-t border-neutral-200 dark:border-neutral-800 bg-white dark:bg-black py-8 font-mono transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+        <div className="text-[10px] md:text-xs font-bold text-neutral-500 dark:text-neutral-400 uppercase tracking-widest">
+          © {new Date().getFullYear()} AARONNOFRAIL — Contact Me Pls for Intern/Projects
         </div>
-        <div className="flex gap-6 font-code text-code">
+
+        <div className="flex gap-6 text-[10px] md:text-xs font-bold tracking-widest">
           <a
-            className="text-secondary hover:text-primary transition-colors hover:opacity-80 uppercase"
+            className="text-neutral-500 hover:text-black dark:hover:text-white transition-colors uppercase"
             href="https://github.com/aaronnofrail"
             target="_blank"
             rel="noopener noreferrer"
@@ -15,7 +16,7 @@ export default function Footer() {
             GITHUB
           </a>
           <a
-            className="text-secondary hover:text-primary transition-colors hover:opacity-80 uppercase"
+            className="text-neutral-500 hover:text-black dark:hover:text-white transition-colors uppercase"
             href="https://www.linkedin.com/in/arundaffa/"
             target="_blank"
             rel="noopener noreferrer"
@@ -23,7 +24,7 @@ export default function Footer() {
             LINKEDIN
           </a>
           <a
-            className="text-secondary hover:text-primary transition-colors hover:opacity-80 uppercase"
+            className="text-neutral-500 hover:text-black dark:hover:text-white transition-colors uppercase"
             href="https://www.instagram.com/dfnhrr"
             target="_blank"
             rel="noopener noreferrer"

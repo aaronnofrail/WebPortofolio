@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { mockBio, Bio } from "@/data/mockData";
 import { saveBioAction } from "@/app/actions/sanityActions";
+import { addActivityLog } from "@/utils/activityLogger";
 
 export default function AdminBioPage() {
   const [bio, setBio] = useState<Bio | null>(null);
@@ -123,6 +124,7 @@ export default function AdminBioPage() {
     
     // Save locally
     localStorage.setItem("aaronnofrail_bio", JSON.stringify(bio));
+    addActivityLog("BIO: Committed updated persona and bio parameters", "info");
     
     // Attempt saving to Sanity CMS
     const res = await saveBioAction(bio);

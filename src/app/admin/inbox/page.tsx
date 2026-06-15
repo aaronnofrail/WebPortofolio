@@ -6,6 +6,7 @@ import {
   deleteMessageAction,
   markMessageReadAction,
 } from "@/app/actions/sanityActions";
+import { addActivityLog } from "@/utils/activityLogger";
 
 interface MessagesWithReadState extends InboxMessage {
   read?: boolean;
@@ -85,6 +86,7 @@ export default function AdminInboxPage() {
     });
     setMessages(updated);
     saveToStorage(updated);
+    addActivityLog(`INBOX: Marked ${checkedIds.length} messages as read`, "info");
     setCheckedIds([]);
   };
 
@@ -95,6 +97,7 @@ export default function AdminInboxPage() {
     const updated = messages.filter((msg) => !checkedIds.includes(msg.id));
     setMessages(updated);
     saveToStorage(updated);
+    addActivityLog(`INBOX: Bulk purged ${checkedIds.length} messages`, "error");
     setCheckedIds([]);
     if (selectedMsgId && checkedIds.includes(selectedMsgId)) {
       setSelectedMsgId(updated[0]?.id || null);
@@ -103,10 +106,13 @@ export default function AdminInboxPage() {
 
   const handleDeleteSingle = (id: string) => {
     if (!confirm("CONFIRM_DELETION: This action is irreversible.")) return;
+    const deletedMsg = messages.find((m) => m.id === id);
+    const senderName = deletedMsg ? deletedMsg.name : id;
     deleteMessageAction(id);
     const updated = messages.filter((msg) => msg.id !== id);
     setMessages(updated);
     saveToStorage(updated);
+    addActivityLog(`INBOX: Purged message from '${senderName}'`, "error");
     if (selectedMsgId === id) {
       setSelectedMsgId(updated[0]?.id || null);
     }
@@ -119,6 +125,7 @@ export default function AdminInboxPage() {
     setTimeout(() => {
       setReplySentStatus("SENT");
       setReplyText("");
+      addActivityLog(`INBOX: Replied to message from '${selectedMessage?.name}'`, "info");
       setTimeout(() => setReplySentStatus("IDLE"), 2500);
     }, 1500);
   };
@@ -265,7 +272,7 @@ export default function AdminInboxPage() {
 
               {/* Reply Box */}
               <div className="pt-4 border-t border-primary/10 space-y-4 font-code">
-                <h3 className="text-code font-bold uppercase">SECURE_REPLY</h3>
+                <h3 className="text-code font-bold uppercase">REPLY</h3>
                 {replySentStatus === "SENT" ? (
                   <div className="border border-primary bg-secondary-container p-4 text-code text-primary font-bold animate-pulse">
                     &gt; TRANSMISSION ENCRYPTED AND DISPATCHED [OK]
@@ -275,7 +282,7 @@ export default function AdminInboxPage() {
                     <textarea
                       value={replyText}
                       onChange={(e) => setReplyText(e.target.value)}
-                      placeholder="Type secure reply here..."
+                      placeholder="Type reply here..."
                       className="w-full border border-primary p-2 text-code bg-white h-24 outline-none resize-none"
                       disabled={replySentStatus === "SENDING"}
                       required

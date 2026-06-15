@@ -7,6 +7,7 @@ import {
   updateFAQAction,
   deleteFAQAction,
 } from "@/app/actions/sanityActions";
+import { addActivityLog } from "@/utils/activityLogger";
 
 export default function AdminFAQPage() {
   const [faqs, setFaqs] = useState<FAQ[]>([]);
@@ -51,6 +52,7 @@ export default function AdminFAQPage() {
             answer: answer.trim(),
           };
           updateFAQAction(faq.id, updatedNode);
+          addActivityLog(`FAQ: Updated query '${updatedNode.question.substring(0, 30)}...'`, "info");
           return updatedNode;
         }
         return faq;
@@ -68,6 +70,7 @@ export default function AdminFAQPage() {
       const updated = [...faqs, newFaq];
       setFaqs(updated);
       saveToStorage(updated);
+      addActivityLog(`FAQ: Created new query '${newFaq.question.substring(0, 30)}...'`, "info");
     }
 
     handleClear();
@@ -81,10 +84,13 @@ export default function AdminFAQPage() {
 
   const handleDelete = (id: string) => {
     if (!confirm("CONFIRM_DELETION: This action is irreversible.")) return;
+    const deletedFaq = faqs.find((f) => f.id === id);
+    const questionStr = deletedFaq ? deletedFaq.question.substring(0, 30) : id;
     deleteFAQAction(id);
     const updated = faqs.filter((faq) => faq.id !== id);
     setFaqs(updated);
     saveToStorage(updated);
+    addActivityLog(`FAQ: Deleted query '${questionStr}...'`, "error");
     if (editingId === id) {
       handleClear();
     }
@@ -96,7 +102,7 @@ export default function AdminFAQPage() {
       <div className="col-span-12 lg:col-span-7 space-y-6">
         <div className="flex items-center justify-between border-b border-primary pb-2">
           <h2 className="font-headline-md text-headline-md font-bold uppercase tracking-tight">
-            Existing_Queries
+            Existing Queries
           </h2>
           <span className="font-code text-label-sm opacity-50">
             COUNT: {String(faqs.length).padStart(2, "0")}
@@ -116,7 +122,7 @@ export default function AdminFAQPage() {
               >
                 <div className="flex justify-between items-start mb-2 font-code">
                   <span className="text-label-sm text-secondary opacity-65">
-                    ID: QA_{String(index + 1).padStart(3, "0")}
+                    ID: QA {String(index + 1).padStart(3, "0")}
                   </span>
                   <div className="flex gap-2">
                     <button
@@ -167,7 +173,7 @@ export default function AdminFAQPage() {
           <div className="border border-primary p-6 bg-surface">
             <div className="mb-8 font-code">
               <h2 className="font-headline-md text-headline-md font-bold uppercase mb-2">
-                {editingId ? "Edit_Entry" : "Create_New_Entry"}
+                {editingId ? "Edit_Entry" : "Create New Entry"}
               </h2>
               <p className="text-label-sm opacity-60">
                 {editingId ? `RECORD_UID: ${editingId}` : "ADDITION_MODULE // v2.0"}
@@ -177,7 +183,7 @@ export default function AdminFAQPage() {
             <form onSubmit={handleSubmit} className="space-y-8 font-code">
               <div>
                 <label className="block font-code text-label-sm font-bold uppercase mb-2 text-on-surface">
-                  Question_Input
+                  Question Input
                 </label>
                 <div className="relative group">
                   <input
@@ -197,7 +203,7 @@ export default function AdminFAQPage() {
 
               <div>
                 <label className="block font-code text-label-sm font-bold uppercase mb-2 text-on-surface">
-                  Response_Textarea
+                  Response Textarea
                 </label>
                 <div className="relative">
                   <textarea
@@ -221,13 +227,13 @@ export default function AdminFAQPage() {
                   type="button"
                   onClick={handleClear}
                 >
-                  CLEAR_FORM
+                  CLEAR FORM
                 </button>
                 <button
                   className="w-full bg-primary text-on-primary py-3 font-code font-bold hover:bg-surface hover:text-primary border border-primary transition-all cursor-pointer"
                   type="submit"
                 >
-                  {editingId ? "SAVE_ENTRY" : "COMMIT_ENTRY"}
+                  {editingId ? "SAVE ENTRY" : "COMMIT ENTRY"}
                 </button>
               </div>
             </form>
@@ -238,7 +244,7 @@ export default function AdminFAQPage() {
             <div className="relative z-10">
               <h4 className="text-label-sm font-bold flex items-center gap-2 mb-2">
                 <span className="material-symbols-outlined text-[16px]">info</span>
-                SYSTEM_HINT
+                SYSTEM HINT
               </h4>
               <p className="text-label-sm leading-relaxed opacity-80">
                 Entries are automatically indexed for the global knowledge base upon commitment. Ensure responses adhere to the markdown standards defined in ROOT/DOCS.

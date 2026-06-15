@@ -1,6 +1,18 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono } from "next/font/google";
+import { JetBrains_Mono, Space_Grotesk, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta-sans",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+});
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
@@ -9,7 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "aaronnofrail portofolio",
+  title: "aaronnofrail portfolio",
   description: "Computer Science specialist passionate about engineering secure, scalable, and lightweight backend architectures.",
 };
 
@@ -21,7 +33,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${jetbrainsMono.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>
@@ -46,8 +58,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col relative bg-background text-primary selection:bg-primary selection:text-on-primary">
-        <div className="crt-overlay"></div>
+      <body className="min-h-full flex flex-col relative bg-background text-primary selection:bg-primary selection:text-on-primary font-sans">
         {children}
       </body>
     </html>

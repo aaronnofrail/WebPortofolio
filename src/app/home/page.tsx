@@ -5,137 +5,113 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PortfolioGate from "@/components/PortfolioGate";
-import { mockBio, Bio } from "@/data/mockData";
+import { translations } from "@/data/translations";
 
 export default function HomePage() {
-  const [logs, setLogs] = useState<string[]>([]);
-  const [bio, setBio] = useState<Bio>(mockBio);
-  const [grayscale, setGrayscale] = useState(true);
+  const [currentDate, setCurrentDate] = useState("");
 
   useEffect(() => {
-    const stored = localStorage.getItem("aaronnofrail_bio");
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        if (parsed.description && parsed.description.includes("arundaffa.nahara@gmail.com")) {
-          localStorage.removeItem("aaronnofrail_bio");
-          setBio(mockBio);
-        } else {
-          setBio(parsed);
-        }
-      } catch (e) {}
-    }
-
-    const storedGrayscale = localStorage.getItem("aaronnofrail_grayscale");
-    if (storedGrayscale !== null) {
-      setGrayscale(storedGrayscale === "true");
-    }
-
-    const fullLogs = [
-      "> ROOT SEQUENCE INITIATED",
-      "> Loading modules... [OK]",
-      "> Establishing secure connection... [OK]",
-      "> Retrieving portfolio data... [OK]",
-      "> SYS.READY: Standing by for input."
-    ];
-    
-    let currentIdx = 0;
-    const interval = setInterval(() => {
-      if (currentIdx < fullLogs.length) {
-        setLogs((prev) => [...prev, fullLogs[currentIdx]]);
-        currentIdx++;
-      } else {
-        clearInterval(interval);
-      }
-    }, 500);
-
-    return () => clearInterval(interval);
+    // Format current date
+    const date = new Date();
+    const options: Intl.DateTimeFormatOptions = { month: "short", day: "numeric", year: "numeric" };
+    setCurrentDate(date.toLocaleDateString("en-US", options).toUpperCase());
   }, []);
+
+  const t = translations.en;
+
+  // Tilted rotations for the hero badges
+  const badgeRotations = [
+    "rotate-[-3deg]",
+    "rotate-[4deg]",
+    "rotate-[-6deg]",
+    "rotate-[8deg]",
+    "rotate-[-2deg]",
+  ];
 
   return (
     <PortfolioGate>
       <Navbar />
-      <main className="flex-grow max-w-container-max mx-auto w-full px-margin-mobile md:px-margin-desktop py-12 flex flex-col gap-12 z-10 relative">
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-gutter items-start">
+      <main className="w-full min-h-[100dvh] bg-white dark:bg-black font-mono overflow-hidden transition-colors duration-300 relative flex flex-col justify-between pt-20">
+        
+        {/* Decorative background grid pattern */}
+        <div className="absolute inset-0 z-0 opacity-[0.02] dark:opacity-[0.03] pointer-events-none" style={{ backgroundImage: "linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px)", backgroundSize: "32px 32px" }}></div>
+
+        {/* Hero Section Container */}
+        <div className="flex-grow flex flex-col justify-center items-center relative z-10 px-4 mb-20">
           
-          {/* Main Bio Content */}
-          <div className="col-span-1 md:col-span-8 flex flex-col gap-6">
-            <div className="border border-primary bg-surface p-6 md:p-8 relative">
-              {/* <div className="absolute top-0 right-0 bg-primary text-on-primary font-label-sm text-label-sm px-2 py-1 border-l border-b border-primary">
-                SYSTEM.READY
-              </div> */}
-              <h1 className="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg mt-4 mb-2">
-                {bio.terminalText.startsWith(">") ? bio.terminalText : `> ${bio.terminalText}`}
-                <span className="terminal-caret ml-1"></span>
-              </h1>
-              
-              <div className="font-body-md text-body-md text-secondary border-l-2 border-primary pl-4 my-6 space-y-4 whitespace-pre-line">
-                {bio.description}
-              </div>
+          {/* Centered Large Typographic Name Banner */}
+          <div className="w-full select-none pointer-events-none my-auto">
+            <h1 className="text-[12vw] leading-[0.8] font-black tracking-tighter text-black dark:text-white text-center uppercase transition-colors duration-300">
+              AARONNOFRAIL
+            </h1>
+            {/* <p className="text-center font-bold tracking-widest text-[11px] md:text-sm text-neutral-500 dark:text-neutral-400 mt-4 uppercase">
+              {t.hero.tagline}
+            </p> */}
+          </div>
 
-              <div className="flex flex-wrap gap-2 mt-8">
-                {bio.skills.map((skill) => (
-                  <span
-                    key={skill}
-                    className="border border-primary px-3 py-1 font-label-sm text-label-sm uppercase hover:bg-primary hover:text-on-primary transition-colors cursor-default"
+          {/* Floating Tilted Skill Pills */}
+          <div className="absolute inset-x-4 top-[68%] md:top-[65%] flex flex-wrap items-center justify-center gap-3 md:gap-5 z-20">
+            {t.hero.skills.map((skill, index) => {
+              const rotation = badgeRotations[index % badgeRotations.length];
+              const isAccent = index % 2 === 0;
+
+              return (
+                <div key={skill} className={rotation}>
+                  <div
+                    className={`flex items-center justify-center whitespace-nowrap transition-transform duration-300 ease-out hover:scale-105 font-bold text-[10px] md:text-xs uppercase rounded-full px-5 py-2.5 border-2 border-black dark:border-neutral-700 shadow-neo ${
+                      isAccent
+                        ? "bg-white dark:bg-neutral-900 text-black dark:text-white"
+                        : "bg-black dark:bg-white text-white dark:text-black hover:bg-neutral-900 dark:hover:bg-neutral-100"
+                    }`}
                   >
-                    [ {skill} ]
-                  </span>
-                ))}
-              </div>
-
-              <div className="mt-8 pt-6 border-t border-primary flex gap-4">
-                <Link
-                  href="/contact"
-                  className="bg-primary text-on-primary border border-primary px-6 py-2 font-body-md text-body-md hover:bg-surface hover:text-primary hover:border-2 transition-all block"
-                >
-                  [ CONTACT ]
-                </Link>
-                <Link
-                  href="/experience"
-                  className="bg-surface text-primary border border-primary px-6 py-2 font-body-md text-body-md hover:bg-primary hover:text-on-primary transition-all block"
-                >
-                  [ JOURNEY ]
-                </Link>
-              </div>
-            </div>
+                    {skill}
+                    {index % 3 === 0 && <span className="ml-1 text-red-500">✦</span>}
+                  </div>
+                </div>
+              );
+            })}
           </div>
+        </div>
 
-          {/* Sidebar Mascot & Logs */}
-          <div className="col-span-1 md:col-span-4 flex flex-col gap-6">
-            {/* Mascot Image */}
-            <div className="border border-primary bg-surface p-4 flex justify-center items-center aspect-square md:aspect-auto md:h-48 overflow-hidden">
-              <img
-                alt="8-bit style black cat mascot"
-                className={`w-full h-full object-cover contrast-125 mix-blend-multiply dark:mix-blend-normal dark:invert ${
-                  grayscale ? "grayscale" : ""
-                }`}
-                src="/assets/01_cat.png"
-              />
-            </div>
+        {/* Neo-brutalist Bottom Status Bar */}
+        <div className="w-full border-t-0.1 border-black dark:border-neutral-700 bg-white dark:bg-neutral-950 text-black dark:text-white font-mono text-[10px] md:text-xs uppercase tracking-wider z-20 relative transition-colors duration-300">
+          <div className="grid grid-cols-1 md:grid-cols-1 divide-x-2 divide-black dark:divide-neutral-700 text-center md:text-center">
             
-            {/* Terminal logs sequence */}
-            <div className="border border-primary bg-surface font-code text-code p-4 flex flex-col h-64 overflow-y-auto">
-              <div className="border-b border-primary pb-2 mb-2 flex justify-between items-center text-secondary font-label-sm text-label-sm">
-                <span>sys_log.txt</span>
-                <span className="material-symbols-outlined text-sm">terminal</span>
-              </div>
-              <ul className="space-y-2 text-primary opacity-80">
-                {logs.map((log, index) => (
-                  <li key={index} className="transition-all duration-150">
-                    {log}
-                  </li>
-                ))}
-                {logs.length < 5 && (
-                  <li>
-                    &gt; <span className="inline-block w-2.5 h-4 bg-primary align-middle cursor-blink"></span>
-                  </li>
-                )}
-              </ul>
-            </div>
-          </div>
+            {/* Status 1: Open to Work */}
+            {/* <div className="p-4 flex items-center justify-center md:justify-start gap-3 hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-colors cursor-default group">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+              </span>
+              <span className="font-bold">{t.hero.statusOpen}</span>
+            </div> */}
 
-        </section>
+            {/* Status 2: Location */}
+            {/* <div className="p-4 flex items-center justify-center md:justify-start hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-colors cursor-default">
+              <span>{t.hero.statusLocation}</span>
+            </div> */}
+
+            {/* Status 3: Current Time */}
+            {/* <div className="p-4 flex items-center justify-center md:justify-start hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-colors cursor-default">
+              <span className="flex gap-2">
+                <span className="font-bold">TIME:</span>
+                <span>{currentDate || "..."}</span>
+              </span>
+            </div> */}
+
+            {/* Status 4: Navigation Link */}
+            <Link
+              href="/about"
+              className="p-4 flex items-center justify-center gap-2 hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-colors cursor-pointer group animate-pulse"
+            >
+              <span>{t.hero.scrollDown}</span>
+              <span className="material-symbols-outlined text-sm block group-hover:translate-y-1 transition-transform">
+                arrow_outward
+              </span>
+            </Link>
+          </div>
+        </div>
+
       </main>
       <Footer />
     </PortfolioGate>

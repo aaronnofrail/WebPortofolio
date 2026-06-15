@@ -18,11 +18,6 @@ export default function AdminHeader() {
         </span>
         <span className="terminal-caret"></span>
       </div>
-      <div className="flex items-center gap-8 h-full">
-        <div className="h-full border-l border-primary px-6 flex items-center bg-surface-container-lowest">
-          <span className="font-code text-label-sm font-bold text-primary">SYSTEM_UPTIME: 99.9%</span>
-        </div>
-      </div>
     </header>
   );
 }

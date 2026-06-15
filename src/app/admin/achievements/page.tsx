@@ -7,6 +7,7 @@ import {
   updateAchievementAction,
   deleteAchievementAction,
 } from "@/app/actions/sanityActions";
+import { addActivityLog } from "@/utils/activityLogger";
 
 export default function AdminAchievementsPage() {
   const [achievements, setAchievements] = useState<Achievement[]>([]);
@@ -41,6 +42,18 @@ export default function AdminAchievementsPage() {
     setEditingId(null);
   };
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (typeof reader.result === "string") {
+        setImageVal(reader.result);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !description.trim()) return;
@@ -65,6 +78,7 @@ export default function AdminAchievementsPage() {
             image: imagePath,
           };
           updateAchievementAction(ach.id, updatedNode);
+          addActivityLog(`ACHIEVEMENT: Updated configuration for '${updatedNode.title}'`, "info");
           return updatedNode;
         }
         return ach;
@@ -84,6 +98,7 @@ export default function AdminAchievementsPage() {
       const updated = [...achievements, newAch];
       setAchievements(updated);
       saveToStorage(updated);
+      addActivityLog(`ACHIEVEMENT: Created new achievement '${newAch.title}'`, "info");
     }
 
     handleClear();
@@ -99,10 +114,13 @@ export default function AdminAchievementsPage() {
 
   const handleDelete = (id: string) => {
     if (!confirm("CONFIRM_DELETION: This action is irreversible.")) return;
+    const deletedAch = achievements.find((a) => a.id === id);
+    const titleStr = deletedAch ? deletedAch.title : id;
     deleteAchievementAction(id);
     const updated = achievements.filter((ach) => ach.id !== id);
     setAchievements(updated);
     saveToStorage(updated);
+    addActivityLog(`ACHIEVEMENT: Deleted achievement '${titleStr}'`, "error");
     if (editingId === id) {
       handleClear();
     }
@@ -186,13 +204,30 @@ export default function AdminAchievementsPage() {
                 <div className="text-xs text-secondary opacity-60 mb-2">
                   Or enter image URL:
                 </div>
-                <input
-                  className="w-full bg-transparent border-t-0 border-l-0 border-r-0 border-b border-primary px-0 py-2 font-code focus:ring-0 outline-none focus:border-b-2"
-                  placeholder="https://... or custom icon name"
-                  type="text"
-                  value={imageVal}
-                  onChange={(e) => setImageVal(e.target.value)}
-                />
+                <div className="flex flex-col gap-4">
+                  <input
+                    className="w-full bg-transparent border-t-0 border-l-0 border-r-0 border-b border-primary px-0 py-2 font-code focus:ring-0 outline-none focus:border-b-2"
+                    placeholder="https://... or custom icon name"
+                    type="text"
+                    value={imageVal}
+                    onChange={(e) => setImageVal(e.target.value)}
+                  />
+                  
+                  <label className="px-4 py-2 border border-primary text-xs font-bold uppercase cursor-pointer hover:bg-primary hover:text-on-primary transition-all font-code text-center">
+                    UPLOAD IMAGE FILE
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleImageUpload}
+                    />
+                  </label>
+                </div>
+                {imageVal.startsWith("data:") && (
+                  <span className="text-[10px] font-bold text-green-600 uppercase font-code block mt-2">
+                    [ Custom Base64 Image Loaded ]
+                  </span>
+                )}
               </div>
 
               <div className="space-y-2">

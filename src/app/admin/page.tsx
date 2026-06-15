@@ -16,10 +16,11 @@ export default function AdminLoginPage() {
     setLoading(true);
 
     setTimeout(() => {
-      // Fetch dynamic password from storage, fallback to "admin"
+      // Fetch dynamic username and password from storage, fallback to "admin"
+      const currentUsername = localStorage.getItem("admin_username") || "admin";
       const currentPassword = localStorage.getItem("admin_password") || "admin";
 
-      if (username.trim() === "admin" && password.trim() === currentPassword) {
+      if (username.trim() === currentUsername && password.trim() === currentPassword) {
         sessionStorage.setItem("admin_authorized", "true");
         router.push("/admin/dashboard");
       } else {

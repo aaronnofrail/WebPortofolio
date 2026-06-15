@@ -7,6 +7,7 @@ import {
   updateProjectAction,
   deleteProjectAction,
 } from "@/app/actions/sanityActions";
+import { addActivityLog } from "@/utils/activityLogger";
 
 export default function AdminProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -47,6 +48,18 @@ export default function AdminProjectsPage() {
     setEditingId(null);
   };
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (typeof reader.result === "string") {
+        setImageVal(reader.result);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !description.trim()) return;
@@ -71,6 +84,7 @@ export default function AdminProjectsPage() {
             status: statusVal,
           };
           updateProjectAction(proj.id, updatedNode);
+          addActivityLog(`PROJECT: Updated project configuration for '${updatedNode.title}'`, "info");
           return updatedNode;
         }
         return proj;
@@ -93,6 +107,7 @@ export default function AdminProjectsPage() {
       const updated = [...projects, newProj];
       setProjects(updated);
       saveToStorage(updated);
+      addActivityLog(`PROJECT: Created new project '${newProj.title}'`, "info");
     }
 
     handleClear();
@@ -119,10 +134,13 @@ export default function AdminProjectsPage() {
 
   const handleDelete = (id: string) => {
     if (!confirm("CONFIRM_DELETION: This action is irreversible.")) return;
+    const deletedProj = projects.find((p) => p.id === id);
+    const titleStr = deletedProj ? deletedProj.title : id;
     deleteProjectAction(id);
     const updated = projects.filter((proj) => proj.id !== id);
     setProjects(updated);
     saveToStorage(updated);
+    addActivityLog(`PROJECT: Deleted project '${titleStr}'`, "error");
     if (editingId === id) {
       handleClear();
     }
@@ -332,13 +350,31 @@ export default function AdminProjectsPage() {
                   </button>
                 ))}
               </div>
-              <input
-                className="font-body-lg p-2 border-b border-primary focus:border-b-2 outline-none"
-                placeholder="Or enter custom URL/path..."
-                type="text"
-                value={imageVal}
-                onChange={(e) => setImageVal(e.target.value)}
-              />
+              
+              <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
+                <input
+                  className="font-body-lg p-2 border-b border-primary focus:border-b-2 outline-none flex-grow"
+                  placeholder="Or enter custom URL/path..."
+                  type="text"
+                  value={imageVal}
+                  onChange={(e) => setImageVal(e.target.value)}
+                />
+                
+                <label className="px-6 py-3 border border-primary text-xs font-bold uppercase cursor-pointer hover:bg-primary hover:text-on-primary transition-all font-code text-center shrink-0 flex items-center justify-center">
+                  UPLOAD IMAGE
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleImageUpload}
+                  />
+                </label>
+              </div>
+              {imageVal.startsWith("data:") && (
+                <span className="text-[10px] font-bold text-green-600 uppercase font-code">
+                  [ Custom Base64 Image Loaded ]
+                </span>
+              )}
             </div>
 
             <div className="flex flex-col gap-2 md:col-span-2">

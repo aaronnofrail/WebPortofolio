@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { addActivityLog } from "@/utils/activityLogger";
 
 export default function AdminSettingsPage() {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
@@ -12,11 +14,15 @@ export default function AdminSettingsPage() {
   useEffect(() => {
     const storedPassword = localStorage.getItem("admin_password") || "admin";
     setPassword(storedPassword);
+    const storedUsername = localStorage.getItem("admin_username") || "admin";
+    setUsername(storedUsername);
   }, []);
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     localStorage.setItem("admin_password", password.trim());
+    localStorage.setItem("admin_username", username.trim());
+    addActivityLog("SETTINGS: Admin authentication credentials updated", "info");
     setSaveSuccess(true);
     setShowNotification(true);
     setTimeout(() => {
@@ -29,16 +35,20 @@ export default function AdminSettingsPage() {
     
     // Clear all storage keys related to portfolio config
     localStorage.removeItem("admin_password");
+    localStorage.removeItem("admin_username");
     localStorage.removeItem("aaronnofrail_bio");
     localStorage.removeItem("aaronnofrail_experiences");
     localStorage.removeItem("aaronnofrail_achievements");
     localStorage.removeItem("aaronnofrail_projects");
     localStorage.removeItem("aaronnofrail_faqs");
     localStorage.removeItem("aaronnofrail_inbox");
+    localStorage.removeItem("aaronnofrail_logs");
 
-    // Reset password state
+    // Reset state
     setPassword("admin");
+    setUsername("admin");
     
+    addActivityLog("SETTINGS: System reset to factory defaults triggered", "error");
     setSaveSuccess(false);
     setShowNotification(true);
     setTimeout(() => {
@@ -89,6 +99,22 @@ export default function AdminSettingsPage() {
             </h3>
             
             <form onSubmit={handleSave} className="space-y-8">
+              {/* Admin Username */}
+              <div className="space-y-2">
+                <label className="block font-code text-label-sm uppercase opacity-60">
+                  Admin Username
+                </label>
+                <input
+                  className="w-full bg-surface border border-primary px-4 py-3 font-code focus:ring-0 outline-none text-body-lg"
+                  placeholder="ENTER ADMIN USERNAME"
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                />
+              </div>
+
+              {/* Admin Password */}
               <div className="space-y-2">
                 <label className="block font-code text-label-sm uppercase opacity-60">
                   New Password

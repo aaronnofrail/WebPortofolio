@@ -1,23 +1,75 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { getActivityLogs, addActivityLog } from "@/utils/activityLogger";
+import { mockProjects } from "@/data/mockData";
 
 export default function AdminDashboardPage() {
+  const router = useRouter();
   const [logs, setLogs] = useState<Array<{ time: string; text: string; type?: string; opacity: number }>>([]);
+  const [stats, setStats] = useState({
+    projects: 0,
+    unreadMessages: 0,
+    views: 1243,
+  });
+
+  const loadData = () => {
+    // Get latest logs
+    setLogs(getActivityLogs());
+
+    // Calculate dynamic stats
+    let projCount = mockProjects.length;
+    const storedProjects = localStorage.getItem("aaronnofrail_projects");
+    if (storedProjects) {
+      try {
+        projCount = JSON.parse(storedProjects).length;
+      } catch (e) {}
+    }
+
+    let unread = 0;
+    const storedInbox = localStorage.getItem("aaronnofrail_inbox");
+    if (storedInbox) {
+      try {
+        const inbox = JSON.parse(storedInbox);
+        unread = inbox.filter((m: any) => !m.read).length;
+      } catch (e) {}
+    }
+
+    let viewsVal = 1243;
+    const storedViews = localStorage.getItem("aaronnofrail_views");
+    if (storedViews) {
+      viewsVal = parseInt(storedViews, 10);
+    } else {
+      localStorage.setItem("aaronnofrail_views", "1243");
+    }
+
+    setStats({
+      projects: projCount,
+      unreadMessages: unread,
+      views: viewsVal,
+    });
+  };
 
   useEffect(() => {
-    const defaultLogs = [
-      { time: "2023-10-24 09:12:04", text: "SYS_INIT: Starting kernel modules... SUCCESS", opacity: 0.5 },
-      { time: "2023-10-24 10:45:22", text: "UPDATE: Project 'NeuroInterface' pushed to v2.1.0", type: "info", opacity: 1 },
-      { time: "2023-10-24 11:20:15", text: "INBOUND: Message received from client_004@proton.me", opacity: 1 },
-      { time: "2023-10-24 12:00:59", text: "ALERT: Authentication attempt failed (IP: 192.168.1.104)", type: "error", opacity: 1 },
-      { time: "2023-10-24 13:15:33", text: "LOG: Cache cleared successfully (245.2 MB)", opacity: 1 },
-      { time: "2023-10-24 14:40:11", text: "INFO: Portfolio assets sync completed with Cloud_Main", type: "info", opacity: 1 },
-      { time: "2023-10-24 15:00:00", text: "-- STANDBY MODE ENGAGED --", opacity: 0.4 }
-    ];
-
-    setLogs(defaultLogs);
+    loadData();
   }, []);
+
+  const handleNewProject = () => {
+    router.push("/admin/projects");
+  };
+
+  const handleGenerateReport = () => {
+    addActivityLog("REPORT: Traffic analysis triggered by user", "info");
+    addActivityLog(`REPORT: Unique Visitors (24h) = ${Math.floor(stats.views * 0.4)} | Total Page Views = ${stats.views}`, "log");
+    loadData();
+  };
+
+  const handleManageKeys = () => {
+    addActivityLog("SEC_KEY: Rotating local SSH and Session keys...", "info");
+    addActivityLog("SEC_KEY: Generated new 4096-bit RSA key pair - STATUS: SUCCESS", "log");
+    loadData();
+  };
 
   return (
     <div className="space-y-12">
@@ -30,25 +82,31 @@ export default function AdminDashboardPage() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Card 1 */}
-        <div className="bg-surface border border-primary p-6 flex flex-col justify-between hover:translate-x-1 hover:-translate-y-1 transition-transform">
+        <div 
+          onClick={() => router.push("/admin/projects")}
+          className="bg-surface border border-primary p-6 flex flex-col justify-between hover:translate-x-1 hover:-translate-y-1 transition-transform cursor-pointer"
+        >
           <div className="flex justify-between items-start mb-8">
             <span className="font-code text-label-sm tracking-widest text-secondary uppercase">Total Projects</span>
             <span className="material-symbols-outlined">folder_open</span>
           </div>
           <div>
-            <span className="font-headline-lg text-headline-lg leading-none font-bold">12</span>
+            <span className="font-headline-lg text-headline-lg leading-none font-bold">{stats.projects}</span>
             <span className="font-code text-label-sm block mt-2 text-secondary">&gt; Active Repositories</span>
           </div>
         </div>
         
         {/* Card 2 */}
-        <div className="bg-surface border border-primary p-6 flex flex-col justify-between hover:translate-x-1 hover:-translate-y-1 transition-transform">
+        <div 
+          onClick={() => router.push("/admin/inbox")}
+          className="bg-surface border border-primary p-6 flex flex-col justify-between hover:translate-x-1 hover:-translate-y-1 transition-transform cursor-pointer"
+        >
           <div className="flex justify-between items-start mb-8">
             <span className="font-code text-label-sm tracking-widest text-secondary uppercase">Unread Messages</span>
             <span className="material-symbols-outlined text-error">inbox</span>
           </div>
           <div>
-            <span className="font-headline-lg text-headline-lg text-error leading-none font-bold">5</span>
+            <span className={`font-headline-lg text-headline-lg leading-none font-bold ${stats.unreadMessages > 0 ? "text-error" : ""}`}>{stats.unreadMessages}</span>
             <span className="font-code text-label-sm block mt-2 text-secondary">&gt; Urgent Responses Required</span>
           </div>
         </div>
@@ -60,7 +118,7 @@ export default function AdminDashboardPage() {
             <span className="material-symbols-outlined">visibility</span>
           </div>
           <div>
-            <span className="font-headline-lg text-headline-lg leading-none font-bold">1.2k</span>
+            <span className="font-headline-lg text-headline-lg leading-none font-bold">{stats.views}</span>
             <span className="font-code text-label-sm block mt-2 text-secondary">&gt; Last 30 Cycles</span>
           </div>
         </div>
@@ -78,7 +136,7 @@ export default function AdminDashboardPage() {
         </div>
         
         <div className="p-6 font-code text-body-md overflow-x-auto">
-          <div className="space-y-3">
+          <div className="space-y-3 max-h-[300px] overflow-y-auto custom-scrollbar">
             {logs.map((log, index) => {
               let logColorClass = "text-primary";
               if (log.type === "error") logColorClass = "text-error font-bold";
@@ -109,19 +167,28 @@ export default function AdminDashboardPage() {
         <div className="space-y-6">
           <h4 className="font-headline-md text-headline-md underline underline-offset-8">QUICK_ACTIONS</h4>
           <div className="space-y-4">
-            <button className="w-full text-left p-4 border border-primary flex justify-between items-center group hover:bg-primary hover:text-on-primary transition-all font-code cursor-pointer">
+            <button 
+              onClick={handleNewProject}
+              className="w-full text-left p-4 border border-primary flex justify-between items-center group hover:bg-primary hover:text-on-primary transition-all font-code cursor-pointer"
+            >
               <span>+ NEW_PROJECT_ENTRY</span>
               <span className="material-symbols-outlined transform group-hover:translate-x-2 transition-transform">
                 arrow_forward_ios
               </span>
             </button>
-            <button className="w-full text-left p-4 border border-primary flex justify-between items-center group hover:bg-primary hover:text-on-primary transition-all font-code cursor-pointer">
+            <button 
+              onClick={handleGenerateReport}
+              className="w-full text-left p-4 border border-primary flex justify-between items-center group hover:bg-primary hover:text-on-primary transition-all font-code cursor-pointer"
+            >
               <span>GENERATE_TRAFFIC_REPORT</span>
               <span className="material-symbols-outlined transform group-hover:translate-x-2 transition-transform">
                 analytics
               </span>
             </button>
-            <button className="w-full text-left p-4 border border-primary flex justify-between items-center group hover:bg-primary hover:text-on-primary transition-all font-code cursor-pointer">
+            <button 
+              onClick={handleManageKeys}
+              className="w-full text-left p-4 border border-primary flex justify-between items-center group hover:bg-primary hover:text-on-primary transition-all font-code cursor-pointer"
+            >
               <span>MANAGE_ENCRYPTION_KEYS</span>
               <span className="material-symbols-outlined transform group-hover:translate-x-2 transition-transform">
                 vpn_key

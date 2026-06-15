@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { translations } from "@/data/translations";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -11,6 +12,7 @@ export default function Navbar() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // Sync theme
     const savedTheme = localStorage.getItem("portfolio-theme");
     const initialTheme = savedTheme === "light" ? "light" : "dark";
     setTheme(initialTheme);
@@ -19,6 +21,7 @@ export default function Navbar() {
     } else {
       document.documentElement.classList.remove("dark");
     }
+
     setMounted(true);
   }, []);
 
@@ -33,95 +36,92 @@ export default function Navbar() {
     }
   };
 
+  // Get active translations (always English)
+  const t = translations.en;
+
   const navItems = [
-    { name: "home", href: "/home" },
-    { name: "about", href: "/about" },
-    { name: "experience", href: "/experience" },
-    { name: "projects", href: "/projects" },
-    { name: "faq", href: "/faq" },
-    { name: "contact", href: "/contact" },
+    { name: t.nav.home, href: "/home" },
+    { name: t.nav.about, href: "/about" },
+    { name: t.nav.experience, href: "/experience" },
+    { name: t.nav.projects, href: "/projects" },
+    { name: t.nav.faq, href: "/faq" },
+    { name: t.nav.contact, href: "/contact" },
   ];
 
   return (
-    <header className="w-full top-0 border-b border-primary bg-background z-40 relative">
-      <nav className="flex justify-between items-center max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-3">
-        <div className="font-headline-md text-headline-md font-bold lowercase text-primary">
+    <nav className="fixed top-0 left-0 w-full z-50 bg-white/95 dark:bg-black/95 backdrop-blur-md border-b border-neutral-200 dark:border-neutral-800 font-mono transition-colors duration-300">
+      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between relative">
+        {/* Brand / Logo */}
+        <div className="flex-shrink-0 z-20 font-bold lowercase tracking-tight text-[18px]">
           <Link
-            className="hover:bg-primary hover:text-on-primary transition-all duration-75 px-1"
+            className="text-black dark:text-white hover:text-neutral-500 transition-colors"
             href="/home"
           >
             aaronnofrail
           </Link>
         </div>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex gap-6 font-body-md text-body-md uppercase tracking-widest items-center">
+        {/* Desktop Nav Links */}
+        <div className="hidden md:flex items-center gap-8 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
                 key={item.href}
-                className={
+                className={`text-xs font-bold uppercase tracking-widest transition-colors ${
                   isActive
-                    ? "text-primary font-bold border-b-2 border-primary px-1.5 py-0.5"
-                    : "text-secondary hover:text-primary transition-colors duration-150 px-1.5 py-0.5 border-b-2 border-transparent"
-                }
+                    ? "text-black dark:text-white border-b-2 border-black dark:border-white pb-1"
+                    : "text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white"
+                }`}
                 href={item.href}
               >
                 {item.name}
               </Link>
             );
           })}
-
-          {/* Theme Toggle Button */}
-          <button
-            onClick={toggleTheme}
-            className="border border-primary p-1.5 hover:bg-primary hover:text-on-primary transition-all cursor-pointer flex items-center justify-center select-none ml-2"
-            title="Toggle theme mode"
-          >
-            <span className="material-symbols-outlined block text-[18px]">
-              {!mounted ? "dark_mode" : theme === "dark" ? "light_mode" : "dark_mode"}
-            </span>
-          </button>
         </div>
 
-        {/* Mobile Nav Actions */}
-        <div className="flex md:hidden items-center gap-3">
+        {/* Desktop Right Hand Side Actions */}
+        <div className="flex items-center gap-3 z-20">
+          {/* Theme Selector Icon */}
           <button
             onClick={toggleTheme}
-            className="border border-primary p-1.5 hover:bg-primary hover:text-on-primary transition-all cursor-pointer flex items-center justify-center select-none"
+            className="p-2 rounded-full border border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 text-black dark:text-white hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-all cursor-pointer flex items-center justify-center select-none"
             title="Toggle theme mode"
+            aria-label="Toggle theme mode"
           >
             <span className="material-symbols-outlined block text-[18px]">
               {!mounted ? "dark_mode" : theme === "dark" ? "light_mode" : "dark_mode"}
             </span>
           </button>
 
+          {/* Mobile menu trigger */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="border border-primary p-1.5 hover:bg-primary hover:text-on-primary flex items-center justify-center cursor-pointer"
+            className="p-2 text-black dark:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900 rounded-full transition-colors md:hidden cursor-pointer"
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
           >
-            <span className="material-symbols-outlined block text-[20px]">
+            <span className="material-symbols-outlined block text-[24px]">
               {mobileMenuOpen ? "close" : "menu"}
             </span>
           </button>
         </div>
-      </nav>
+      </div>
 
-      {/* Mobile Nav Drawer */}
+      {/* Mobile Drawer menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-primary bg-background p-4 flex flex-col gap-4 font-body-md text-body-md uppercase tracking-widest">
+        <div className="md:hidden border-t border-neutral-200 dark:border-neutral-800 bg-white dark:bg-black/95 p-6 flex flex-col gap-4 font-mono uppercase tracking-widest text-sm transition-all duration-300">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
                 key={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={
+                className={`py-2 px-3 border-l-4 rounded-r-md ${
                   isActive
-                    ? "text-primary font-bold border-l-4 border-primary pl-2 py-1"
-                    : "text-secondary hover:text-primary transition-colors duration-150 pl-2 py-1 border-l-4 border-transparent"
-                }
+                    ? "text-black dark:text-white border-black dark:border-white bg-neutral-100 dark:bg-neutral-950 font-bold"
+                    : "text-neutral-500 border-transparent hover:text-black dark:hover:text-white"
+                }`}
                 href={item.href}
               >
                 {item.name}
@@ -130,6 +130,6 @@ export default function Navbar() {
           })}
         </div>
       )}
-    </header>
+    </nav>
   );
 }

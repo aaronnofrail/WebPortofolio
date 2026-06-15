@@ -37,12 +37,12 @@ export default function SplashPage() {
         </Link>
       </main>
 
-      <div className="absolute bottom-8 left-8 hidden md:block">
+      {/* <div className="absolute bottom-8 left-8 hidden md:block">
         <p className="font-label-sm text-label-sm text-outline">SYS.INIT.LOADING_COMPLETE</p>
       </div>
       <div className="absolute bottom-8 right-8 hidden md:block">
         <p className="font-label-sm text-label-sm text-outline">v.2026.1</p>
-      </div>
+      </div> */}
     </div>
   );
 }

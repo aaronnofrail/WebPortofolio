@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PortfolioGate from "@/components/PortfolioGate";
 import { mockFAQs, FAQ } from "@/data/mockData";
+import { translations } from "@/data/translations";
 
 interface TerminalLine {
   type: "command" | "text" | "error" | "help" | "neofetch" | "faq" | "ls";
@@ -26,18 +27,18 @@ export default function FAQPage() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    // Fetch client IP
     fetch("https://api.ipify.org?format=json")
       .then((res) => res.json())
       .then((data) => setClientIp(data.ip))
       .catch(() => setClientIp("180.251.148.234"));
-  }, []);
 
-  useEffect(() => {
+    // Sync FAQs from localStorage
     const stored = localStorage.getItem("aaronnofrail_faqs");
     if (stored) {
       try {
         setFaqs(JSON.parse(stored));
-      } catch (e) { }
+      } catch (e) {}
     }
   }, []);
 
@@ -50,12 +51,13 @@ export default function FAQPage() {
     inputRef.current?.focus();
   };
 
+  const t = translations.en;
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       const command = inputValue.trim();
       if (!command && !isSubmittingFlag) return;
 
-      // Add to history list for up/down arrow indexing
       const newHistory = [...history, command];
       setHistory(newHistory);
       setHistoryIndex(newHistory.length);
@@ -92,7 +94,6 @@ export default function FAQPage() {
         return;
       }
 
-      // Add entered command line to terminal
       const updatedLines: TerminalLine[] = [
         ...terminalLines,
         { type: "command", text: command, prompt: "aaron@nofrail:~$" },
@@ -121,7 +122,6 @@ export default function FAQPage() {
       }
     } else if (e.key === "Tab") {
       e.preventDefault();
-      // Auto-complete file names
       const parts = inputValue.split(" ");
       if (parts[0] === "cat" && parts[1] !== undefined) {
         const filePrefix = parts[1].toLowerCase();
@@ -249,12 +249,8 @@ Files available for cat:
           if (storedBio) {
             try {
               const parsed = JSON.parse(storedBio);
-              if (parsed.description && parsed.description.includes("Computer Science geek")) {
-                localStorage.removeItem("aaronnofrail_bio");
-              } else {
-                bioDesc = parsed.description;
-              }
-            } catch (e) { }
+              bioDesc = parsed.description;
+            } catch (e) {}
           }
           const finalDesc =
             bioDesc ||
@@ -329,34 +325,34 @@ Files available for cat:
       case "command":
         const promptText = line.prompt || "aaron@nofrail:~$";
         return (
-          <div key={index} className="flex flex-wrap items-center gap-2 font-code">
-            <span className="text-secondary select-none">
+          <div key={index} className="flex flex-wrap items-center gap-2 font-mono text-xs md:text-sm">
+            <span className="text-neutral-500 select-none">
               {promptText}
             </span>
-            <span className="text-primary font-bold break-all">{line.text}</span>
+            <span className="text-black dark:text-white font-bold break-all">{line.text}</span>
           </div>
         );
       case "text":
         return (
-          <div key={index} className="whitespace-pre-wrap leading-relaxed text-primary break-words font-code">
+          <div key={index} className="whitespace-pre-wrap leading-relaxed text-black dark:text-white break-words font-mono text-xs md:text-sm">
             {line.text}
           </div>
         );
       case "help":
         return (
-          <pre key={index} className="whitespace-pre-wrap leading-relaxed text-secondary break-words font-code max-w-full overflow-x-auto">
+          <pre key={index} className="whitespace-pre-wrap leading-relaxed text-neutral-600 dark:text-neutral-400 break-words font-mono text-xs md:text-sm max-w-full overflow-x-auto">
             {line.text}
           </pre>
         );
       case "ls":
         return (
-          <div key={index} className="text-primary font-bold font-code break-words max-w-full">
+          <div key={index} className="text-black dark:text-white font-bold font-mono text-xs md:text-sm break-words max-w-full">
             {line.text}
           </div>
         );
       case "error":
         return (
-          <div key={index} className="text-error font-bold font-code break-words">
+          <div key={index} className="text-red-500 font-bold font-mono text-xs md:text-sm break-words">
             {line.text}
           </div>
         );
@@ -365,11 +361,11 @@ Files available for cat:
           <div key={index} className="flex flex-col gap-6 pl-0 md:pl-4 max-w-full">
             {line.faqList?.map((faq) => (
               <article key={faq.id} className="flex flex-col gap-2">
-                <div className="flex gap-2 items-start font-bold font-code text-code text-primary">
-                  <span className="text-secondary select-none">&gt;</span>
+                <div className="flex gap-2 items-start font-bold font-mono text-xs md:text-sm text-black dark:text-white">
+                  <span className="text-neutral-500 select-none">&gt;</span>
                   <h3>{faq.question}</h3>
                 </div>
-                <div className="pl-4 text-on-surface-variant max-w-full font-code text-code leading-relaxed break-words whitespace-pre-wrap">
+                <div className="pl-4 text-neutral-600 dark:text-neutral-400 max-w-full font-mono text-xs md:text-sm leading-relaxed break-words whitespace-pre-wrap">
                   <p>{faq.answer}</p>
                 </div>
               </article>
@@ -378,9 +374,9 @@ Files available for cat:
         );
       case "neofetch":
         return (
-          <div key={index} className="flex flex-col gap-4 font-code text-code max-w-full text-primary select-text">
+          <div key={index} className="flex flex-col gap-4 font-mono text-xs md:text-sm max-w-full text-black dark:text-white select-text">
             {/* ASCII Art */}
-            <pre className="leading-tight select-none overflow-x-auto text-primary font-bold">
+            <pre className="leading-tight select-none overflow-x-auto text-black dark:text-white font-bold">
               {`                                        __            _ _ 
   __ _  __ _ _ __ ___  _ __  _ __   ___/ _|_ __ __ _(_) |
  / _\` |/ _\` | '__/ _ \\| '_ \\| '_ \\ / _ \\ |_| '__/ _\` | | |
@@ -388,7 +384,7 @@ Files available for cat:
  \\__,_|\\__,_|_|  \\___/|_| |_|_| |_|\\___|_| |_|  \\__,_|_|_|`}
             </pre>
 
-            <div className="text-center font-bold tracking-widest text-primary my-2">
+            <div className="text-center font-bold tracking-widest text-black dark:text-white my-2">
               aaronnofrail / ICC UH
             </div>
 
@@ -397,31 +393,31 @@ Files available for cat:
 
               <div className="flex flex-col gap-1 mt-1 font-mono">
                 <div>
-                  <span className="font-bold">Alias:</span> <span className="text-primary opacity-90">aaronnofrail</span>
+                  <span className="font-bold">Alias:</span> <span className="text-neutral-700 dark:text-neutral-300">aaronnofrail</span>
                 </div>
                 <div>
-                  <span className="font-bold">Affiliation:</span> <span className="text-primary opacity-90">ICC UH / Informatics Hasanuddin University</span>
+                  <span className="font-bold">Affiliation:</span> <span className="text-neutral-700 dark:text-neutral-300">ICC UH / Informatics Hasanuddin University</span>
                 </div>
                 <div>
-                  <span className="font-bold">Specialties:</span> <span className="text-primary opacity-90">Web Exploitation, Cryptography, Forensics, OSINT</span>
+                  <span className="font-bold">Specialties:</span> <span className="text-neutral-700 dark:text-neutral-300">Web Exploitation, Cryptography, Forensics, OSINT</span>
                 </div>
                 <div>
-                  <span className="font-bold">Status:</span> <span className="text-primary opacity-90">Seeking Internship / CTF Enjoyer</span>
+                  <span className="font-bold">Status:</span> <span className="text-neutral-700 dark:text-neutral-300">Seeking Internship / CTF Enthusiast</span>
                 </div>
                 <div>
-                  <span className="font-bold">Contact:</span> <a href="mailto:arundaffa.nahara@gmail.com" className="text-primary underline opacity-90">arundaffa.nahara@gmail.com</a>
+                  <span className="font-bold">Contact:</span> <a href="mailto:arundaffa.nahara@gmail.com" className="underline text-neutral-700 dark:text-neutral-300">arundaffa.nahara@gmail.com</a>
                 </div>
                 <div>
-                  <span className="font-bold">Instagram:</span> <a href="https://instagram.com/dfnhrr" target="_blank" rel="noopener noreferrer" className="text-primary underline opacity-90">@dfnhrr</a>
+                  <span className="font-bold">Instagram:</span> <a href="https://instagram.com/dfnhrr" target="_blank" rel="noopener noreferrer" className="underline text-neutral-700 dark:text-neutral-300">@dfnhrr</a>
                 </div>
               </div>
 
-              <p className="mt-2 font-bold">Client IP detected: <span className="text-primary opacity-90 font-normal">{clientIp}</span></p>
+              <p className="mt-2 font-bold">Client IP detected: <span className="text-neutral-700 dark:text-neutral-300 font-normal">{clientIp}</span></p>
 
               <p className="italic opacity-85 my-1">"When the tide goes out, you don't find your dreams—you find the anchor you actually built."</p>
 
-              <div className="mt-2 p-4 border border-primary/30 bg-primary/5 flex flex-col gap-2 rounded">
-                <span className="font-bold text-primary">The flag is:</span>
+              <div className="mt-2 p-4 border border-black/20 dark:border-white/20 bg-black/5 dark:bg-white/5 flex flex-col gap-2 rounded-xl">
+                <span className="font-bold">The flag is:</span>
                 <span className="opacity-90">{"the flag is my ex name in aaron{} format #iykyk"}</span>
               </div>
             </div>
@@ -435,37 +431,46 @@ Files available for cat:
   return (
     <PortfolioGate>
       <Navbar />
-      <main className="flex-grow w-full max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-12 flex flex-col gap-8 relative z-10">
+      <main className="flex-grow w-full max-w-7xl mx-auto px-6 py-24 md:py-32 font-mono transition-colors duration-300 bg-white dark:bg-black text-black dark:text-white relative flex flex-col gap-8">
+        
         {/* Heading */}
-        <h1 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary">
-          &gt; ./faq.sh
+        <h1 className="text-4xl md:text-7xl font-black uppercase tracking-tighter">
+          {t.faq.title}
         </h1>
 
-        {/* Terminal Output Component */}
+        {/* Terminal Window Block */}
         <div
           onClick={focusInput}
-          className="w-full border border-primary bg-surface flex flex-col relative overflow-hidden cursor-text min-h-[80px]"
+          className="w-full max-w-4xl mx-auto border-4 border-black dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-950 flex flex-col relative overflow-hidden rounded-[2.5rem] shadow-neo-lg min-h-[300px] cursor-text"
         >
+          {/* Scoped Scanlines effect */}
+          <div className="absolute inset-0 pointer-events-none z-10 scanlines opacity-50 dark:opacity-75"></div>
+
           {/* Terminal Header Bar */}
-          <div className="w-full bg-primary text-on-primary font-label-sm text-label-sm px-4 py-2 flex justify-between items-center select-none shrink-0">
-            <span>tty1</span>
-            <span>aaron@nofrail: ~</span>
+          <div className="w-full bg-black dark:bg-neutral-800 text-white font-mono text-xs px-6 py-3.5 flex justify-between items-center select-none shrink-0 border-b-2 border-black dark:border-neutral-700 z-20">
+            <span className="font-bold flex items-center gap-1">
+              <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span>
+              <span className="w-2.5 h-2.5 rounded-full bg-yellow-500 inline-block"></span>
+              <span className="w-2.5 h-2.5 rounded-full bg-green-500 inline-block"></span>
+              <span className="ml-2">tty1</span>
+            </span>
+            <span>{t.faq.terminalHeader}</span>
           </div>
 
-          {/* Terminal Body */}
-          <div className="p-6 md:p-8 flex-grow flex flex-col gap-6 overflow-y-auto w-full max-w-4xl mx-auto min-h-[80px] max-h-[70vh] custom-scrollbar">
+          {/* Terminal Body Viewport */}
+          <div className="p-6 md:p-8 flex-grow flex flex-col gap-6 overflow-y-auto w-full min-h-[250px] max-h-[60vh] custom-scrollbar z-20 relative bg-white dark:bg-neutral-950">
             {/* Rendered History */}
             {terminalLines.map((line, idx) => renderTerminalLine(line, idx))}
 
             {/* Active Prompt Input */}
-            <div className="flex items-center gap-2 flex-wrap font-code w-full">
-              <span className="text-secondary select-none shrink-0">
+            <div className="flex items-center gap-2 flex-wrap font-mono text-xs md:text-sm w-full">
+              <span className="text-neutral-500 select-none shrink-0">
                 aaron@nofrail:~$
               </span>
               <input
                 ref={inputRef}
                 type="text"
-                className="flex-1 min-w-[150px] bg-transparent text-primary font-bold outline-none font-code text-code p-0 m-0 border-none focus:ring-0 focus:outline-none"
+                className="flex-1 min-w-[150px] bg-transparent text-black dark:text-white font-bold outline-none border-none p-0 m-0 focus:ring-0 focus:outline-none"
                 style={{
                   border: "none",
                   outline: "none",

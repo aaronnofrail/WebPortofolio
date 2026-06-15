@@ -3,40 +3,37 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #fdf8f8;
+  --background: #ffffff;
   --foreground: #000000;
   
   --color-primary: #000000;
   --color-on-primary: #ffffff;
-  --color-secondary: #5f5f53;
+  --color-secondary: #52525b; /* zinc-600 */
   --color-on-secondary: #ffffff;
-  --color-secondary-container: #e5e3d4;
-  --color-on-secondary-container: #656559;
+  --color-secondary-container: #f4f4f5; /* zinc-100 */
+  --color-on-secondary-container: #18181b;
   
-  --color-surface: #fdf8f8;
-  --color-surface-dim: #ddd9d8;
-  --color-surface-container-low: #f7f3f2;
-  --color-surface-container: #f1edec;
-  --color-surface-container-high: #ebe7e6;
-  --color-surface-container-highest: #e5e2e1;
+  --color-surface: #ffffff;
+  --color-surface-dim: #f4f4f5;
+  --color-surface-container-low: #fafafa;
+  --color-surface-container: #f4f4f5;
+  --color-surface-container-high: #e4e4e7;
+  --color-surface-container-highest: #d4d4d8;
   --color-surface-container-lowest: #ffffff;
   
-  --color-outline: #747878;
-  --color-outline-variant: #c4c7c7;
-  --color-error: #ba1a1a;
+  --color-outline: #a1a1aa;
+  --color-outline-variant: #e4e4e7;
+  --color-error: #ef4444;
   --color-on-error: #ffffff;
-  --color-error-container: #ffdad6;
-  --color-on-error-container: #93000a;
+  --color-error-container: #ffffff;
+  --color-on-error-container: #991b1b;
 
   --caret-color: #000000;
-  --scanline-color: rgba(0, 0, 0, 0.02);
-  --crt-overlay-color: rgba(0, 0, 0, 0.03);
+  --scanline-color: rgba(0, 0, 0, 0.015);
+  --crt-overlay-color: rgba(0, 0, 0, 0.02);
   
-  --checkerboard-color-1: #f1edec;
-  --checkerboard-color-2: #fdf8f8;
-  
-  --shadow-color: #000000;
-  --shadow-color-ambient: rgba(0, 0, 0, 0.1);
+  --shadow-color: rgba(0, 0, 0, 1);
+  --shadow-color-ambient: rgba(0, 0, 0, 0.05);
 }
 
 .dark {
@@ -45,35 +42,32 @@
 
   --color-primary: #ffffff;
   --color-on-primary: #000000;
-  --color-secondary: #a1a1aa;
+  --color-secondary: #a1a1aa; /* zinc-400 */
   --color-on-secondary: #000000;
-  --color-secondary-container: #1a1c1c;
-  --color-on-secondary-container: #ffffff;
+  --color-secondary-container: #18181b; /* zinc-900 */
+  --color-on-secondary-container: #f4f4f5;
   
   --color-surface: #0a0a0a;
   --color-surface-dim: #050505;
-  --color-surface-container-low: #050505;
-  --color-surface-container: #0d0e0f;
-  --color-surface-container-high: #1a1c1c;
-  --color-surface-container-highest: #242626;
+  --color-surface-container-low: #09090b;
+  --color-surface-container: #18181b;
+  --color-surface-container-high: #27272a;
+  --color-surface-container-highest: #3f3f46;
   --color-surface-container-lowest: #000000;
   
-  --color-outline: #ffffff;
-  --color-outline-variant: #3f3f46;
-  --color-error: #ff3333;
+  --color-outline: #52525b;
+  --color-outline-variant: #27272a;
+  --color-error: #f87171;
   --color-on-error: #000000;
-  --color-error-container: #3a0007;
-  --color-on-error-container: #ff3333;
+  --color-error-container: #450a0a;
+  --color-on-error-container: #f87171;
 
   --caret-color: #ffffff;
-  --scanline-color: rgba(255, 255, 255, 0.02);
+  --scanline-color: rgba(255, 255, 255, 0.025);
   --crt-overlay-color: rgba(255, 255, 255, 0.02);
   
-  --checkerboard-color-1: #18181b;
-  --checkerboard-color-2: #09090b;
-  
-  --shadow-color: #ffffff;
-  --shadow-color-ambient: rgba(255, 255, 255, 0.15);
+  --shadow-color: rgba(255, 255, 255, 0.2);
+  --shadow-color-ambient: rgba(255, 255, 255, 0.05);
 }
 
 @theme {
@@ -99,19 +93,50 @@
   --color-error-container: var(--color-error-container);
   --color-on-error-container: var(--color-on-error-container);
 
+  --font-sans: var(--font-plus-jakarta-sans), sans-serif;
+  --font-display: var(--font-space-grotesk), sans-serif;
   --font-mono: var(--font-jetbrains-mono), monospace;
   
-  --spacing-container-max: 1100px;
-  --spacing-margin-mobile: 16px;
-  --spacing-margin-desktop: 64px;
-  --spacing-gutter: 24px;
+  --spacing-container-max: 1200px;
+  --spacing-margin-mobile: 24px;
+  --spacing-margin-desktop: 80px;
+  --spacing-gutter: 32px;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Neo-brutalist shadow offsets */
+.shadow-neo {
+  box-shadow: 3px 3px 0px 0px var(--shadow-color);
+  transition: all 0.2s ease;
+}
+.shadow-neo:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0px 0px var(--shadow-color);
+}
+
+.shadow-neo-lg {
+  box-shadow: 6px 6px 0px 0px var(--shadow-color);
+  transition: all 0.3s ease;
+}
+.shadow-neo-lg:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px 0px var(--shadow-color);
+}
+
+.shadow-neo-btn {
+  box-shadow: 2px 2px 0px 0px var(--shadow-color);
+  transition: all 0.15s ease;
+}
+.shadow-neo-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px 0px var(--shadow-color);
 }
 
 /* Custom Utilities for Paper Terminal CRT Scanlines */
@@ -153,30 +178,19 @@ body {
   animation: blink 1s step-end infinite;
 }
 
-/* Custom Shadow Utility Classes */
-.project-card-hover {
-  transition: box-shadow 0.2s ease;
-}
-.project-card-hover:hover {
-  box-shadow: 4px 4px 0px 0px var(--shadow-color) !important;
+/* Transition utility classes */
+.theme-transition {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.admin-project-card-hover {
-  transition: box-shadow 0.2s ease, border-width 0.2s ease;
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
 }
-.admin-project-card-hover:hover {
-  box-shadow: 4px 4px 0px 0px var(--shadow-color) !important;
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
 }
-.admin-project-card-editing {
-  border-width: 2px !important;
-  box-shadow: 4px 4px 0px 0px var(--shadow-color) !important;
-}
-
-.admin-faq-card-editing {
-  border-width: 2px !important;
-  box-shadow: 2px 2px 0px 0px var(--shadow-color) !important;
-}
-
-.settings-save-button {
-  box-shadow: 4px 4px 0px 0px var(--shadow-color-ambient);
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-outline);
+  border-radius: 3px;
 }

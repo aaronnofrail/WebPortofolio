@@ -34,6 +34,11 @@ export interface Project {
   githubUrl: string;
   demoUrl: string;
   status: "Active" | "Completed" | "Archived" | "In Progress";
+  caseStudy?: {
+    problem: string;
+    solution: string;
+    result: string;
+  };
 }
 
 export interface FAQ {

@@ -209,7 +209,7 @@ export default function ProjectsPage() {
                   </div>
 
                   {/* Actions buttons */}
-                  <div className="flex gap-4 mt-auto pt-4 border-t border-neutral-100 dark:border-neutral-800 justify-between items-center">
+                  <div className="flex gap-4 mt-auto pt-4 border-t border-neutral-100 dark:border-neutral-800 justify-between items-center flex-wrap">
                     <button
                       onClick={() => setActiveCaseStudyProject(project)}
                       className="group/btn relative flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-black dark:text-white cursor-pointer"
@@ -218,15 +218,31 @@ export default function ProjectsPage() {
                       <span>{t.projects.readCase}</span>
                     </button>
                     
-                    <a
-                      href={project.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-4 py-2 border-2 border-black dark:border-neutral-700 bg-white dark:bg-neutral-900 text-black dark:text-white text-[10px] font-bold uppercase tracking-widest rounded-lg hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors flex items-center gap-1.5 shadow-neo-btn"
-                    >
-                      <span>{t.projects.visitSite}</span>
-                      <span className="material-symbols-outlined text-[12px]">arrow_outward</span>
-                    </a>
+                    <div className="flex gap-2">
+                      {project.githubUrl && project.githubUrl !== "#" && (
+                        <a
+                          href={project.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-3 py-1.5 border-2 border-black dark:border-neutral-700 bg-white dark:bg-neutral-900 text-black dark:text-white text-[10px] font-bold uppercase tracking-widest rounded-lg hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors flex items-center gap-1 shadow-neo-btn"
+                        >
+                          <span>CODE</span>
+                          <span className="material-symbols-outlined text-[12px]">code</span>
+                        </a>
+                      )}
+                      
+                      {project.demoUrl && project.demoUrl !== "#" && (
+                        <a
+                          href={project.demoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-3 py-1.5 border-2 border-black dark:border-neutral-700 bg-white dark:bg-neutral-900 text-black dark:text-white text-[10px] font-bold uppercase tracking-widest rounded-lg hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors flex items-center gap-1 shadow-neo-btn"
+                        >
+                          <span>DEMO</span>
+                          <span className="material-symbols-outlined text-[12px]">arrow_outward</span>
+                        </a>
+                      )}
+                    </div>
                   </div>
 
                 </article>
@@ -240,6 +256,9 @@ export default function ProjectsPage() {
           const details = projectDetails[activeCaseStudyProject.id] || {
             caseStudy: { problem: "", solution: "", result: "" }
           };
+          const problemText = activeCaseStudyProject.caseStudy?.problem || details.caseStudy.problem;
+          const solutionText = activeCaseStudyProject.caseStudy?.solution || details.caseStudy.solution;
+          const resultText = activeCaseStudyProject.caseStudy?.result || details.caseStudy.result;
 
           return (
             <div
@@ -253,10 +272,10 @@ export default function ProjectsPage() {
                 {/* Close Button */}
                 <button
                   onClick={() => setActiveCaseStudyProject(null)}
-                  className="absolute top-4 right-4 p-2 bg-neutral-100 dark:bg-neutral-800 rounded-full border border-black dark:border-neutral-500 text-black dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors cursor-pointer flex items-center justify-center shadow-neo-btn"
+                  className="absolute top-6 right-6 p-2 rounded-full border-2 border-black dark:border-neutral-700 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors flex items-center justify-center cursor-pointer shadow-neo-btn bg-white dark:bg-neutral-900"
                   title="Close Case Study"
                 >
-                  <span className="material-symbols-outlined text-[16px]">close</span>
+                  <span className="material-symbols-outlined text-sm font-bold block">close</span>
                 </button>
 
                 <header className="mb-6 pb-4 border-b-2 border-black/10 dark:border-white/10 pr-8">
@@ -277,7 +296,7 @@ export default function ProjectsPage() {
                       PROBLEM
                     </h4>
                     <p className="text-neutral-700 dark:text-neutral-300">
-                      {details.caseStudy.problem}
+                      {problemText}
                     </p>
                   </section>
 
@@ -288,7 +307,7 @@ export default function ProjectsPage() {
                       SOLUTION
                     </h4>
                     <p className="text-neutral-700 dark:text-neutral-300">
-                      {details.caseStudy.solution}
+                      {solutionText}
                     </p>
                   </section>
 
@@ -299,7 +318,7 @@ export default function ProjectsPage() {
                       RESULT & IMPACT
                     </h4>
                     <p className="text-neutral-700 dark:text-neutral-300">
-                      {details.caseStudy.result}
+                      {resultText}
                     </p>
                   </section>
                 </div>

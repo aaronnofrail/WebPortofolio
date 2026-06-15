@@ -127,7 +127,8 @@ export default function AdminAchievementsPage() {
   };
 
   const isIcon = (val: string) => {
-    return !val.startsWith("http") && !val.startsWith("/") && !val.includes(".");
+    if (!val) return true;
+    return !val.startsWith("http") && !val.startsWith("/") && !val.startsWith("data:") && !val.includes(".");
   };
 
   return (

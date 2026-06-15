@@ -19,6 +19,9 @@ export default function AdminProjectsPage() {
   const [tagsText, setTagsText] = useState("");
   const [statusVal, setStatusVal] = useState<Project["status"]>("Active");
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [problem, setProblem] = useState("");
+  const [solution, setSolution] = useState("");
+  const [result, setResult] = useState("");
 
   useEffect(() => {
     const stored = localStorage.getItem("aaronnofrail_projects");
@@ -46,6 +49,9 @@ export default function AdminProjectsPage() {
     setTagsText("");
     setStatusVal("Active");
     setEditingId(null);
+    setProblem("");
+    setSolution("");
+    setResult("");
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,6 +75,12 @@ export default function AdminProjectsPage() {
       .map((t) => t.trim())
       .filter(Boolean);
 
+    const caseStudy = {
+      problem: problem.trim(),
+      solution: solution.trim(),
+      result: result.trim(),
+    };
+
     if (editingId) {
       // Edit
       const updated = projects.map((proj) => {
@@ -82,6 +94,7 @@ export default function AdminProjectsPage() {
             demoUrl: demoUrl.trim() || "#",
             tags,
             status: statusVal,
+            caseStudy,
           };
           updateProjectAction(proj.id, updatedNode);
           addActivityLog(`PROJECT: Updated project configuration for '${updatedNode.title}'`, "info");
@@ -102,6 +115,7 @@ export default function AdminProjectsPage() {
         demoUrl: demoUrl.trim() || "#",
         tags,
         status: statusVal,
+        caseStudy,
       };
       createProjectAction(newProj);
       const updated = [...projects, newProj];
@@ -124,6 +138,9 @@ export default function AdminProjectsPage() {
     setDemoUrl(proj.demoUrl === "#" ? "" : proj.demoUrl);
     setTagsText(proj.tags.join(", "));
     setStatusVal(proj.status);
+    setProblem(proj.caseStudy?.problem || "");
+    setSolution(proj.caseStudy?.solution || "");
+    setResult(proj.caseStudy?.result || "");
     
     // Scroll to form
     const formElement = document.getElementById("project-form-section");
@@ -428,6 +445,51 @@ export default function AdminProjectsPage() {
                 value={tagsText}
                 onChange={(e) => setTagsText(e.target.value)}
               />
+            </div>
+
+            {/* Case Study Section */}
+            <div className="md:col-span-2 border-t border-primary/20 pt-8 mt-4">
+              <h4 className="font-headline-md text-headline-md uppercase mb-6 text-primary">
+                Case Study Details (Optional)
+              </h4>
+              <div className="grid grid-cols-1 gap-6">
+                <div className="flex flex-col gap-2">
+                  <label className="text-label-sm font-bold uppercase tracking-widest opacity-60">
+                    The Challenge (Problem)
+                  </label>
+                  <textarea
+                    className="font-body-lg p-2 resize-none border border-primary outline-none"
+                    placeholder="Describe the challenge or problem solved..."
+                    rows={2}
+                    value={problem}
+                    onChange={(e) => setProblem(e.target.value)}
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-label-sm font-bold uppercase tracking-widest opacity-60">
+                    The Execution (Solution)
+                  </label>
+                  <textarea
+                    className="font-body-lg p-2 resize-none border border-primary outline-none"
+                    placeholder="Describe the technical solution or execution..."
+                    rows={2}
+                    value={solution}
+                    onChange={(e) => setSolution(e.target.value)}
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-label-sm font-bold uppercase tracking-widest opacity-60">
+                    The Outcome (Result)
+                  </label>
+                  <textarea
+                    className="font-body-lg p-2 resize-none border border-primary outline-none"
+                    placeholder="Describe the outcome or final result..."
+                    rows={2}
+                    value={result}
+                    onChange={(e) => setResult(e.target.value)}
+                  />
+                </div>
+              </div>
             </div>
 
             <div className="md:col-span-2 pt-6 flex justify-end gap-4">

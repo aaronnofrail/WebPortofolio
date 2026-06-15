@@ -42,7 +42,8 @@ export default function ExperiencePage() {
   const t = translations.en;
 
   const isIcon = (val: string) => {
-    return !val.startsWith("http") && !val.startsWith("/") && !val.includes(".");
+    if (!val) return true;
+    return !val.startsWith("http") && !val.startsWith("/") && !val.startsWith("data:") && !val.includes(".");
   };
 
   // Map experience items to specific years for folder display

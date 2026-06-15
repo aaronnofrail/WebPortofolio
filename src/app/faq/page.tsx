@@ -18,14 +18,14 @@ export default function FAQPage() {
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [terminalLines, setTerminalLines] = useState<TerminalLine[]>([
-    {
-      type: "neofetch",
-      text: "",
-    },
-    {
-      type: "text",
-      text: "Welcome to Aaron's interactive terminal database.\nType 'help' to see list of commands, or 'cat frequently_asked_questions.txt' to print the FAQ list.",
-    },
+    // {
+    //   type: "neofetch",
+    //   text: "",
+    // },
+    // {
+    //   type: "text",
+    //   text: "Welcome to Aaron's interactive terminal database.\nType 'help' to see list of commands, or 'cat frequently_asked_questions.txt' to print the FAQ list.",
+    // },
   ]);
 
   const terminalEndRef = useRef<HTMLDivElement>(null);
@@ -36,7 +36,7 @@ export default function FAQPage() {
     if (stored) {
       try {
         setFaqs(JSON.parse(stored));
-      } catch (e) {}
+      } catch (e) { }
     }
   }, []);
 
@@ -175,7 +175,7 @@ Files available for cat:
           if (storedBio) {
             try {
               bioDesc = JSON.parse(storedBio).description;
-            } catch (e) {}
+            } catch (e) { }
           }
           const finalDesc =
             bioDesc ||
@@ -193,19 +193,19 @@ Files available for cat:
           if (storedProj) {
             try {
               projs = JSON.parse(storedProj);
-            } catch (e) {}
+            } catch (e) { }
           }
           const text =
             projs.length > 0
               ? JSON.stringify(
-                  projs.map((p: any) => ({
-                    title: p.title,
-                    status: p.status,
-                    tags: p.tags,
-                  })),
-                  null,
-                  2
-                )
+                projs.map((p: any) => ({
+                  title: p.title,
+                  status: p.status,
+                  tags: p.tags,
+                })),
+                null,
+                2
+              )
               : "No projects registered in manifest.";
           setTerminalLines([
             ...currentLines,
@@ -220,16 +220,16 @@ Files available for cat:
           if (storedExp) {
             try {
               exps = JSON.parse(storedExp);
-            } catch (e) {}
+            } catch (e) { }
           }
           const text =
             exps.length > 0
               ? exps
-                  .map(
-                    (e: any) =>
-                      `* ${e.jobTitle} at ${e.company} (${e.period})`
-                  )
-                  .join("\n")
+                .map(
+                  (e: any) =>
+                    `* ${e.jobTitle} at ${e.company} (${e.period})`
+                )
+                .join("\n")
               : "No experience logs recorded.";
           setTerminalLines([
             ...currentLines,
@@ -323,19 +323,19 @@ Files available for cat:
             <div className="flex flex-col gap-1 w-full max-w-md font-code shrink-0">
               <div className="flex gap-2">
                 <span className="text-secondary font-bold w-24">OS:</span>
-                <span>aaronnofrail.sys v2.4.1</span>
+                <span>aaronnofrail</span>
               </div>
               <div className="flex gap-2">
                 <span className="text-secondary font-bold w-24">Host:</span>
-                <span>Frontend/UI Specialist</span>
+                <span>Frontend Engineer</span>
               </div>
               <div className="flex gap-2">
                 <span className="text-secondary font-bold w-24">Uptime:</span>
-                <span>10 years (Industry Experience)</span>
+                <span>1 years Experience</span>
               </div>
               <div className="flex gap-2">
                 <span className="text-secondary font-bold w-24">Packages:</span>
-                <span>React, TypeScript, Tailwind, Node</span>
+                <span>React, NextJS, TypeScript, Tailwind, Node</span>
               </div>
               <div className="flex gap-2">
                 <span className="text-secondary font-bold w-24">Shell:</span>
@@ -365,7 +365,7 @@ Files available for cat:
         {/* Terminal Output Component */}
         <div
           onClick={focusInput}
-          className="w-full border border-primary bg-surface flex flex-col relative overflow-hidden cursor-text min-h-[500px]"
+          className="w-full border border-primary bg-surface flex flex-col relative overflow-hidden cursor-text min-h-[80px]"
         >
           {/* Terminal Header Bar */}
           <div className="w-full bg-primary text-on-primary font-label-sm text-label-sm px-4 py-2 flex justify-between items-center select-none shrink-0">
@@ -374,7 +374,7 @@ Files available for cat:
           </div>
 
           {/* Terminal Body */}
-          <div className="p-6 md:p-8 flex-grow flex flex-col gap-6 overflow-y-auto max-h-[60vh] custom-scrollbar">
+          <div className="p-6 md:p-8 flex-grow flex flex-col gap-6 overflow-y-auto w-full max-w-4xl mx-auto min-h-[80px] max-h-[70vh] custom-scrollbar">
             {/* Rendered History */}
             {terminalLines.map((line, idx) => renderTerminalLine(line, idx))}
 
@@ -396,7 +396,7 @@ Files available for cat:
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
                 autoFocus
-                placeholder="Type 'cat frequently_asked_questions.txt' or 'help'..."
+                placeholder="Type 'help' to see available commands"
               />
             </div>
             <div ref={terminalEndRef} />

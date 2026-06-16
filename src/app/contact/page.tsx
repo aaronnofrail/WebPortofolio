@@ -345,7 +345,7 @@ export default function ContactPage() {
                 <span className="material-symbols-outlined text-[16px] text-neutral-400">monitor</span>
                 <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">tail -f cat_status.log</span>
               </div>
-              <div className="flex-grow flex items-center justify-start relative overflow-hidden bg-neutral-100 dark:bg-neutral-850 rounded-xl p-4 border border-neutral-200 dark:border-neutral-700 min-h-[120px]">
+              <div className="flex-grow flex items-center justify-start relative overflow-hidden bg-neutral-100 dark:bg-neutral-950 rounded-xl p-4 border border-neutral-200 dark:border-neutral-700 min-h-[120px]">
                 <pre
                   className="absolute font-mono text-xs leading-tight text-black dark:text-white select-none pointer-events-none font-bold transition-all duration-[150ms] ease-linear"
                   style={{

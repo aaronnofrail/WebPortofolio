@@ -161,7 +161,7 @@ export const mockProjects: Project[] = [
     image: "/assets/3feef40f9ad84a9798bb3d3bdbcce6cc.png",
     tags: ["React", "CSS", "NPM"],
     githubUrl: "https://github.com/aaronnofrail/terminal-ui",
-    demoUrl: "#",
+    demoUrl: "https://terminal-ui.aaronnofrail.dev",
     status: "Completed"
   },
   {
@@ -171,7 +171,7 @@ export const mockProjects: Project[] = [
     image: "/assets/defca9ce59df46a9b6c40796bbbc32d2.png",
     tags: ["Solidity", "Go", "Cryptography"],
     githubUrl: "https://github.com/aaronnofrail/omega-protocol",
-    demoUrl: "#",
+    demoUrl: "https://omega-protocol.aaronnofrail.dev",
     status: "Archived"
   },
   {

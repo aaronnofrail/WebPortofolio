@@ -226,7 +226,7 @@ export default function ProjectsPage() {
                           rel="noopener noreferrer"
                           className="px-3 py-1.5 border-2 border-black dark:border-neutral-700 bg-white dark:bg-neutral-900 text-black dark:text-white text-[10px] font-bold uppercase tracking-widest rounded-lg hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors flex items-center gap-1 shadow-neo-btn"
                         >
-                          <span>CODE</span>
+                          <span>GITHUB</span>
                           <span className="material-symbols-outlined text-[12px]">code</span>
                         </a>
                       )}
@@ -238,7 +238,7 @@ export default function ProjectsPage() {
                           rel="noopener noreferrer"
                           className="px-3 py-1.5 border-2 border-black dark:border-neutral-700 bg-white dark:bg-neutral-900 text-black dark:text-white text-[10px] font-bold uppercase tracking-widest rounded-lg hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors flex items-center gap-1 shadow-neo-btn"
                         >
-                          <span>DEMO</span>
+                          <span>{t.projects.visitSite}</span>
                           <span className="material-symbols-outlined text-[12px]">arrow_outward</span>
                         </a>
                       )}

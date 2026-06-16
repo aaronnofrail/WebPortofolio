@@ -280,10 +280,10 @@ export default function AdminAchievementsPage() {
           <header className="flex justify-between border-b-2 border-primary pb-4 items-center">
             <div>
               <h2 className="font-headline-md text-headline-md font-bold uppercase tracking-tight">
-                ACHIEVEMENT_LIST
+                ACHIEVEMENT LIST
               </h2>
               <p className="text-label-sm opacity-60 font-code">
-                COUNT: {String(achievements.length).padStart(2, "0")} ACTIVE_RECORDS
+                COUNT: {String(achievements.length).padStart(2, "0")} ACTIVE RECORDS
               </p>
             </div>
           </header>

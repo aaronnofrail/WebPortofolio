@@ -79,7 +79,7 @@ export default function ExperiencePage() {
             const year = yearMatch ? yearMatch[1] : "2020";
             const isLeft = index % 2 === 0;
 
-            const tRole = t.experience.roles[exp.id as keyof typeof t.experience.roles] || {
+            const tRole = {
               jobTitle: exp.jobTitle,
               company: exp.company,
               period: exp.period,

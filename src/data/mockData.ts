@@ -23,6 +23,7 @@ export interface Achievement {
   description: string;
   image: string;
   tags: string[];
+  credentialUrl?: string;
 }
 
 export interface Project {
@@ -118,28 +119,32 @@ export const mockAchievements: Achievement[] = [
     title: "AWS_SOLUTIONS_ARCHITECT",
     description: "Professional certification for designing distributed applications on the AWS platform.",
     image: "/assets/ach_aws.png",
-    tags: ["CLOUD", "INFRASTRUCTURE", "VERIFIED"]
+    tags: ["CLOUD", "INFRASTRUCTURE", "VERIFIED"],
+    credentialUrl: "https://aws.amazon.com/certification/certified-solutions-architect-associate/"
   },
   {
     id: "ach_2",
     title: "GLOBAL_HACKATHON_WINNER",
     description: "Rank: 01. Designed and engineered a lightweight, brutalist CSS framework mimicking mid-century computing interfaces.",
     image: "/assets/ach_hackathon.png",
-    tags: ["UI/UX", "FRONTEND", "2023"]
+    tags: ["UI/UX", "FRONTEND", "2023"],
+    credentialUrl: "https://github.com/aaronnofrail"
   },
   {
     id: "ach_3",
     title: "OPEN_SOURCE_SEMINAR",
     description: "Seminar and knowledge sharing on high-performance networking libraries and core contributions within the global Go community.",
     image: "/assets/ach_seminar.png",
-    tags: ["GOLANG", "OPEN SOURCE", "COMMUNITY"]
+    tags: ["GOLANG", "OPEN SOURCE", "COMMUNITY"],
+    credentialUrl: "https://github.com/aaronnofrail"
   },
   {
     id: "ach_4",
     title: "OPEN_SOURCE_CONTRIBUTOR_VETERAN",
     description: "5+ years of active maintenance for critical library dependencies in the Python ecosystem.",
     image: "/assets/ach_contributor.png",
-    tags: ["COMMUNITY", "PYTHON"]
+    tags: ["COMMUNITY", "PYTHON"],
+    credentialUrl: "https://github.com/aaronnofrail"
   }
 ];
 

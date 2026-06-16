@@ -16,6 +16,7 @@ export default function AdminAchievementsPage() {
   const [tagsText, setTagsText] = useState("");
   const [imageVal, setImageVal] = useState("military_tech"); // default icon name or URL
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [credentialUrl, setCredentialUrl] = useState("");
 
   useEffect(() => {
     const stored = localStorage.getItem("aaronnofrail_achievements");
@@ -40,6 +41,7 @@ export default function AdminAchievementsPage() {
     setTagsText("");
     setImageVal("military_tech");
     setEditingId(null);
+    setCredentialUrl("");
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,6 +108,7 @@ export default function AdminAchievementsPage() {
             description: description.trim(),
             tags,
             image: imagePath,
+            credentialUrl: credentialUrl.trim(),
           };
           updateAchievementAction(ach.id, updatedNode);
           addActivityLog(`ACHIEVEMENT: Updated configuration for '${updatedNode.title}'`, "info");
@@ -123,6 +126,7 @@ export default function AdminAchievementsPage() {
         description: description.trim(),
         tags,
         image: imagePath,
+        credentialUrl: credentialUrl.trim(),
       };
       createAchievementAction(newAch);
       const updated = [...achievements, newAch];
@@ -140,6 +144,7 @@ export default function AdminAchievementsPage() {
     setDescription(ach.description);
     setTagsText(ach.tags.join(", "));
     setImageVal(ach.image);
+    setCredentialUrl(ach.credentialUrl || "");
   };
 
   const handleDelete = (id: string) => {
@@ -259,6 +264,19 @@ export default function AdminAchievementsPage() {
                     [ Custom Base64 Image Loaded ]
                   </span>
                 )}
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-label-sm font-bold uppercase tracking-wider">
+                  Credential URL (Optional)
+                </label>
+                <input
+                  className="w-full bg-transparent border-t-0 border-l-0 border-r-0 border-b border-primary px-0 py-2 font-code focus:ring-0 outline-none focus:border-b-2"
+                  placeholder="https://credentials.com/..."
+                  type="text"
+                  value={credentialUrl}
+                  onChange={(e) => setCredentialUrl(e.target.value)}
+                />
               </div>
 
               <div className="space-y-2">

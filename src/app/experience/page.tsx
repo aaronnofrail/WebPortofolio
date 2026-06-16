@@ -46,13 +46,6 @@ export default function ExperiencePage() {
     return !val.startsWith("http") && !val.startsWith("/") && !val.startsWith("data:") && !val.includes(".");
   };
 
-  // Map experience items to specific years for folder display
-  const folderYears: Record<string, string> = {
-    exp_1: "2026",
-    exp_2: "2024",
-    exp_3: "2021",
-  };
-
   return (
     <PortfolioGate>
       <Navbar />
@@ -82,7 +75,8 @@ export default function ExperiencePage() {
 
           {experiences.map((exp, index) => {
             const isExpanded = !!expandedFolders[exp.id];
-            const year = folderYears[exp.id] || "2020";
+            const yearMatch = exp.period.match(/\b(19\d\d|20\d\d)\b/);
+            const year = yearMatch ? yearMatch[1] : "2020";
             const isLeft = index % 2 === 0;
 
             const tRole = t.experience.roles[exp.id as keyof typeof t.experience.roles] || {
@@ -215,19 +209,44 @@ export default function ExperiencePage() {
                 >
                   {/* Banner image or icon wrapper */}
                   <div className="aspect-square border-b-2 border-black dark:border-neutral-700 overflow-hidden bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center p-6 relative">
-                    {hasIcon ? (
-                      <span
-                        className="material-symbols-outlined text-6xl text-black dark:text-white"
-                        style={{ fontVariationSettings: "'FILL' 1" }}
+                    {ach.credentialUrl ? (
+                      <a
+                        href={ach.credentialUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full h-full flex items-center justify-center cursor-pointer"
+                        title="View Credential"
                       >
-                        {ach.image || "military_tech"}
-                      </span>
+                        {hasIcon ? (
+                          <span
+                            className="material-symbols-outlined text-6xl text-black dark:text-white"
+                            style={{ fontVariationSettings: "'FILL' 1" }}
+                          >
+                            {ach.image || "military_tech"}
+                          </span>
+                        ) : (
+                          <img
+                            alt={ach.title}
+                            className="w-full h-full object-contain filter grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
+                            src={ach.image}
+                          />
+                        )}
+                      </a>
                     ) : (
-                      <img
-                        alt={ach.title}
-                        className="w-full h-full object-contain filter grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
-                        src={ach.image}
-                      />
+                      hasIcon ? (
+                        <span
+                          className="material-symbols-outlined text-6xl text-black dark:text-white"
+                          style={{ fontVariationSettings: "'FILL' 1" }}
+                        >
+                          {ach.image || "military_tech"}
+                        </span>
+                      ) : (
+                        <img
+                          alt={ach.title}
+                          className="w-full h-full object-contain filter grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
+                          src={ach.image}
+                        />
+                      )
                     )}
                   </div>
                   

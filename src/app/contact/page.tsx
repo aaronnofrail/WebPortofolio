@@ -6,6 +6,30 @@ import Footer from "@/components/Footer";
 import PortfolioGate from "@/components/PortfolioGate";
 import { translations } from "@/data/translations";
 
+const catRight0 = `   /\\_/\\     
+  ( o.o )___ 
+   > ^ <    \\
+    / |  / | 
+   (  | (  | `;
+
+const catRight1 = `   /\\_/\\     
+  ( o.o )___ 
+   > ^ <    \\
+    \\ |  \\ | 
+    ( |  ( | `;
+
+const catLeft0 = `      /\\_/\\  
+   ___( o.o )
+  /    > ^ < 
+   | \\  | \\  
+   |  ) |  ) `;
+
+const catLeft1 = `      /\\_/\\  
+   ___( o.o )
+  /    > ^ < 
+   / |  / |  
+   ( Y  ( Y  `;
+
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: "",
@@ -16,6 +40,33 @@ export default function ContactPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  const [catPos, setCatPos] = useState(0);
+  const [catDir, setCatDir] = useState(1); // 1 = right, -1 = left
+  const [catFrame, setCatFrame] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCatFrame((prev) => (prev === 0 ? 1 : 0));
+      setCatPos((prevPos) => {
+        const step = 1.5;
+        if (catDir === 1) {
+          if (prevPos >= 72) {
+            setCatDir(-1);
+            return 72;
+          }
+          return prevPos + step;
+        } else {
+          if (prevPos <= 0) {
+            setCatDir(1);
+            return 0;
+          }
+          return prevPos - step;
+        }
+      });
+    }, 150);
+    return () => clearInterval(interval);
+  }, [catDir]);
 
   const t = translations.en;
 
@@ -289,19 +340,30 @@ export default function ContactPage() {
             </div>
 
             {/* ASCII Cat Mascot frame */}
-            <div className="border-2 border-black dark:border-neutral-700 p-6 rounded-[2rem] bg-white dark:bg-neutral-900 shadow-neo flex-grow flex flex-col min-h-[160px]">
+            <div className="border-2 border-black dark:border-neutral-700 p-6 rounded-[2rem] bg-white dark:bg-neutral-900 shadow-neo flex-grow flex flex-col min-h-[180px]">
               <div className="flex items-center gap-2 border-b border-neutral-200 dark:border-neutral-800 pb-3 mb-4">
                 <span className="material-symbols-outlined text-[16px] text-neutral-400">monitor</span>
                 <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-400">tail -f cat_status.log</span>
               </div>
-              <div className="flex-grow flex items-center justify-center relative overflow-hidden bg-neutral-100 dark:bg-neutral-850 rounded-xl p-4 border border-neutral-200 dark:border-neutral-700">
-                <pre className="font-mono text-xs leading-tight text-black dark:text-white select-none pointer-events-none font-bold">
-{`  /\\_/\\
- ( o.o )
-  > ^ <`}
+              <div className="flex-grow flex items-center justify-start relative overflow-hidden bg-neutral-100 dark:bg-neutral-850 rounded-xl p-4 border border-neutral-200 dark:border-neutral-700 min-h-[120px]">
+                <pre
+                  className="absolute font-mono text-xs leading-tight text-black dark:text-white select-none pointer-events-none font-bold transition-all duration-[150ms] ease-linear"
+                  style={{
+                    left: `${catPos}%`,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                  }}
+                >
+                  {catDir === 1
+                    ? catFrame === 0
+                      ? catRight0
+                      : catRight1
+                    : catFrame === 0
+                    ? catLeft0
+                    : catLeft1}
                 </pre>
-                <div className="absolute bottom-2 left-3 text-[9px] text-neutral-400 uppercase tracking-widest">
-                  [STATUS] IDLE_PURR...
+                <div className="absolute bottom-2 left-3 text-[9px] text-neutral-400 uppercase tracking-widest font-bold">
+                  [STATUS] PATROLLING...
                 </div>
               </div>
             </div>

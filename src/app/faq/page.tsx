@@ -244,17 +244,10 @@ Files available for cat:
             },
           ]);
         } else if (argument === "who-are-u") {
-          const storedBio = localStorage.getItem("aaronnofrail_bio");
-          let bioDesc = "";
-          if (storedBio) {
-            try {
-              const parsed = JSON.parse(storedBio);
-              bioDesc = parsed.description;
-            } catch (e) {}
-          }
+          const storedWho = localStorage.getItem("aaronnofrail_who_are_u");
           const finalDesc =
-            bioDesc ||
-            "aaronnofrail, also known as Arundaffa Nahara, is a Undergraduate Student from the Informatics Engineering department at Universitas Hasanuddin. Currently in his 2nd semester. He is currently looking for internship/freelance opportunities. if you're interested, please contact him via email.";
+            storedWho ||
+            "Aaron is a security researcher and frontend developer based in the void.";
           setTerminalLines([
             ...currentLines,
             { type: "text", text: finalDesc },

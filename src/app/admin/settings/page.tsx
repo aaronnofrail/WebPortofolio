@@ -37,6 +37,7 @@ export default function AdminSettingsPage() {
     localStorage.removeItem("admin_password");
     localStorage.removeItem("admin_username");
     localStorage.removeItem("aaronnofrail_bio");
+    localStorage.removeItem("aaronnofrail_who_are_u");
     localStorage.removeItem("aaronnofrail_experiences");
     localStorage.removeItem("aaronnofrail_achievements");
     localStorage.removeItem("aaronnofrail_projects");

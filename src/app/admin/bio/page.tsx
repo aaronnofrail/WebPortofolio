@@ -11,6 +11,7 @@ export default function AdminBioPage() {
   const [grayscale, setGrayscale] = useState(true);
   const [newSkill, setNewSkill] = useState("");
   const [saveStatus, setSaveStatus] = useState<"IDLE" | "SAVING" | "SAVED">("IDLE");
+  const [whoAreU, setWhoAreU] = useState("");
 
   // Load from localStorage or mock
   useEffect(() => {
@@ -35,6 +36,9 @@ export default function AdminBioPage() {
     if (storedGrayscale !== null) {
       setGrayscale(storedGrayscale === "true");
     }
+    
+    const storedWho = localStorage.getItem("aaronnofrail_who_are_u") || "Aaron is a security researcher and frontend developer based in the void.";
+    setWhoAreU(storedWho);
   }, []);
 
   if (!bio) {
@@ -124,6 +128,7 @@ export default function AdminBioPage() {
     
     // Save locally
     localStorage.setItem("aaronnofrail_bio", JSON.stringify(bio));
+    localStorage.setItem("aaronnofrail_who_are_u", whoAreU.trim());
     addActivityLog("BIO: Committed updated persona and bio parameters", "info");
     
     // Attempt saving to Sanity CMS
@@ -151,6 +156,8 @@ export default function AdminBioPage() {
     } else {
       setBio(mockBio);
     }
+    const storedWho = localStorage.getItem("aaronnofrail_who_are_u") || "Aaron is a security researcher and frontend developer based in the void.";
+    setWhoAreU(storedWho);
     setIsDirty(false);
   };
 
@@ -230,6 +237,20 @@ export default function AdminBioPage() {
                   onChange={(e) => handleTextareaChange(e, "description")}
                   className="w-full h-48 bg-background border border-primary p-3 font-code text-body-md focus:outline-none resize-none custom-scrollbar leading-relaxed"
                   spellCheck="false"
+                />
+              </div>
+
+              <div className="space-y-1 mt-4">
+                <div className="text-secondary">&gt; terminal_who_are_u_response=</div>
+                <textarea
+                  value={whoAreU}
+                  onChange={(e) => {
+                    setWhoAreU(e.target.value);
+                    setIsDirty(true);
+                  }}
+                  className="w-full h-24 bg-background border border-primary p-3 font-code text-body-md focus:outline-none resize-none custom-scrollbar leading-relaxed"
+                  spellCheck="false"
+                  placeholder="Aaron is a security researcher and frontend developer based in the void."
                 />
               </div>
             </div>

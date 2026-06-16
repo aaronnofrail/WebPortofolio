@@ -413,7 +413,7 @@ Files available for cat:
             </div>
 
             <div className="flex flex-col gap-3 pl-0 md:pl-4">
-              <p className="opacity-90">Welcome to my hidden profile on the darknet.</p>
+              <p className="opacity-90">Welcome to aaron's hidden profile.</p>
 
               <div className="flex flex-col gap-1 mt-1 font-mono">
                 <div>
@@ -482,7 +482,10 @@ Files available for cat:
           </div>
 
           {/* Terminal Body Viewport */}
-          <div className="p-6 md:p-8 flex-grow flex flex-col gap-6 overflow-y-auto w-full min-h-[250px] max-h-[60vh] custom-scrollbar z-20 relative bg-white dark:bg-neutral-950">
+          <div
+            data-lenis-prevent
+            className="p-6 md:p-8 flex-grow flex flex-col gap-6 overflow-y-auto w-full min-h-[250px] max-h-[60vh] custom-scrollbar z-20 relative bg-white dark:bg-neutral-950"
+          >
             {/* Rendered History */}
             {terminalLines.map((line, idx) => renderTerminalLine(line, idx))}
 

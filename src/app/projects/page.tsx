@@ -39,6 +39,18 @@ export default function ProjectsPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (activeCaseStudyProject) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [activeCaseStudyProject]);
+
   const t = translations.en;
 
   // Categories mapping
@@ -268,6 +280,7 @@ export default function ProjectsPage() {
               <div
                 className="w-full max-w-2xl bg-white dark:bg-neutral-900 border-4 border-black dark:border-neutral-600 rounded-[2rem] p-6 md:p-8 relative shadow-neo-lg max-h-[85vh] overflow-y-auto"
                 onClick={(e) => e.stopPropagation()} // Stop bubbling
+                data-lenis-prevent
               >
                 {/* Close Button */}
                 <button

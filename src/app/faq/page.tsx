@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import PortfolioGate from "@/components/PortfolioGate";
 import { mockFAQs, FAQ } from "@/data/mockData";
 import { translations } from "@/data/translations";
+import { getActivityLogs, ActivityLog } from "@/utils/activityLogger";
 
 interface TerminalLine {
   type: "command" | "text" | "error" | "help" | "neofetch" | "faq" | "ls";
@@ -22,6 +23,7 @@ export default function FAQPage() {
   const [terminalLines, setTerminalLines] = useState<TerminalLine[]>([]);
   const [clientIp, setClientIp] = useState("127.0.0.1");
   const [isSubmittingFlag, setIsSubmittingFlag] = useState(false);
+  const [isTailing, setIsTailing] = useState(false);
 
   const terminalEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -47,13 +49,84 @@ export default function FAQPage() {
     terminalEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [terminalLines]);
 
+  // Poll logs and simulate traffic when tailing is active
+  useEffect(() => {
+    if (!isTailing) return;
+
+    let lastLogTime = "";
+    const logList = getActivityLogs();
+    if (logList.length > 0) {
+      lastLogTime = logList[0].time;
+    }
+
+    const interval = setInterval(() => {
+      const currentLogs = getActivityLogs();
+      if (currentLogs.length > 0) {
+        const newLogs: ActivityLog[] = [];
+        for (const log of currentLogs) {
+          if (log.time > lastLogTime) {
+            newLogs.push(log);
+          } else {
+            break;
+          }
+        }
+
+        if (newLogs.length > 0) {
+          lastLogTime = currentLogs[0].time;
+          const linesToAppend = [...newLogs].reverse().map(
+            (log) => `[${log.time}] ${log.type?.toUpperCase() || "INFO"}: ${log.text}`
+          );
+          setTerminalLines((prev) => [
+            ...prev,
+            ...linesToAppend.map((t) => ({ type: "text" as const, text: t })),
+          ]);
+        }
+      }
+
+      // 15% chance to simulate background activity logs to keep terminal scrolling
+      if (Math.random() < 0.15) {
+        const timeStr = new Date().toISOString().replace("T", " ").substring(0, 19);
+        const simLogs = [
+          "SYS_PING: Keep-alive packet transmitted to secondary server",
+          "DB_STATUS: Connection pool healthy [3/10 active]",
+          "MEM_CHECK: Usage stable at 342 MB / 1024 MB",
+          "SEC_GUARD: Log integrity check verified [OK]",
+        ];
+        const randomText = simLogs[Math.floor(Math.random() * simLogs.length)];
+        const simLine = `[${timeStr}] INFO: ${randomText}`;
+        setTerminalLines((prev) => [
+          ...prev,
+          { type: "text" as const, text: simLine }
+        ]);
+      }
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [isTailing]);
+
   const focusInput = () => {
     inputRef.current?.focus();
   };
 
   const t = translations.en;
 
+  const stopTailing = () => {
+    setIsTailing(false);
+    setTerminalLines((prev) => [
+      ...prev,
+      { type: "text", text: "^C\n--- Monitoring terminated ---" },
+    ]);
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (isTailing) {
+      e.preventDefault();
+      if (e.key === "Escape" || (e.ctrlKey && e.key.toLowerCase() === "c")) {
+        stopTailing();
+      }
+      return;
+    }
+
     if (e.key === "Enter") {
       const command = inputValue.trim();
       if (!command && !isSubmittingFlag) return;
@@ -123,7 +196,7 @@ export default function FAQPage() {
     } else if (e.key === "Tab") {
       e.preventDefault();
       const parts = inputValue.split(" ");
-      if (parts[0] === "cat" && parts[1] !== undefined) {
+      if ((parts[0] === "cat" || parts[0] === "tail") && parts[1] !== undefined) {
         const filePrefix = parts[1].toLowerCase();
         const files = [
           "faq",
@@ -133,10 +206,15 @@ export default function FAQPage() {
           "what-is-your-fav-tools",
           "how-to-reach-you",
           "are-you-taken",
+          "status.log",
         ];
         const match = files.find((f) => f.startsWith(filePrefix));
         if (match) {
-          setInputValue(`cat ${match}`);
+          if (parts[0] === "tail") {
+            setInputValue(`tail -f ${match}`);
+          } else {
+            setInputValue(`cat ${match}`);
+          }
         }
       }
     }
@@ -160,18 +238,20 @@ export default function FAQPage() {
   help                             - Show this menu
   ls                               - List files in current directory
   cat <filename>                   - Display contents of a file
+  tail -f <filename>               - Monitor file growth in real-time
   reveal identity                  - Display system specifications
   submit <flag>                    - Submit challenge flag
   clear                            - Clear terminal screen
 
-Files available for cat:
+Files available for cat / tail:
   faq                              - The FAQ database
   who-are-u                        - Core profile description
   what-keeps-you-up-at-night       - Logical challenges interest
   what-is-your-fav-in-ctf          - Favorite CTF categories
   what-is-your-fav-tools           - Favorite tools used
   how-to-reach-you                 - Contact information
-  are-you-taken                    - Relationship status / interest`,
+  are-you-taken                    - Relationship status / interest
+  status.log                       - System logs database`,
           },
         ]);
       } else if (mainCommand === "ls") {
@@ -179,7 +259,7 @@ Files available for cat:
           ...currentLines,
           {
             type: "ls",
-            text: "faq    who-are-u    what-keeps-you-up-at-night    what-is-your-fav-in-ctf    what-is-your-fav-tools    how-to-reach-you    are-you-taken",
+            text: "faq    who-are-u    what-keeps-you-up-at-night    what-is-your-fav-in-ctf    what-is-your-fav-tools    how-to-reach-you    are-you-taken    status.log",
           },
         ]);
       } else if (
@@ -292,12 +372,44 @@ Files available for cat:
               text: "yes, i’m happily married to mai sakurajima — but if you're interested to work with me, feel free to reach me via email at arundaffa.nahara@gmail.com or DM me on instagram @dfnhrr",
             },
           ]);
+        } else if (argument === "status.log" || argument === "status_log") {
+          const logList = getActivityLogs();
+          const formattedLogs = [...logList].reverse().map(
+            (log) => `[${log.time}] ${log.type?.toUpperCase() || "INFO"}: ${log.text}`
+          );
+          setTerminalLines([
+            ...currentLines,
+            ...formattedLogs.map((t) => ({ type: "text" as const, text: t })),
+          ]);
         } else {
           setTerminalLines([
             ...currentLines,
             {
               type: "error",
               text: `cat: ${argument}: No such file. Type 'ls' to see list of files.`,
+            },
+          ]);
+        }
+      } else if (mainCommand === "tail") {
+        const cleanArg = argument.replace("-f", "").trim();
+        if (cleanArg === "status.log" || cleanArg === "status_log") {
+          setIsTailing(true);
+          const logList = getActivityLogs();
+          const logsToShow = [...logList].slice(0, 15).reverse();
+          const formattedLogs = logsToShow.map(
+            (log) => `[${log.time}] ${log.type?.toUpperCase() || "INFO"}: ${log.text}`
+          );
+          setTerminalLines([
+            ...currentLines,
+            { type: "text", text: ">>> Monitoring status.log (Press Ctrl+C to exit)..." },
+            ...formattedLogs.map((t) => ({ type: "text" as const, text: t })),
+          ]);
+        } else {
+          setTerminalLines([
+            ...currentLines,
+            {
+              type: "error",
+              text: `tail: ${argument}: unsupported file or flag. Usage: tail -f status.log`,
             },
           ]);
         }
@@ -457,23 +569,32 @@ Files available for cat:
 
             {/* Active Prompt Input */}
             <div className="flex items-center gap-2 flex-wrap font-mono text-xs md:text-sm w-full">
-              <span className="text-neutral-500 select-none shrink-0">
-                aaron@nofrail:~$
-              </span>
+              {isTailing ? (
+                <span className="text-red-500 font-bold select-none shrink-0 animate-pulse">
+                  [TAIL: status.log - press Ctrl+C to terminate]
+                </span>
+              ) : (
+                <span className="text-neutral-500 select-none shrink-0">
+                  aaron@nofrail:~$
+                </span>
+              )}
               <input
                 ref={inputRef}
                 type="text"
-                className="flex-1 min-w-[150px] bg-transparent text-black dark:text-white font-bold outline-none border-none p-0 m-0 focus:ring-0 focus:outline-none"
+                readOnly={isTailing}
+                className={`flex-1 min-w-[150px] bg-transparent text-black dark:text-white font-bold outline-none border-none p-0 m-0 focus:ring-0 focus:outline-none ${isTailing ? "caret-transparent cursor-default select-none" : ""}`}
                 style={{
                   border: "none",
                   outline: "none",
                   boxShadow: "none",
                 }}
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
+                value={isTailing ? "" : inputValue}
+                onChange={(e) => {
+                  if (!isTailing) setInputValue(e.target.value);
+                }}
                 onKeyDown={handleKeyDown}
                 autoFocus
-                placeholder="Type 'help' to see available commands"
+                placeholder={isTailing ? "" : "Type 'help' to see available commands"}
               />
             </div>
             <div ref={terminalEndRef} />

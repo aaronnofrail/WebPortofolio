@@ -41,7 +41,7 @@ export default function HomePage() {
           
           {/* Centered Large Typographic Name Banner */}
           <div className="w-full select-none my-auto flex justify-center items-center">
-            <div className="overflow-hidden relative group h-[11vw] w-full flex items-center justify-center cursor-default">
+            <div className="overflow-hidden relative group h-[11vw] w-full cursor-default">
               <div className="flex flex-col transition-transform duration-700 ease-in-out transform group-hover:-translate-y-1/2">
                 <h1 className="text-[12vw] leading-[0.8] font-black tracking-tighter text-black dark:text-white text-center uppercase h-[11vw] flex items-center justify-center">
                   AARONNOFRAIL

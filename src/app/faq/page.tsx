@@ -24,6 +24,7 @@ export default function FAQPage() {
   const [clientIp, setClientIp] = useState("127.0.0.1");
   const [isSubmittingFlag, setIsSubmittingFlag] = useState(false);
   const [isTailing, setIsTailing] = useState(false);
+  const [tailedFilename, setTailedFilename] = useState("status.log");
 
   const terminalEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -48,6 +49,19 @@ export default function FAQPage() {
     // Scroll terminal to bottom when lines change
     terminalEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [terminalLines]);
+
+  useEffect(() => {
+    if (!isTailing) return;
+
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" || (e.ctrlKey && e.key.toLowerCase() === "c")) {
+        stopTailing();
+      }
+    };
+
+    window.addEventListener("keydown", handleGlobalKeyDown);
+    return () => window.removeEventListener("keydown", handleGlobalKeyDown);
+  }, [isTailing]);
 
   // Poll logs and simulate traffic when tailing is active
   useEffect(() => {
@@ -195,25 +209,38 @@ export default function FAQPage() {
       }
     } else if (e.key === "Tab") {
       e.preventDefault();
-      const parts = inputValue.split(" ");
-      if ((parts[0] === "cat" || parts[0] === "tail") && parts[1] !== undefined) {
-        const filePrefix = parts[1].toLowerCase();
-        const files = [
-          "faq",
-          "who-are-u",
-          "what-keeps-you-up-at-night",
-          "what-is-your-fav-in-ctf",
-          "what-is-your-fav-tools",
-          "how-to-reach-you",
-          "are-you-taken",
-          "status.log",
-        ];
-        const match = files.find((f) => f.startsWith(filePrefix));
-        if (match) {
-          if (parts[0] === "tail") {
-            setInputValue(`tail -f ${match}`);
+      const trimmed = inputValue.trim();
+      const parts = trimmed.split(/\s+/);
+      if (parts.length > 0) {
+        const cmd = parts[0].toLowerCase();
+        if (cmd === "cat" || cmd === "tail") {
+          let filePrefix = "";
+          if (cmd === "tail" && parts[1] === "-f") {
+            filePrefix = parts[2] ? parts[2].toLowerCase() : "";
           } else {
-            setInputValue(`cat ${match}`);
+            filePrefix = parts[1] ? parts[1].toLowerCase() : "";
+          }
+
+          const files = [
+            "faq",
+            "who-are-u",
+            "what-keeps-you-up-at-night",
+            "what-is-your-fav-in-ctf",
+            "what-is-your-fav-tools",
+            "how-to-reach-you",
+            "are-you-taken",
+            "status.log",
+            "cat_status.log",
+          ];
+
+          const match = files.find((f) => f.startsWith(filePrefix));
+          if (match) {
+            if (cmd === "tail") {
+              const hasDashF = parts.includes("-f");
+              setInputValue(`tail ${hasDashF ? "-f " : ""}${match}`);
+            } else {
+              setInputValue(`cat ${match}`);
+            }
           }
         }
       }
@@ -227,6 +254,22 @@ export default function FAQPage() {
     const argument = parts.slice(1).join(" ");
 
     setTimeout(() => {
+      const isStatusLogFile = (arg: string) => {
+        const clean = arg.toLowerCase().trim();
+        return (
+          clean === "status.log" ||
+          clean === "status_log" ||
+          clean === "status log" ||
+          clean === "cat_status.log" ||
+          clean === "cat_status" ||
+          clean === "cat-status.log" ||
+          clean === "cat-status" ||
+          clean === "cat status.log" ||
+          clean === "cat status log" ||
+          clean === "status"
+        );
+      };
+
       if (mainCommand === "clear") {
         setTerminalLines([]);
       } else if (mainCommand === "help") {
@@ -251,7 +294,8 @@ Files available for cat / tail:
   what-is-your-fav-tools           - Favorite tools used
   how-to-reach-you                 - Contact information
   are-you-taken                    - Relationship status / interest
-  status.log                       - System logs database`,
+  status.log                       - System logs database
+  cat_status.log                   - System logs database`,
           },
         ]);
       } else if (mainCommand === "ls") {
@@ -259,7 +303,7 @@ Files available for cat / tail:
           ...currentLines,
           {
             type: "ls",
-            text: "faq    who-are-u    what-keeps-you-up-at-night    what-is-your-fav-in-ctf    what-is-your-fav-tools    how-to-reach-you    are-you-taken    status.log",
+            text: "faq    who-are-u    what-keeps-you-up-at-night    what-is-your-fav-in-ctf    what-is-your-fav-tools    how-to-reach-you    are-you-taken    status.log    cat_status.log",
           },
         ]);
       } else if (
@@ -372,7 +416,7 @@ Files available for cat / tail:
               text: "yes, i’m happily married to mai sakurajima — but if you're interested to work with me, feel free to reach me via email at arundaffa.nahara@gmail.com or DM me on instagram @dfnhrr",
             },
           ]);
-        } else if (argument === "status.log" || argument === "status_log") {
+        } else if (isStatusLogFile(argument)) {
           const logList = getActivityLogs();
           const formattedLogs = [...logList].reverse().map(
             (log) => `[${log.time}] ${log.type?.toUpperCase() || "INFO"}: ${log.text}`
@@ -392,7 +436,8 @@ Files available for cat / tail:
         }
       } else if (mainCommand === "tail") {
         const cleanArg = argument.replace("-f", "").trim();
-        if (cleanArg === "status.log" || cleanArg === "status_log") {
+        if (isStatusLogFile(cleanArg)) {
+          setTailedFilename(cleanArg || "status.log");
           setIsTailing(true);
           const logList = getActivityLogs();
           const logsToShow = [...logList].slice(0, 15).reverse();
@@ -401,7 +446,7 @@ Files available for cat / tail:
           );
           setTerminalLines([
             ...currentLines,
-            { type: "text", text: ">>> Monitoring status.log (Press Ctrl+C to exit)..." },
+            { type: "text", text: `>>> Monitoring ${cleanArg} (Press Ctrl+C or Escape to exit)...` },
             ...formattedLogs.map((t) => ({ type: "text" as const, text: t })),
           ]);
         } else {
@@ -523,7 +568,7 @@ Files available for cat / tail:
 
               <div className="mt-2 p-4 border border-black/20 dark:border-white/20 bg-black/5 dark:bg-white/5 flex flex-col gap-2 rounded-xl">
                 <span className="font-bold">The flag is:</span>
-                <span className="opacity-90">{"the flag is my ex name in aaron{} format #iykyk"}</span>
+                <span className="opacity-90">{"the flag is 'her' name in aaron{...} format #iykyk"}</span>
               </div>
             </div>
           </div>
@@ -571,7 +616,7 @@ Files available for cat / tail:
             <div className="flex items-center gap-2 flex-wrap font-mono text-xs md:text-sm w-full">
               {isTailing ? (
                 <span className="text-red-500 font-bold select-none shrink-0 animate-pulse">
-                  [TAIL: status.log - press Ctrl+C to terminate]
+                  [TAIL: {tailedFilename} - press Ctrl+C to terminate]
                 </span>
               ) : (
                 <span className="text-neutral-500 select-none shrink-0">

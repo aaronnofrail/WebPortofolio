@@ -83,17 +83,16 @@ export async function updateExperienceAction(id: string, exp: any) {
     return { success: false, error: "SANITY_API_WRITE_TOKEN_MISSING" };
   }
   try {
-    await writeClient
-      .patch(id)
-      .set({
-        jobTitle: exp.jobTitle,
-        company: exp.company,
-        period: exp.period,
-        status: exp.status,
-        responsibilities: exp.responsibilities,
-        tags: exp.tags,
-      })
-      .commit();
+    await writeClient.createOrReplace({
+      _id: id,
+      _type: "experience",
+      jobTitle: exp.jobTitle,
+      company: exp.company,
+      period: exp.period,
+      status: exp.status,
+      responsibilities: exp.responsibilities,
+      tags: exp.tags,
+    });
     revalidatePath("/experience");
     return { success: true };
   } catch (error: any) {
@@ -140,16 +139,15 @@ export async function updateAchievementAction(id: string, ach: any) {
     return { success: false, error: "SANITY_API_WRITE_TOKEN_MISSING" };
   }
   try {
-    await writeClient
-      .patch(id)
-      .set({
-        title: ach.title,
-        description: ach.description,
-        image: ach.image,
-        tags: ach.tags,
-        credentialUrl: ach.credentialUrl,
-      })
-      .commit();
+    await writeClient.createOrReplace({
+      _id: id,
+      _type: "achievement",
+      title: ach.title,
+      description: ach.description,
+      image: ach.image,
+      tags: ach.tags,
+      credentialUrl: ach.credentialUrl,
+    });
     revalidatePath("/experience");
     return { success: true };
   } catch (error: any) {
@@ -198,18 +196,18 @@ export async function updateProjectAction(id: string, proj: any) {
     return { success: false, error: "SANITY_API_WRITE_TOKEN_MISSING" };
   }
   try {
-    await writeClient
-      .patch(id)
-      .set({
-        title: proj.title,
-        description: proj.description,
-        imageAssetPath: proj.image,
-        githubUrl: proj.githubUrl,
-        demoUrl: proj.demoUrl,
-        tags: proj.tags,
-        status: proj.status,
-      })
-      .commit();
+    await writeClient.createOrReplace({
+      _id: id,
+      _type: "project",
+      title: proj.title,
+      description: proj.description,
+      imageAssetPath: proj.image,
+      githubUrl: proj.githubUrl,
+      demoUrl: proj.demoUrl,
+      tags: proj.tags,
+      status: proj.status,
+      caseStudy: proj.caseStudy || undefined,
+    });
     revalidatePath("/projects");
     return { success: true };
   } catch (error: any) {
@@ -254,13 +252,13 @@ export async function updateFAQAction(id: string, faq: any) {
     return { success: false, error: "SANITY_API_WRITE_TOKEN_MISSING" };
   }
   try {
-    await writeClient
-      .patch(id)
-      .set({
-        question: faq.question,
-        answer: faq.answer,
-      })
-      .commit();
+    await writeClient.createOrReplace({
+      _id: id,
+      _type: "faq",
+      question: faq.question,
+      answer: faq.answer,
+      order: faq.order || 1,
+    });
     revalidatePath("/faq");
     return { success: true };
   } catch (error: any) {

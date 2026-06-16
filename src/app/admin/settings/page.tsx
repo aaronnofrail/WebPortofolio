@@ -3,12 +3,22 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { addActivityLog } from "@/utils/activityLogger";
+import {
+  saveBioAction,
+  updateExperienceAction,
+  updateAchievementAction,
+  updateProjectAction,
+  updateFAQAction,
+} from "@/app/actions/sanityActions";
 
 export default function AdminSettingsPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
+
+  const [syncing, setSyncing] = useState(false);
+  const [syncResult, setSyncResult] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -58,6 +68,78 @@ export default function AdminSettingsPage() {
     }, 1500);
   };
 
+  const handleSync = async () => {
+    if (!confirm("CONFIRM_SYNC: Sync all local storage configurations and records to Sanity CMS? This will replace or add documents to Sanity database.")) return;
+    
+    setSyncing(true);
+    setSyncResult("SYNCING: Starting transmission...");
+
+    try {
+      let count = 0;
+
+      // 1. Sync Bio
+      const storedBio = localStorage.getItem("aaronnofrail_bio");
+      if (storedBio) {
+        setSyncResult("SYNCING: Transmitting Bio...");
+        const parsed = JSON.parse(storedBio);
+        const res = await saveBioAction(parsed);
+        if (res.success) count++;
+      }
+
+      // 2. Sync Experiences
+      const storedExp = localStorage.getItem("aaronnofrail_experiences");
+      if (storedExp) {
+        setSyncResult("SYNCING: Transmitting Experiences...");
+        const parsed = JSON.parse(storedExp);
+        for (const exp of parsed) {
+          const res = await updateExperienceAction(exp.id, exp);
+          if (res.success) count++;
+        }
+      }
+
+      // 3. Sync Achievements
+      const storedAch = localStorage.getItem("aaronnofrail_achievements");
+      if (storedAch) {
+        setSyncResult("SYNCING: Transmitting Achievements...");
+        const parsed = JSON.parse(storedAch);
+        for (const ach of parsed) {
+          const res = await updateAchievementAction(ach.id, ach);
+          if (res.success) count++;
+        }
+      }
+
+      // 4. Sync Projects
+      const storedProj = localStorage.getItem("aaronnofrail_projects");
+      if (storedProj) {
+        setSyncResult("SYNCING: Transmitting Projects...");
+        const parsed = JSON.parse(storedProj);
+        for (const proj of parsed) {
+          const res = await updateProjectAction(proj.id, proj);
+          if (res.success) count++;
+        }
+      }
+
+      // 5. Sync FAQs
+      const storedFaq = localStorage.getItem("aaronnofrail_faqs");
+      if (storedFaq) {
+        setSyncResult("SYNCING: Transmitting FAQs...");
+        const parsed = JSON.parse(storedFaq);
+        for (const faq of parsed) {
+          const res = await updateFAQAction(faq.id, faq);
+          if (res.success) count++;
+        }
+      }
+
+      setSyncResult(`SYNC_COMPLETE: Successfully transmitted ${count} records to Sanity CMS!`);
+      addActivityLog(`SETTINGS: Synced local cache data to Sanity CMS (${count} documents)`, "info");
+    } catch (err: any) {
+      console.error(err);
+      setSyncResult(`SYNC_FAILED: ${err.message || "Unknown transmission error"}`);
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   return (
     <div className="space-y-12">
       {/* Page Header */}
@@ -93,6 +175,31 @@ export default function AdminSettingsPage() {
       {/* Grid Layout */}
       <div className="flex flex-col gap-16 max-w-3xl mx-auto">
         <div className="col-span-12 space-y-12">
+          {/* Sanity CMS Sync Section */}
+          <section className="mb-8 border-2 border-primary/30 p-6 rounded-2xl bg-surface">
+            <h3 className="text-headline-md font-headline-md font-bold border-b border-primary/20 pb-2 mb-4">
+              SANITY_CMS_SYNCHRONIZATION
+            </h3>
+            <p className="font-code text-body-md text-secondary uppercase tracking-tight mb-6">
+              Migrate your local device configurations and cache data to the online Sanity database.
+            </p>
+
+            <button
+              type="button"
+              disabled={syncing}
+              onClick={handleSync}
+              className="px-8 py-3.5 bg-primary text-on-primary font-bold font-code text-body-sm border border-primary hover:bg-background hover:text-primary transition-all active:scale-95 cursor-pointer uppercase tracking-wider disabled:opacity-50"
+            >
+              {syncing ? "SYNCING..." : "SYNC LOCAL CACHE TO SANITY"}
+            </button>
+
+            {syncResult && (
+              <div className="mt-4 p-3 border border-primary/20 bg-background font-code text-body-sm text-secondary break-all">
+                &gt;&gt;&gt; {syncResult}
+              </div>
+            )}
+          </section>
+
           {/* Security Protocol Section */}
           <section className="mb-8">
             <h3 className="text-headline-md font-headline-md font-bold border-b border-primary/20 pb-2 mb-8">

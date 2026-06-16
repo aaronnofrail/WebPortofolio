@@ -21,15 +21,50 @@ export default function AdminExperiencePage() {
   const [editingId, setEditingId] = useState<string | null>(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem("aaronnofrail_experiences");
-    if (stored) {
-      try {
-        setExperiences(JSON.parse(stored));
-      } catch (e) {
+    const isSanityConfigured =
+      process.env.NEXT_PUBLIC_SANITY_PROJECT_ID &&
+      process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== "aaronnofrail_project";
+
+    if (isSanityConfigured) {
+      import("@/sanity/client").then(({ client }) => {
+        client
+          .fetch(`*[_type == "experience"]`)
+          .then((fetched: any[]) => {
+            if (fetched && fetched.length > 0) {
+              const mapped = fetched.map((item) => ({
+                id: item._id,
+                jobTitle: item.jobTitle,
+                company: item.company,
+                period: item.period,
+                responsibilities: item.responsibilities || [],
+                tags: item.tags || [],
+                status: item.status || "",
+              }));
+              setExperiences(mapped);
+            } else {
+              loadFromLocalStorage();
+            }
+          })
+          .catch((err) => {
+            console.error("Failed to fetch experiences from Sanity, using localStorage fallback:", err);
+            loadFromLocalStorage();
+          });
+      });
+    } else {
+      loadFromLocalStorage();
+    }
+
+    function loadFromLocalStorage() {
+      const stored = localStorage.getItem("aaronnofrail_experiences");
+      if (stored) {
+        try {
+          setExperiences(JSON.parse(stored));
+        } catch (e) {
+          setExperiences(mockExperiences);
+        }
+      } else {
         setExperiences(mockExperiences);
       }
-    } else {
-      setExperiences(mockExperiences);
     }
   }, []);
 

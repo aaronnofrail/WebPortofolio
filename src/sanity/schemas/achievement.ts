@@ -11,7 +11,8 @@ const achievementSchema = {
       title: 'Tags / Categories',
       type: 'array',
       of: [{ type: 'string' }]
-    }
+    },
+    { name: 'credentialUrl', title: 'Credential URL', type: 'url' }
   ]
 };
 

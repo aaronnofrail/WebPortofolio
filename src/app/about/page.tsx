@@ -11,15 +11,40 @@ export default function AboutPage() {
   const [bioDescription, setBioDescription] = useState<string | null>(null);
 
   useEffect(() => {
-    // Read custom bio description from localStorage
-    const storedBio = localStorage.getItem("aaronnofrail_bio");
-    if (storedBio) {
-      try {
-        const parsed = JSON.parse(storedBio);
-        if (parsed.description) {
-          setBioDescription(parsed.description);
-        }
-      } catch (e) {}
+    const isSanityConfigured =
+      process.env.NEXT_PUBLIC_SANITY_PROJECT_ID &&
+      process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== "aaronnofrail_project";
+
+    if (isSanityConfigured) {
+      import("@/sanity/client").then(({ client }) => {
+        client
+          .fetch(`*[_type == "bio"][0]`)
+          .then((fetched: any) => {
+            if (fetched && fetched.description) {
+              setBioDescription(fetched.description);
+            } else {
+              loadFromLocalStorage();
+            }
+          })
+          .catch((err) => {
+            console.error("Failed to fetch bio from Sanity, using localStorage fallback:", err);
+            loadFromLocalStorage();
+          });
+      });
+    } else {
+      loadFromLocalStorage();
+    }
+
+    function loadFromLocalStorage() {
+      const storedBio = localStorage.getItem("aaronnofrail_bio");
+      if (storedBio) {
+        try {
+          const parsed = JSON.parse(storedBio);
+          if (parsed.description) {
+            setBioDescription(parsed.description);
+          }
+        } catch (e) {}
+      }
     }
   }, []);
 

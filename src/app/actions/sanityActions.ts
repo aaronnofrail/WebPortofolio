@@ -126,6 +126,7 @@ export async function createAchievementAction(ach: any) {
       description: ach.description,
       image: ach.image, // string for icons or URLs in fallback config
       tags: ach.tags,
+      credentialUrl: ach.credentialUrl,
     });
     revalidatePath("/experience");
     return { success: true };
@@ -146,6 +147,7 @@ export async function updateAchievementAction(id: string, ach: any) {
         description: ach.description,
         image: ach.image,
         tags: ach.tags,
+        credentialUrl: ach.credentialUrl,
       })
       .commit();
     revalidatePath("/experience");

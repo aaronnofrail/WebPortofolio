@@ -19,15 +19,49 @@ export default function AdminAchievementsPage() {
   const [credentialUrl, setCredentialUrl] = useState("");
 
   useEffect(() => {
-    const stored = localStorage.getItem("aaronnofrail_achievements");
-    if (stored) {
-      try {
-        setAchievements(JSON.parse(stored));
-      } catch (e) {
+    const isSanityConfigured =
+      process.env.NEXT_PUBLIC_SANITY_PROJECT_ID &&
+      process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== "aaronnofrail_project";
+
+    if (isSanityConfigured) {
+      import("@/sanity/client").then(({ client }) => {
+        client
+          .fetch(`*[_type == "achievement"]`)
+          .then((fetched: any[]) => {
+            if (fetched && fetched.length > 0) {
+              const mapped = fetched.map((item) => ({
+                id: item._id,
+                title: item.title,
+                description: item.description,
+                image: item.imageAssetPath || item.image || "",
+                tags: item.tags || [],
+                credentialUrl: item.credentialUrl || "",
+              }));
+              setAchievements(mapped);
+            } else {
+              loadFromLocalStorage();
+            }
+          })
+          .catch((err) => {
+            console.error("Failed to fetch achievements from Sanity, using localStorage fallback:", err);
+            loadFromLocalStorage();
+          });
+      });
+    } else {
+      loadFromLocalStorage();
+    }
+
+    function loadFromLocalStorage() {
+      const stored = localStorage.getItem("aaronnofrail_achievements");
+      if (stored) {
+        try {
+          setAchievements(JSON.parse(stored));
+        } catch (e) {
+          setAchievements(mockAchievements);
+        }
+      } else {
         setAchievements(mockAchievements);
       }
-    } else {
-      setAchievements(mockAchievements);
     }
   }, []);
 

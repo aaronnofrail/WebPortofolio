@@ -33,12 +33,43 @@ export default function FAQPage() {
       .then((data) => setClientIp(data.ip))
       .catch(() => setClientIp("180.251.148.234"));
 
-    // Sync FAQs from localStorage
-    const stored = localStorage.getItem("aaronnofrail_faqs");
-    if (stored) {
-      try {
-        setFaqs(JSON.parse(stored));
-      } catch (e) {}
+    const isSanityConfigured =
+      process.env.NEXT_PUBLIC_SANITY_PROJECT_ID &&
+      process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== "aaronnofrail_project";
+
+    if (isSanityConfigured) {
+      import("@/sanity/client").then(({ client }) => {
+        client
+          .fetch(`*[_type == "faq"] | order(order asc)`)
+          .then((fetched: any[]) => {
+            if (fetched && fetched.length > 0) {
+              const mapped = fetched.map((item) => ({
+                id: item._id,
+                question: item.question,
+                answer: item.answer,
+              }));
+              setFaqs(mapped);
+            } else {
+              loadFromLocalStorage();
+            }
+          })
+          .catch((err) => {
+            console.error("Failed to fetch FAQs from Sanity, using localStorage fallback:", err);
+            loadFromLocalStorage();
+          });
+      });
+    } else {
+      loadFromLocalStorage();
+    }
+
+    function loadFromLocalStorage() {
+      // Sync FAQs from localStorage
+      const stored = localStorage.getItem("aaronnofrail_faqs");
+      if (stored) {
+        try {
+          setFaqs(JSON.parse(stored));
+        } catch (e) {}
+      }
     }
   }, []);
 

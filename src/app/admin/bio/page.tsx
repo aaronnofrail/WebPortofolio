@@ -15,21 +15,54 @@ export default function AdminBioPage() {
 
   // Load from localStorage or mock
   useEffect(() => {
-    const stored = localStorage.getItem("aaronnofrail_bio");
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-        if (parsed.description && parsed.description.includes("arundaffa.nahara@gmail.com")) {
-          localStorage.removeItem("aaronnofrail_bio");
+    const isSanityConfigured =
+      process.env.NEXT_PUBLIC_SANITY_PROJECT_ID &&
+      process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== "aaronnofrail_project";
+
+    if (isSanityConfigured) {
+      import("@/sanity/client").then(({ client }) => {
+        client
+          .fetch(`*[_type == "bio"][0]`)
+          .then((fetched: any) => {
+            if (fetched) {
+              setBio({
+                name: fetched.name || mockBio.name,
+                role: fetched.role || mockBio.role,
+                terminalText: fetched.terminalText || mockBio.terminalText,
+                description: fetched.description || mockBio.description,
+                philosophy: fetched.philosophy || mockBio.philosophy,
+                skills: fetched.skills || mockBio.skills,
+              });
+            } else {
+              loadFromLocalStorage();
+            }
+          })
+          .catch((err) => {
+            console.error("Failed to fetch bio from Sanity, using localStorage fallback:", err);
+            loadFromLocalStorage();
+          });
+      });
+    } else {
+      loadFromLocalStorage();
+    }
+
+    function loadFromLocalStorage() {
+      const stored = localStorage.getItem("aaronnofrail_bio");
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored);
+          if (parsed.description && parsed.description.includes("arundaffa.nahara@gmail.com")) {
+            localStorage.removeItem("aaronnofrail_bio");
+            setBio(mockBio);
+          } else {
+            setBio(parsed);
+          }
+        } catch (e) {
           setBio(mockBio);
-        } else {
-          setBio(parsed);
         }
-      } catch (e) {
+      } else {
         setBio(mockBio);
       }
-    } else {
-      setBio(mockBio);
     }
 
     const storedGrayscale = localStorage.getItem("aaronnofrail_grayscale");

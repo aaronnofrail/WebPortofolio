@@ -15,20 +15,80 @@ export default function ExperiencePage() {
   });
 
   useEffect(() => {
-    // Read custom experiences from localStorage
-    const storedExp = localStorage.getItem("aaronnofrail_experiences");
-    if (storedExp) {
-      try {
-        setExperiences(JSON.parse(storedExp));
-      } catch (e) {}
+    const isSanityConfigured =
+      process.env.NEXT_PUBLIC_SANITY_PROJECT_ID &&
+      process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== "aaronnofrail_project";
+
+    if (isSanityConfigured) {
+      import("@/sanity/client").then(({ client }) => {
+        // Fetch experiences
+        client
+          .fetch(`*[_type == "experience"]`)
+          .then((fetched: any[]) => {
+            if (fetched && fetched.length > 0) {
+              const mapped = fetched.map((item) => ({
+                id: item._id,
+                jobTitle: item.jobTitle,
+                company: item.company,
+                period: item.period,
+                responsibilities: item.responsibilities || [],
+                tags: item.tags || [],
+                status: item.status || "",
+              }));
+              setExperiences(mapped);
+            } else {
+              loadExperiencesFromLocalStorage();
+            }
+          })
+          .catch((err) => {
+            console.error("Failed to fetch experiences from Sanity, using localStorage fallback:", err);
+            loadExperiencesFromLocalStorage();
+          });
+
+        // Fetch achievements
+        client
+          .fetch(`*[_type == "achievement"]`)
+          .then((fetched: any[]) => {
+            if (fetched && fetched.length > 0) {
+              const mapped = fetched.map((item) => ({
+                id: item._id,
+                title: item.title,
+                description: item.description,
+                image: item.imageAssetPath || item.image || "",
+                tags: item.tags || [],
+                credentialUrl: item.credentialUrl || "",
+              }));
+              setAchievements(mapped);
+            } else {
+              loadAchievementsFromLocalStorage();
+            }
+          })
+          .catch((err) => {
+            console.error("Failed to fetch achievements from Sanity, using localStorage fallback:", err);
+            loadAchievementsFromLocalStorage();
+          });
+      });
+    } else {
+      loadExperiencesFromLocalStorage();
+      loadAchievementsFromLocalStorage();
     }
 
-    // Read custom achievements from localStorage
-    const storedAch = localStorage.getItem("aaronnofrail_achievements");
-    if (storedAch) {
-      try {
-        setAchievements(JSON.parse(storedAch));
-      } catch (e) {}
+    function loadExperiencesFromLocalStorage() {
+      const storedExp = localStorage.getItem("aaronnofrail_experiences");
+      if (storedExp) {
+        try {
+          setExperiences(JSON.parse(storedExp));
+        } catch (e) {}
+      }
+    }
+
+    function loadAchievementsFromLocalStorage() {
+      const storedAch = localStorage.getItem("aaronnofrail_achievements");
+      if (storedAch) {
+        try {
+          setAchievements(JSON.parse(storedAch));
+        } catch (e) {}
+      }
     }
   }, []);
 

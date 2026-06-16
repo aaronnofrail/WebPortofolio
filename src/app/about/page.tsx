@@ -8,6 +8,7 @@ import PortfolioGate from "@/components/PortfolioGate";
 import { translations } from "@/data/translations";
 
 export default function AboutPage() {
+  const t = translations.en;
   const [bioDescription, setBioDescription] = useState<string | null>(null);
 
   useEffect(() => {
@@ -42,13 +43,25 @@ export default function AboutPage() {
           const parsed = JSON.parse(storedBio);
           if (parsed.description) {
             setBioDescription(parsed.description);
+            return;
           }
         } catch (e) {}
       }
+      setBioDescription(t.about.bio);
     }
   }, []);
 
-  const t = translations.en;
+  if (bioDescription === null) {
+    return (
+      <PortfolioGate>
+        <Navbar />
+        <main className="flex-grow w-full max-w-7xl mx-auto px-6 py-24 md:py-32 font-mono flex items-center justify-center min-h-[50vh] bg-white dark:bg-black text-black dark:text-white">
+          <div className="text-xl font-bold animate-pulse">&gt; LOADING_BIO_PERSONA...</div>
+        </main>
+        <Footer />
+      </PortfolioGate>
+    );
+  }
 
   const coreLanguages = ["HTML5", "CSS3", "JavaScript", "TypeScript", "Go (Golang)", "Python", "Rust", "SQL"];
   const frameworksUI = ["React.js", "Next.js", "TailwindCSS", "Node.js", "Express.js", "gRPC"];

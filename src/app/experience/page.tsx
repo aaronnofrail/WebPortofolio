@@ -8,8 +8,8 @@ import { mockExperiences, mockAchievements, Experience, Achievement } from "@/da
 import { translations } from "@/data/translations";
 
 export default function ExperiencePage() {
-  const [experiences, setExperiences] = useState<Experience[]>(mockExperiences);
-  const [achievements, setAchievements] = useState<Achievement[]>(mockAchievements);
+  const [experiences, setExperiences] = useState<Experience[] | null>(null);
+  const [achievements, setAchievements] = useState<Achievement[] | null>(null);
   const [expandedFolders, setExpandedFolders] = useState<Record<string, boolean>>({
     exp_1: true, // Expand the first one by default
   });
@@ -100,6 +100,18 @@ export default function ExperiencePage() {
   };
 
   const t = translations.en;
+
+  if (experiences === null || achievements === null) {
+    return (
+      <PortfolioGate>
+        <Navbar />
+        <main className="flex-grow w-full max-w-7xl mx-auto px-6 py-24 md:py-32 font-mono flex items-center justify-center min-h-[50vh] bg-white dark:bg-black text-black dark:text-white">
+          <div className="text-xl font-bold animate-pulse">&gt; LOADING_TIMELINE_LOGS...</div>
+        </main>
+        <Footer />
+      </PortfolioGate>
+    );
+  }
 
   const isIcon = (val: string) => {
     if (!val) return true;

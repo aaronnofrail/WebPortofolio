@@ -14,7 +14,7 @@ interface CaseStudy {
 }
 
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState<Project[]>(mockProjects);
+  const [projects, setProjects] = useState<Project[] | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [activeCaseStudyProject, setActiveCaseStudyProject] = useState<Project | null>(null);
 
@@ -88,6 +88,18 @@ export default function ProjectsPage() {
   }, [activeCaseStudyProject]);
 
   const t = translations.en;
+
+  if (projects === null) {
+    return (
+      <PortfolioGate>
+        <Navbar />
+        <main className="flex-grow w-full max-w-7xl mx-auto px-6 py-24 md:py-32 font-mono flex items-center justify-center min-h-[50vh] bg-white dark:bg-black text-black dark:text-white">
+          <div className="text-xl font-bold animate-pulse">&gt; INITIALIZING_PROJECT_MODULES...</div>
+        </main>
+        <Footer />
+      </PortfolioGate>
+    );
+  }
 
   // Categories mapping
   const getProjectCategory = (project: Project): string => {

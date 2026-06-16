@@ -401,11 +401,15 @@ Files available for cat:
           <div key={index} className="flex flex-col gap-4 font-mono text-xs md:text-sm max-w-full text-black dark:text-white select-text">
             {/* ASCII Art */}
             <pre className="leading-tight select-none overflow-x-auto text-black dark:text-white font-bold">
-              {`                                        __            _ _ 
-  __ _  __ _ _ __ ___  _ __  _ __   ___/ _|_ __ __ _(_) |
- / _\` |/ _\` | '__/ _ \\| '_ \\| '_ \\ / _ \\ |_| '__/ _\` | | |
-| (_| | (_| | | | (_) | | | | | | |  __/  _| | | (_| | | |
- \\__,_|\\__,_|_|  \\___/|_| |_|_| |_|\\___|_| |_|  \\__,_|_|_|`}
+              {`▄▄▄▄▄▄██▀███ ▒█████   ███▄    █  ███▄    █  ▒█████    █████▒██▀███   ▄▄▄       ██▓ ██▓    
+▒████▄   ▒████▄    ▓██ ▒ ██▒▒██▒  ██▒ ██ ▀█   █  ██ ▀█   █ ▒██▒  ██▒▓██   ▒▓██ ▒ ██▒▒████▄    ▓██▒▓██▒    
+▒██  ▀█▄ ▒██  ▀█▄  ▓██ ░▄█ ▒▒██░  ██▒▓██  ▀█ ██▒▓██  ▀█ ██▒▒██░  ██▒▒████ ░▓██ ░▄█ ▒▒██  ▀█▄  ▒██▒▒██░    
+░██▄▄▄▄██░██▄▄▄▄██ ▒██▀▀█▄  ▒██   ██░▓██▒  ▐▌██▒▓██▒  ▐▌██▒▒██   ██░░▓█▒  ░▒██▀▀█▄  ░██▄▄▄▄██ ░██░▒██░    
+ ▓█   ▓██▒▓█   ▓██▒░██▓ ▒██▒░ ████▓▒░▒██░   ▓██░▒██░   ▓██░░ ████▓▒░░▒█░   ░██▓ ▒██▒ ▓█   ▓██▒░██░░██████▒
+ ▒▒   ▓▒█░▒▒   ▓▒█░░ ▒▓ ░▒▓░░ ▒░▒░▒░ ░ ▒░   ▒ ▒ ░ ▒░   ▒ ▒ ░ ▒░▒░▒░  ▒ ░   ░ ▒▓ ░▒▓░ ▒▒   ▓▒█░░▓  ░ ▒░▓  ░
+  ▒   ▒▒ ░ ▒   ▒▒ ░  ░▒ ░ ▒░  ░ ▒ ▒░ ░ ░░   ░ ▒░░ ░░   ░ ▒░  ░ ▒ ▒░  ░       ░▒ ░ ▒░  ▒   ▒▒ ░ ▒ ░░ ░ ▒  ░
+  ░   ▒    ░   ▒     ░░   ░ ░ ░ ░ ▒     ░   ░ ░    ░   ░ ░ ░ ░ ░ ▒   ░ ░     ░░   ░   ░   ▒    ▒ ░  ░ ░   
+      ░  ░     ░  ░   ░         ░ ░           ░          ░     ░ ░            ░           ░  ░ ░      ░  ░`}
             </pre>
 
             <div className="text-center font-bold tracking-widest text-black dark:text-white my-2">
@@ -442,7 +446,7 @@ Files available for cat:
 
               <div className="mt-2 p-4 border border-black/20 dark:border-white/20 bg-black/5 dark:bg-white/5 flex flex-col gap-2 rounded-xl">
                 <span className="font-bold">The flag is:</span>
-                <span className="opacity-90">{"the flag is my ex name in aaron{} format #iykyk"}</span>
+                <span className="opacity-90">{"the flag is her name in aaron{} format #iykyk"}</span>
               </div>
             </div>
           </div>

@@ -105,7 +105,7 @@ export default function HomePage() {
               className="p-4 flex items-center justify-center gap-2 hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-colors cursor-pointer group animate-pulse"
             >
               <span>{t.hero.scrollDown}</span>
-              <span className="material-symbols-outlined text-sm block group-hover:translate-y-1 transition-transform">
+              <span className="material-symbols-outlined text-sm block">
                 arrow_outward
               </span>
             </Link>

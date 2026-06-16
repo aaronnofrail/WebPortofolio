@@ -40,13 +40,17 @@ export default function HomePage() {
         <div className="flex-grow flex flex-col justify-center items-center relative z-10 px-4 mb-20">
           
           {/* Centered Large Typographic Name Banner */}
-          <div className="w-full select-none pointer-events-none my-auto">
-            <h1 className="text-[12vw] leading-[0.8] font-black tracking-tighter text-black dark:text-white text-center uppercase transition-colors duration-300">
-              AARONNOFRAIL
-            </h1>
-            {/* <p className="text-center font-bold tracking-widest text-[11px] md:text-sm text-neutral-500 dark:text-neutral-400 mt-4 uppercase">
-              {t.hero.tagline}
-            </p> */}
+          <div className="w-full select-none my-auto flex justify-center items-center">
+            <div className="overflow-hidden relative group h-[11vw] w-full flex items-center justify-center cursor-default">
+              <div className="flex flex-col transition-transform duration-700 ease-in-out transform group-hover:-translate-y-1/2">
+                <h1 className="text-[12vw] leading-[0.8] font-black tracking-tighter text-black dark:text-white text-center uppercase h-[11vw] flex items-center justify-center">
+                  AARONNOFRAIL
+                </h1>
+                <h1 className="text-[9vw] leading-[0.8] font-black tracking-tighter text-black dark:text-white text-center normal-case h-[11vw] flex items-center justify-center whitespace-nowrap">
+                  Arundaffa Nahara
+                </h1>
+              </div>
+            </div>
           </div>
 
           {/* Floating Tilted Skill Pills */}

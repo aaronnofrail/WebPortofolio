@@ -7,7 +7,6 @@ import { translations } from "@/data/translations";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const isHome = pathname === "/home" || pathname === "/";
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">("dark");
   const [mounted, setMounted] = useState(false);
@@ -53,25 +52,13 @@ export default function Navbar() {
     <nav className="fixed top-0 left-0 w-full z-50 bg-white/95 dark:bg-black/95 backdrop-blur-md border-b border-neutral-200 dark:border-neutral-800 font-mono transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between relative">
         {/* Brand / Logo */}
-        <div className="flex-shrink-0 z-20 font-bold tracking-tight text-[18px]">
-          {isHome ? (
-            <div className="h-7 overflow-hidden relative group">
-              <Link
-                href="/home"
-                className="block text-black dark:text-white transition-transform duration-500 ease-in-out transform group-hover:-translate-y-1/2"
-              >
-                <span className="block h-7 leading-7 lowercase">aaronnofrail</span>
-                <span className="block h-7 leading-7 normal-case">Arundaffa Nahara</span>
-              </Link>
-            </div>
-          ) : (
-            <Link
-              className="text-black dark:text-white hover:text-neutral-500 transition-colors lowercase"
-              href="/home"
-            >
-              aaronnofrail
-            </Link>
-          )}
+        <div className="flex-shrink-0 z-20 font-bold lowercase tracking-tight text-[18px]">
+          <Link
+            className="text-black dark:text-white hover:text-neutral-500 transition-colors"
+            href="/home"
+          >
+            aaronnofrail
+          </Link>
         </div>
 
         {/* Desktop Nav Links */}

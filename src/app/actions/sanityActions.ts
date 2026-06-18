@@ -1,7 +1,6 @@
 "use server";
 
 import { createClient } from "@sanity/client";
-import { revalidatePath } from "next/cache";
 
 const writeClient = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "y2wq5bs3",
@@ -46,9 +45,6 @@ export async function saveBioAction(bio: any) {
         skills: bio.skills,
       });
     }
-    revalidatePath("/");
-    revalidatePath("/home");
-    revalidatePath("/about");
     return { success: true };
   } catch (error: any) {
     console.error("saveBioAction error:", error);
@@ -71,7 +67,6 @@ export async function createExperienceAction(exp: any) {
       responsibilities: exp.responsibilities,
       tags: exp.tags,
     });
-    revalidatePath("/experience");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -93,7 +88,6 @@ export async function updateExperienceAction(id: string, exp: any) {
       responsibilities: exp.responsibilities,
       tags: exp.tags,
     });
-    revalidatePath("/experience");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -106,7 +100,6 @@ export async function deleteExperienceAction(id: string) {
   }
   try {
     await writeClient.delete(id);
-    revalidatePath("/experience");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -127,7 +120,6 @@ export async function createAchievementAction(ach: any) {
       tags: ach.tags,
       credentialUrl: ach.credentialUrl,
     });
-    revalidatePath("/experience");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -148,7 +140,6 @@ export async function updateAchievementAction(id: string, ach: any) {
       tags: ach.tags,
       credentialUrl: ach.credentialUrl,
     });
-    revalidatePath("/experience");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -161,7 +152,6 @@ export async function deleteAchievementAction(id: string) {
   }
   try {
     await writeClient.delete(id);
-    revalidatePath("/experience");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -184,7 +174,6 @@ export async function createProjectAction(proj: any) {
       tags: proj.tags,
       status: proj.status,
     });
-    revalidatePath("/projects");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -208,7 +197,6 @@ export async function updateProjectAction(id: string, proj: any) {
       status: proj.status,
       caseStudy: proj.caseStudy || undefined,
     });
-    revalidatePath("/projects");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -221,7 +209,6 @@ export async function deleteProjectAction(id: string) {
   }
   try {
     await writeClient.delete(id);
-    revalidatePath("/projects");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -240,7 +227,6 @@ export async function createFAQAction(faq: any) {
       answer: faq.answer,
       order: 1,
     });
-    revalidatePath("/faq");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -259,7 +245,6 @@ export async function updateFAQAction(id: string, faq: any) {
       answer: faq.answer,
       order: faq.order || 1,
     });
-    revalidatePath("/faq");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
@@ -272,7 +257,6 @@ export async function deleteFAQAction(id: string) {
   }
   try {
     await writeClient.delete(id);
-    revalidatePath("/faq");
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };

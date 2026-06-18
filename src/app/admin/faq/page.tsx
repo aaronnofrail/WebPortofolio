@@ -14,6 +14,7 @@ export default function AdminFAQPage() {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [saveStatus, setSaveStatus] = useState<"IDLE" | "SAVING" | "SAVED" | "ERROR">("IDLE");
 
   useEffect(() => {
     const isSanityConfigured =
@@ -69,42 +70,69 @@ export default function AdminFAQPage() {
     setEditingId(null);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!question.trim() || !answer.trim()) return;
+    setSaveStatus("SAVING");
 
-    if (editingId) {
-      // Edit
-      const updated = faqs.map((faq) => {
-        if (faq.id === editingId) {
-          const updatedNode = {
-            ...faq,
-            question: question.trim(),
-            answer: answer.trim(),
-          };
-          updateFAQAction(faq.id, updatedNode);
-          addActivityLog(`FAQ: Updated query '${updatedNode.question.substring(0, 30)}...'`, "info");
-          return updatedNode;
+    try {
+      if (editingId) {
+        // Edit
+        const updatedNode = {
+          question: question.trim(),
+          answer: answer.trim(),
+        };
+
+        const res = await updateFAQAction(editingId, updatedNode);
+        if (res && !res.success) {
+          console.error("Failed to update FAQ in Sanity:", res.error);
+          setSaveStatus("ERROR");
+          setTimeout(() => setSaveStatus("IDLE"), 2000);
+          return;
         }
-        return faq;
-      });
-      setFaqs(updated);
-      saveToStorage(updated);
-    } else {
-      // Add
-      const newFaq: FAQ = {
-        id: `faq_${Date.now()}`,
-        question: question.trim(),
-        answer: answer.trim(),
-      };
-      createFAQAction(newFaq);
-      const updated = [...faqs, newFaq];
-      setFaqs(updated);
-      saveToStorage(updated);
-      addActivityLog(`FAQ: Created new query '${newFaq.question.substring(0, 30)}...'`, "info");
-    }
 
-    handleClear();
+        const updated = faqs.map((faq) => {
+          if (faq.id === editingId) {
+            return {
+              ...faq,
+              ...updatedNode,
+            };
+          }
+          return faq;
+        });
+        setFaqs(updated);
+        saveToStorage(updated);
+        addActivityLog(`FAQ: Updated query '${updatedNode.question.substring(0, 30)}...'`, "info");
+      } else {
+        // Add
+        const newFaq: FAQ = {
+          id: `faq_${Date.now()}`,
+          question: question.trim(),
+          answer: answer.trim(),
+        };
+
+        const res = await createFAQAction(newFaq);
+        if (res && !res.success) {
+          console.error("Failed to create FAQ in Sanity:", res.error);
+          setSaveStatus("ERROR");
+          setTimeout(() => setSaveStatus("IDLE"), 2000);
+          return;
+        }
+
+        const updated = [...faqs, newFaq];
+        setFaqs(updated);
+        saveToStorage(updated);
+        addActivityLog(`FAQ: Created new query '${newFaq.question.substring(0, 30)}...'`, "info");
+      }
+
+      setSaveStatus("SAVED");
+      setTimeout(() => setSaveStatus("IDLE"), 2000);
+      handleClear();
+    } catch (err) {
+      console.error("Failed to save FAQ:", err);
+      setSaveStatus("ERROR");
+      setTimeout(() => setSaveStatus("IDLE"), 2000);
+    }
   };
 
   const handleEdit = (faq: FAQ) => {
@@ -211,7 +239,8 @@ export default function AdminFAQPage() {
               </p>
             </div>
             
-            <form onSubmit={handleSubmit} className="space-y-8 font-code">
+            <form onSubmit={handleSubmit} className="font-code">
+              <fieldset disabled={saveStatus === "SAVING"} className="space-y-8">
               <div>
                 <label className="block font-code text-label-sm font-bold uppercase mb-2 text-on-surface">
                   Question Input
@@ -254,19 +283,30 @@ export default function AdminFAQPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <button
-                  className="w-full border border-primary bg-surface py-3 font-code font-bold hover:bg-primary hover:text-on-primary transition-all cursor-pointer"
+                  className="w-full border border-primary bg-surface py-3 font-code font-bold hover:bg-primary hover:text-on-primary transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   type="button"
                   onClick={handleClear}
+                  disabled={saveStatus === "SAVING"}
                 >
                   CLEAR FORM
                 </button>
                 <button
-                  className="w-full bg-primary text-on-primary py-3 font-code font-bold hover:bg-surface hover:text-primary border border-primary transition-all cursor-pointer"
+                  className="w-full bg-primary text-on-primary py-3 font-code font-bold hover:bg-surface hover:text-primary border border-primary transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   type="submit"
+                  disabled={saveStatus === "SAVING"}
                 >
-                  {editingId ? "SAVE ENTRY" : "COMMIT ENTRY"}
+                  {saveStatus === "SAVING"
+                    ? "SAVING..."
+                    : saveStatus === "SAVED"
+                    ? "SAVED [OK]"
+                    : saveStatus === "ERROR"
+                    ? "SAVE ERROR"
+                    : editingId
+                    ? "SAVE ENTRY"
+                    : "COMMIT ENTRY"}
                 </button>
               </div>
+              </fieldset>
             </form>
           </div>
 

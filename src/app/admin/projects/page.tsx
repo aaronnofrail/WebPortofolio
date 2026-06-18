@@ -22,6 +22,7 @@ export default function AdminProjectsPage() {
   const [problem, setProblem] = useState("");
   const [solution, setSolution] = useState("");
   const [result, setResult] = useState("");
+  const [saveStatus, setSaveStatus] = useState<"IDLE" | "SAVING" | "SAVED" | "ERROR">("IDLE");
 
   useEffect(() => {
     const isSanityConfigured =
@@ -133,9 +134,10 @@ export default function AdminProjectsPage() {
     reader.readAsDataURL(file);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !description.trim()) return;
+    setSaveStatus("SAVING");
 
     const tags = tagsText
       .split(",")
@@ -148,52 +150,78 @@ export default function AdminProjectsPage() {
       result: result.trim(),
     };
 
-    if (editingId) {
-      // Edit
-      const updated = projects.map((proj) => {
-        if (proj.id === editingId) {
-          const updatedNode = {
-            ...proj,
-            title: title.trim().toUpperCase(),
-            description: description.trim(),
-            image: imageVal,
-            githubUrl: githubUrl.trim() || "#",
-            demoUrl: demoUrl.trim() || "#",
-            tags,
-            status: statusVal,
-            caseStudy,
-          };
-          updateProjectAction(proj.id, updatedNode);
-          addActivityLog(`PROJECT: Updated project configuration for '${updatedNode.title}'`, "info");
-          return updatedNode;
-        }
-        return proj;
-      });
-      setProjects(updated);
-      saveToStorage(updated);
-    } else {
-      // Add
-      const newProj: Project = {
-        id: `proj_${Date.now()}`,
-        title: title.trim().toUpperCase(),
-        description: description.trim(),
-        image: imageVal,
-        githubUrl: githubUrl.trim() || "#",
-        demoUrl: demoUrl.trim() || "#",
-        tags,
-        status: statusVal,
-        caseStudy,
-      };
-      createProjectAction(newProj);
-      const updated = [...projects, newProj];
-      setProjects(updated);
-      saveToStorage(updated);
-      addActivityLog(`PROJECT: Created new project '${newProj.title}'`, "info");
-    }
+    try {
+      if (editingId) {
+        // Edit
+        const updatedNode = {
+          title: title.trim().toUpperCase(),
+          description: description.trim(),
+          image: imageVal,
+          githubUrl: githubUrl.trim() || "#",
+          demoUrl: demoUrl.trim() || "#",
+          tags,
+          status: statusVal,
+          caseStudy,
+        };
 
-    handleClear();
-    // Scroll back to page top or list top
-    window.scrollTo({ top: 0, behavior: "smooth" });
+        const res = await updateProjectAction(editingId, updatedNode);
+        if (res && !res.success) {
+          console.error("Failed to update project in Sanity:", res.error);
+          setSaveStatus("ERROR");
+          setTimeout(() => setSaveStatus("IDLE"), 2000);
+          return;
+        }
+
+        const updated = projects.map((proj) => {
+          if (proj.id === editingId) {
+            return {
+              ...proj,
+              ...updatedNode,
+            };
+          }
+          return proj;
+        });
+        setProjects(updated);
+        saveToStorage(updated);
+        addActivityLog(`PROJECT: Updated project configuration for '${updatedNode.title}'`, "info");
+      } else {
+        // Add
+        const newProj: Project = {
+          id: `proj_${Date.now()}`,
+          title: title.trim().toUpperCase(),
+          description: description.trim(),
+          image: imageVal,
+          githubUrl: githubUrl.trim() || "#",
+          demoUrl: demoUrl.trim() || "#",
+          tags,
+          status: statusVal,
+          caseStudy,
+        };
+
+        const res = await createProjectAction(newProj);
+        if (res && !res.success) {
+          console.error("Failed to create project in Sanity:", res.error);
+          setSaveStatus("ERROR");
+          setTimeout(() => setSaveStatus("IDLE"), 2000);
+          return;
+        }
+
+        const updated = [...projects, newProj];
+        setProjects(updated);
+        saveToStorage(updated);
+        addActivityLog(`PROJECT: Created new project '${newProj.title}'`, "info");
+      }
+
+      setSaveStatus("SAVED");
+      setTimeout(() => setSaveStatus("IDLE"), 2000);
+      handleClear();
+      // Scroll back to page top or list top
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (err) {
+      console.error("Failed to save project:", err);
+      setSaveStatus("ERROR");
+      setTimeout(() => setSaveStatus("IDLE"), 2000);
+    }
   };
 
   const handleEdit = (proj: Project) => {
@@ -382,7 +410,8 @@ export default function AdminProjectsPage() {
         </div>
 
         <div className="p-8">
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 font-code">
+          <form onSubmit={handleSubmit} className="font-code">
+            <fieldset disabled={saveStatus === "SAVING"} className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
             <div className="flex flex-col gap-2">
               <label className="text-label-sm font-bold uppercase tracking-widest opacity-60">
                 Project Name
@@ -561,19 +590,30 @@ export default function AdminProjectsPage() {
 
             <div className="md:col-span-2 pt-6 flex justify-end gap-4">
               <button
-                className="px-8 py-3 border border-primary hover:bg-primary hover:text-on-primary transition-all font-bold uppercase tracking-widest cursor-pointer"
+                className="px-8 py-3 border border-primary hover:bg-primary hover:text-on-primary transition-all font-bold uppercase tracking-widest cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 type="button"
                 onClick={handleClear}
+                disabled={saveStatus === "SAVING"}
               >
                 Clear / Cancel
               </button>
               <button
-                className="px-10 py-3 bg-primary text-on-primary border border-primary hover:bg-background hover:text-primary transition-all font-bold uppercase tracking-widest cursor-pointer"
+                className="px-10 py-3 bg-primary text-on-primary border border-primary hover:bg-background hover:text-primary transition-all font-bold uppercase tracking-widest cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 type="submit"
+                disabled={saveStatus === "SAVING"}
               >
-                {editingId ? "Deploy Edits" : "Deploy Changes"}
+                {saveStatus === "SAVING"
+                  ? "Deploying..."
+                  : saveStatus === "SAVED"
+                  ? "Deployed [OK]"
+                  : saveStatus === "ERROR"
+                  ? "Deploy Error"
+                  : editingId
+                  ? "Deploy Edits"
+                  : "Deploy Changes"}
               </button>
             </div>
+            </fieldset>
           </form>
         </div>
       </section>

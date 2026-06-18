@@ -19,6 +19,7 @@ export default function AdminExperiencePage() {
   const [tagsText, setTagsText] = useState("");
   const [statusVal, setStatusVal] = useState("active"); // "active" or "archived"
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [saveStatus, setSaveStatus] = useState<"IDLE" | "SAVING" | "SAVED" | "ERROR">("IDLE");
 
   useEffect(() => {
     const isSanityConfigured =
@@ -83,9 +84,10 @@ export default function AdminExperiencePage() {
     setEditingId(null);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!jobTitle.trim() || !company.trim()) return;
+    setSaveStatus("SAVING");
 
     const responsibilities = responsibilitiesText
       .split("\n")
@@ -99,46 +101,70 @@ export default function AdminExperiencePage() {
 
     const periodStr = `${startPeriod || "N/A"} — ${endPeriod || "PRESENT"}`.toUpperCase();
 
-    if (editingId) {
-      // Edit mode
-      const updated = experiences.map((exp) => {
-        if (exp.id === editingId) {
-          const updatedNode = {
-            ...exp,
-            jobTitle: jobTitle.trim(),
-            company: company.trim(),
-            period: periodStr,
-            responsibilities,
-            tags,
-            status: statusVal === "active" ? "ACTIVE" : "ARCHIVED",
-          };
-          updateExperienceAction(exp.id, updatedNode);
-          addActivityLog(`EXPERIENCE: Updated experience configuration for '${updatedNode.jobTitle}' at '${updatedNode.company}'`, "info");
-          return updatedNode;
+    try {
+      if (editingId) {
+        // Edit mode
+        const updatedNode = {
+          jobTitle: jobTitle.trim(),
+          company: company.trim(),
+          period: periodStr,
+          responsibilities,
+          tags,
+          status: statusVal === "active" ? "ACTIVE" : "ARCHIVED",
+        };
+        const res = await updateExperienceAction(editingId, updatedNode);
+        if (res && !res.success) {
+          console.error("Failed to update experience in Sanity:", res.error);
+          setSaveStatus("ERROR");
+          setTimeout(() => setSaveStatus("IDLE"), 2000);
+          return;
         }
-        return exp;
-      });
-      setExperiences(updated);
-      saveToStorage(updated);
-    } else {
-      // Add mode
-      const newExp: Experience = {
-        id: `exp_${Date.now()}`,
-        jobTitle: jobTitle.trim(),
-        company: company.trim(),
-        period: periodStr,
-        status: statusVal === "active" ? "ACTIVE" : "ARCHIVED",
-        responsibilities,
-        tags,
-      };
-      createExperienceAction(newExp);
-      const updated = [newExp, ...experiences];
-      setExperiences(updated);
-      saveToStorage(updated);
-      addActivityLog(`EXPERIENCE: Added experience for '${newExp.jobTitle}' at '${newExp.company}'`, "info");
-    }
 
-    handleClear();
+        const updated = experiences.map((exp) => {
+          if (exp.id === editingId) {
+            return {
+              ...exp,
+              ...updatedNode,
+            };
+          }
+          return exp;
+        });
+        setExperiences(updated);
+        saveToStorage(updated);
+        addActivityLog(`EXPERIENCE: Updated experience configuration for '${updatedNode.jobTitle}' at '${updatedNode.company}'`, "info");
+      } else {
+        // Add mode
+        const newExp: Experience = {
+          id: `exp_${Date.now()}`,
+          jobTitle: jobTitle.trim(),
+          company: company.trim(),
+          period: periodStr,
+          status: statusVal === "active" ? "ACTIVE" : "ARCHIVED",
+          responsibilities,
+          tags,
+        };
+        const res = await createExperienceAction(newExp);
+        if (res && !res.success) {
+          console.error("Failed to create experience in Sanity:", res.error);
+          setSaveStatus("ERROR");
+          setTimeout(() => setSaveStatus("IDLE"), 2000);
+          return;
+        }
+
+        const updated = [newExp, ...experiences];
+        setExperiences(updated);
+        saveToStorage(updated);
+        addActivityLog(`EXPERIENCE: Added experience for '${newExp.jobTitle}' at '${newExp.company}'`, "info");
+      }
+
+      setSaveStatus("SAVED");
+      setTimeout(() => setSaveStatus("IDLE"), 2000);
+      handleClear();
+    } catch (err) {
+      console.error("Failed to save experience:", err);
+      setSaveStatus("ERROR");
+      setTimeout(() => setSaveStatus("IDLE"), 2000);
+    }
   };
 
   const handleEdit = (exp: Experience) => {
@@ -190,7 +216,8 @@ export default function AdminExperiencePage() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-10 max-w-lg font-code">
+        <form onSubmit={handleSubmit} className="max-w-lg font-code">
+          <fieldset disabled={saveStatus === "SAVING"} className="space-y-10">
           <div className="space-y-2">
             <label className="text-label-sm font-bold text-primary block">
               JOB TITLE
@@ -304,24 +331,43 @@ export default function AdminExperiencePage() {
 
           <div className="pt-4 flex gap-4">
             <button
-              className="inline-flex items-center justify-center px-8 py-4 text-body-md font-bold text-on-primary bg-primary border border-primary hover:bg-surface hover:text-primary transition-all cursor-pointer"
+              className="inline-flex items-center justify-center px-8 py-4 text-body-md font-bold text-on-primary bg-primary border border-primary hover:bg-surface hover:text-primary transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               type="submit"
+              disabled={saveStatus === "SAVING"}
             >
-              {editingId ? "COMMIT CHANGES" : "COMMIT ENTRY"}
+              {saveStatus === "SAVING"
+                ? "SAVING..."
+                : saveStatus === "SAVED"
+                ? "SAVED SUCCESS"
+                : saveStatus === "ERROR"
+                ? "SAVE ERROR"
+                : editingId
+                ? "COMMIT CHANGES"
+                : "COMMIT ENTRY"}
               <span className="ml-2 material-symbols-outlined text-[18px]">
-                {editingId ? "save" : "add_task"}
+                {saveStatus === "SAVING"
+                  ? "sync"
+                  : saveStatus === "SAVED"
+                  ? "check"
+                  : saveStatus === "ERROR"
+                  ? "error"
+                  : editingId
+                  ? "save"
+                  : "add_task"}
               </span>
             </button>
             {editingId && (
               <button
                 type="button"
                 onClick={handleClear}
-                className="border border-primary px-6 py-4 text-body-md font-bold hover:bg-primary hover:text-on-primary transition-all cursor-pointer"
+                disabled={saveStatus === "SAVING"}
+                className="border border-primary px-6 py-4 text-body-md font-bold hover:bg-primary hover:text-on-primary transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 CANCEL
               </button>
             )}
           </div>
+          </fieldset>
         </form>
       </section>
 

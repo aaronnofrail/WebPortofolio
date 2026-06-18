@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { JetBrains_Mono, Space_Grotesk, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
+import ViewsTracker from "@/components/ViewsTracker";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -51,7 +52,7 @@ export default function RootLayout({
                   if (theme === 'dark' || (!theme && true)) {
                      document.documentElement.classList.add('dark');
                   } else {
-                    document.documentElement.classList.remove('dark');
+                     document.documentElement.classList.remove('dark');
                   }
                 } catch (e) {}
               })();
@@ -61,9 +62,11 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col relative bg-background text-primary selection:bg-primary selection:text-on-primary font-sans">
         <SmoothScroll>
+          <ViewsTracker />
           {children}
         </SmoothScroll>
       </body>
     </html>
   );
 }
+

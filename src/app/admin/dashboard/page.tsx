@@ -49,6 +49,29 @@ export default function AdminDashboardPage() {
       unreadMessages: unread,
       views: viewsVal,
     });
+
+    const isSanityConfigured =
+      process.env.NEXT_PUBLIC_SANITY_PROJECT_ID &&
+      process.env.NEXT_PUBLIC_SANITY_PROJECT_ID !== "aaronnofrail_project";
+
+    if (isSanityConfigured) {
+      import("@/sanity/client").then(({ client }) => {
+        client
+          .fetch(`*[_type == "views"][0]`)
+          .then((fetched: any) => {
+            if (fetched && typeof fetched.count === "number") {
+              localStorage.setItem("aaronnofrail_views", String(fetched.count));
+              setStats((prev) => ({
+                ...prev,
+                views: fetched.count,
+              }));
+            }
+          })
+          .catch((err) => {
+            console.error("Failed to fetch views from Sanity:", err);
+          });
+      });
+    }
   };
 
   useEffect(() => {

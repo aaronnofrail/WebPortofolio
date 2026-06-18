@@ -4,6 +4,7 @@ import achievementSchema from './achievement';
 import projectSchema from './project';
 import faqSchema from './faq';
 import messageSchema from './message';
+import viewsSchema from './views';
 
 export const schemaTypes = [
   bioSchema,
@@ -11,5 +12,7 @@ export const schemaTypes = [
   achievementSchema,
   projectSchema,
   faqSchema,
-  messageSchema
+  messageSchema,
+  viewsSchema
 ];
+

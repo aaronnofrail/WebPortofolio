@@ -303,3 +303,44 @@ export async function markMessageReadAction(id: string, read: boolean) {
     return { success: false, error: error.message };
   }
 }
+
+// --- VIEWS ACTIONS ---
+export async function getViewsAction() {
+  try {
+    const existing = await writeClient.fetch(`*[_type == "views"][0]`);
+    if (existing) {
+      return { success: true, count: existing.count || 0 };
+    }
+    return { success: true, count: 1243 };
+  } catch (error: any) {
+    console.error("getViewsAction error:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function incrementViewsAction() {
+  if (!hasWriteToken()) {
+    return { success: false, error: "SANITY_API_WRITE_TOKEN_MISSING" };
+  }
+  try {
+    const existing = await writeClient.fetch(`*[_type == "views"][0]`);
+    if (existing) {
+      const newCount = (existing.count || 0) + 1;
+      await writeClient
+        .patch(existing._id)
+        .set({ count: newCount })
+        .commit();
+      return { success: true, count: newCount };
+    } else {
+      await writeClient.create({
+        _type: "views",
+        count: 1244,
+      });
+      return { success: true, count: 1244 };
+    }
+  } catch (error: any) {
+    console.error("incrementViewsAction error:", error);
+    return { success: false, error: error.message };
+  }
+}
+

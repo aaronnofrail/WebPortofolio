@@ -60,7 +60,7 @@ export default function AdminLayout({
 
   // Authenticated layout: SideNavBar + Top Header + Page Canvas
   return (
-    <div className="flex h-screen overflow-hidden bg-background text-primary selection:bg-primary selection:text-on-primary scanlines">
+    <div className="flex h-screen overflow-hidden bg-white dark:bg-black text-black dark:text-white selection:bg-black dark:selection:bg-white selection:text-white dark:selection:text-black scanlines transition-colors duration-300">
       {/* Sidebar Navigation */}
       <AdminSidebar />
       
@@ -70,7 +70,7 @@ export default function AdminLayout({
         <AdminHeader />
         
         {/* Scrollable page body */}
-        <div className="flex-grow overflow-y-auto bg-surface-container-low p-6 md:p-8">
+        <div className="flex-grow overflow-y-auto bg-neutral-50 dark:bg-neutral-950/40 p-6 md:p-8">
           <div className="max-w-[1100px] mx-auto w-full">
             {children}
           </div>

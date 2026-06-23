@@ -17,36 +17,29 @@ export default function AdminSidebar() {
   ];
 
   const activeClass =
-    "flex items-center text-on-primary bg-primary font-bold px-6 py-3 border-b border-primary font-code text-code border-l-4 transition-all duration-75";
+    "flex items-center gap-3 px-4 py-2.5 mx-3 my-1 border-2 border-black dark:border-neutral-700 bg-black dark:bg-white text-white dark:text-black font-bold uppercase tracking-wider rounded-xl shadow-neo transition-all duration-150 font-mono text-xs";
   const inactiveClass =
-    "flex items-center text-primary px-6 py-3 hover:bg-secondary-container transition-colors font-code text-code";
+    "flex items-center gap-3 px-4 py-2.5 mx-3 my-1 border-2 border-transparent hover:border-black dark:hover:border-neutral-700 bg-transparent text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white font-bold uppercase tracking-wider rounded-xl hover:shadow-neo-btn transition-all duration-150 font-mono text-xs";
 
   const getIconClass = (isActive: boolean) =>
     isActive
-      ? "w-5 h-5 mr-3 object-contain invert dark:invert-0"
-      : "w-5 h-5 mr-3 object-contain dark:invert";
+      ? "w-4.5 h-4.5 object-contain invert dark:invert-0 shrink-0"
+      : "w-4.5 h-4.5 object-contain dark:invert shrink-0";
 
   return (
-    <aside className="hidden md:flex flex-col h-screen w-64 border-r border-primary bg-surface fixed left-0 top-0 z-50">
-      <div className="p-6 border-b border-primary">
+    <aside className="hidden md:flex flex-col h-screen w-64 border-r-2 border-black dark:border-neutral-700 bg-white dark:bg-black fixed left-0 top-0 z-50 transition-colors duration-300">
+      <div className="p-6 border-b-2 border-black dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900/50">
         <div className="flex items-center gap-3 mb-4">
-          {/* <div className="w-10 h-10 border border-primary flex items-center justify-center overflow-hidden shrink-0">
-            <img
-              alt="System Administrator Avatar"
-              className="w-full h-full object-cover"
-              src="/assets/ach_contributor.png"
-            />
-          </div> */}
           <div>
-            <h1 className="font-headline-md text-headline-md font-bold text-primary">aaronnofrail</h1>
+            <h1 className="text-xl font-black text-black dark:text-white font-mono lowercase tracking-tight">aaronnofrail</h1>
           </div>
         </div>
-        <button className="w-full border border-primary py-2 px-4 font-code text-label-sm hover:bg-primary hover:text-on-primary transition-all duration-75 uppercase tracking-widest font-bold cursor-pointer">
+        <button className="w-full border-2 border-black dark:border-neutral-700 py-2.5 px-4 font-mono text-[10px] bg-white dark:bg-neutral-900 text-black dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all duration-150 shadow-neo-btn uppercase tracking-widest font-bold cursor-pointer">
           DEPLOY CHANGES
         </button>
       </div>
 
-      <nav className="flex-grow py-4 overflow-y-auto">
+      <nav className="flex-grow py-6 overflow-y-auto">
         <div className="space-y-1">
           {adminNavItems.map((item) => {
             const isActive = pathname === item.href;
@@ -68,9 +61,9 @@ export default function AdminSidebar() {
         </div>
       </nav>
 
-      <div className="mt-auto p-4 space-y-2 border-t border-primary bg-surface-container-low">
+      <div className="mt-auto p-4 space-y-2 border-t-2 border-black dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-900/50">
         <Link
-          className={pathname === "/admin/settings" ? activeClass : "flex items-center text-primary px-6 py-3 hover:bg-secondary-container transition-colors font-code text-code"}
+          className={pathname === "/admin/settings" ? activeClass : inactiveClass}
           href="/admin/settings"
         >
           <img
@@ -81,7 +74,7 @@ export default function AdminSidebar() {
           SETTINGS
         </Link>
         <Link
-          className="flex items-center text-primary px-6 py-3 hover:bg-secondary-container transition-colors font-code text-code"
+          className={inactiveClass}
           href="/home"
           onClick={() => {
             sessionStorage.removeItem("admin_authorized");

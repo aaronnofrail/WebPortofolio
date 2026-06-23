@@ -202,28 +202,28 @@ export default function AdminExperiencePage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col md:flex-row gap-12">
+    <div className="flex-grow flex flex-col md:flex-row gap-12 text-black dark:text-white">
       {/* Left: ADD_EXPERIENCE FORM */}
       <section className="w-full md:w-1/2 space-y-8">
         <div>
-          <h2 className="font-headline-lg text-headline-lg font-bold text-primary border-b-4 border-primary inline-block mb-4">
+          <h2 className="text-3xl font-black uppercase tracking-tight border-b-4 border-black dark:border-neutral-700 inline-block pb-2 mb-4">
             {editingId ? "EDIT EXPERIENCE" : "ADD EXPERIENCE"}
           </h2>
-          <p className="font-code text-body-md text-on-surface-variant max-w-md">
+          <p className="font-mono text-xs text-neutral-500 dark:text-neutral-400 max-w-md leading-relaxed">
             {editingId
               ? `Modifying node ${editingId}. Ensure correct timeline parameters.`
               : "Initialize a new career node by defining parameters below. Ensure exact timestamps for chronology validation."}
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="max-w-lg font-code">
-          <fieldset disabled={saveStatus === "SAVING"} className="space-y-10">
+        <form onSubmit={handleSubmit} className="max-w-lg font-mono">
+          <fieldset disabled={saveStatus === "SAVING"} className="space-y-8">
           <div className="space-y-2">
-            <label className="text-label-sm font-bold text-primary block">
+            <label className="text-xs font-bold text-black dark:text-neutral-300 block">
               JOB TITLE
             </label>
             <input
-              className="w-full bg-transparent border-0 border-b border-primary p-2 text-body-lg placeholder:text-surface-dim outline-none focus:border-b-2"
+              className="w-full bg-white dark:bg-neutral-900 border-2 border-black dark:border-neutral-700 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-black dark:text-white font-mono"
               placeholder="e.g. SENIOR_SYSTEMS_ARCHITECT"
               type="text"
               value={jobTitle}
@@ -233,11 +233,11 @@ export default function AdminExperiencePage() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-label-sm font-bold text-primary block">
+            <label className="text-xs font-bold text-black dark:text-neutral-300 block">
               COMPANY
             </label>
             <input
-              className="w-full bg-transparent border-0 border-b border-primary p-2 text-body-lg placeholder:text-surface-dim outline-none focus:border-b-2"
+              className="w-full bg-white dark:bg-neutral-900 border-2 border-black dark:border-neutral-700 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-black dark:text-white font-mono"
               placeholder="e.g. NEO_TECH_CORP"
               type="text"
               value={company}
@@ -246,13 +246,13 @@ export default function AdminExperiencePage() {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-8">
+          <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label className="text-label-sm font-bold text-primary block">
+              <label className="text-xs font-bold text-black dark:text-neutral-300 block">
                 START DATE
               </label>
               <input
-                className="w-full bg-transparent border-0 border-b border-primary p-2 text-body-lg placeholder:text-surface-dim outline-none focus:border-b-2"
+                className="w-full bg-white dark:bg-neutral-900 border-2 border-black dark:border-neutral-700 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-black dark:text-white font-mono"
                 placeholder="e.g. JAN 2022"
                 type="text"
                 value={startPeriod}
@@ -260,11 +260,11 @@ export default function AdminExperiencePage() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-label-sm font-bold text-primary block">
+              <label className="text-xs font-bold text-black dark:text-neutral-300 block">
                 END DATE
               </label>
               <input
-                className="w-full bg-transparent border-0 border-b border-primary p-2 text-body-lg placeholder:text-surface-dim outline-none focus:border-b-2"
+                className="w-full bg-white dark:bg-neutral-900 border-2 border-black dark:border-neutral-700 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-black dark:text-white font-mono"
                 placeholder="e.g. PRESENT"
                 type="text"
                 value={endPeriod}
@@ -274,10 +274,10 @@ export default function AdminExperiencePage() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-label-sm font-bold text-primary block">
+            <label className="text-xs font-bold text-black dark:text-neutral-300 block">
               STATUS
             </label>
-            <div className="flex gap-4 pt-1">
+            <div className="flex gap-6 pt-1 font-mono text-sm">
               <label className="flex items-center gap-2 cursor-pointer select-none">
                 <input
                   type="radio"
@@ -285,7 +285,7 @@ export default function AdminExperiencePage() {
                   value="active"
                   checked={statusVal === "active"}
                   onChange={() => setStatusVal("active")}
-                  className="accent-primary"
+                  className="accent-black dark:accent-white"
                 />
                 Active Entry
               </label>
@@ -296,7 +296,7 @@ export default function AdminExperiencePage() {
                   value="archived"
                   checked={statusVal === "archived"}
                   onChange={() => setStatusVal("archived")}
-                  className="accent-primary"
+                  className="accent-black dark:accent-white"
                 />
                 Archived Entry
               </label>
@@ -304,11 +304,11 @@ export default function AdminExperiencePage() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-label-sm font-bold text-primary block">
+            <label className="text-xs font-bold text-black dark:text-neutral-300 block">
               KEY RESPONSIBILITIES (one per line)
             </label>
             <textarea
-              className="w-full bg-transparent border border-primary p-4 text-body-md placeholder:text-surface-dim resize-none outline-none"
+              className="w-full bg-white dark:bg-neutral-900 border-2 border-black dark:border-neutral-700 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-black dark:text-white font-mono resize-none"
               placeholder="* Execute modular deployments&#10;* Maintain system integrity&#10;* Lead engineering sprints"
               rows={6}
               value={responsibilitiesText}
@@ -317,11 +317,11 @@ export default function AdminExperiencePage() {
           </div>
 
           <div className="space-y-2">
-            <label className="text-label-sm font-bold text-primary block">
+            <label className="text-xs font-bold text-black dark:text-neutral-300 block">
               TAGS (comma separated)
             </label>
             <input
-              className="w-full bg-transparent border-0 border-b border-primary p-2 text-body-lg placeholder:text-surface-dim outline-none focus:border-b-2"
+              className="w-full bg-white dark:bg-neutral-900 border-2 border-black dark:border-neutral-700 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-black dark:text-white font-mono"
               placeholder="React, TypeScript, Postgres"
               type="text"
               value={tagsText}
@@ -331,7 +331,7 @@ export default function AdminExperiencePage() {
 
           <div className="pt-4 flex gap-4">
             <button
-              className="inline-flex items-center justify-center px-8 py-4 text-body-md font-bold text-on-primary bg-primary border border-primary hover:bg-surface hover:text-primary transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-3.5 bg-black dark:bg-white text-white dark:text-black border-2 border-black dark:border-transparent font-bold font-mono text-xs uppercase tracking-widest rounded-xl hover:bg-neutral-850 dark:hover:bg-neutral-100 transition-all shadow-neo-btn cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
               type="submit"
               disabled={saveStatus === "SAVING"}
             >
@@ -344,7 +344,7 @@ export default function AdminExperiencePage() {
                 : editingId
                 ? "COMMIT CHANGES"
                 : "COMMIT ENTRY"}
-              <span className="ml-2 material-symbols-outlined text-[18px]">
+              <span className="material-symbols-outlined text-[16px]">
                 {saveStatus === "SAVING"
                   ? "sync"
                   : saveStatus === "SAVED"
@@ -361,7 +361,7 @@ export default function AdminExperiencePage() {
                 type="button"
                 onClick={handleClear}
                 disabled={saveStatus === "SAVING"}
-                className="border border-primary px-6 py-4 text-body-md font-bold hover:bg-primary hover:text-on-primary transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                className="border-2 border-black dark:border-neutral-700 px-6 py-3.5 rounded-xl font-bold hover:bg-neutral-100 dark:hover:bg-neutral-850 transition-all shadow-neo-btn cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-black dark:text-white font-mono text-xs uppercase"
               >
                 CANCEL
               </button>
@@ -372,13 +372,13 @@ export default function AdminExperiencePage() {
       </section>
 
       {/* Right: EXPERIENCE_LIST */}
-      <section className="w-full md:w-1/2 p-6 bg-surface-container-low border border-primary space-y-8">
-        <div className="flex justify-between items-end border-b border-primary pb-4">
+      <section className="w-full md:w-1/2 p-6 bg-white dark:bg-neutral-900 border-2 border-black dark:border-neutral-700 rounded-[2rem] shadow-neo space-y-8">
+        <div className="flex justify-between items-end border-b-2 border-black dark:border-neutral-700 pb-4">
           <div>
-            <h2 className="font-headline-lg text-headline-lg font-bold text-primary uppercase">
+            <h2 className="text-2xl font-black uppercase tracking-tight text-black dark:text-white">
               EXPERIENCE LIST
             </h2>
-            <p className="font-code text-label-sm text-secondary mt-1">
+            <p className="font-mono text-[10px] text-neutral-400 mt-1 uppercase font-bold tracking-wider">
               TOTAL RECORDS: [{experiences.length.toString().padStart(2, "0")}]
             </p>
           </div>
@@ -393,60 +393,58 @@ export default function AdminExperiencePage() {
             return (
               <article
                 key={exp.id}
-                className={`border bg-surface p-6 relative transition-transform duration-200 hover:-translate-y-1 ${isEditing ? "border-2 border-primary" : "border-primary"
-                  }`}
+                className={`border-2 p-6 relative transition-all duration-200 hover:-translate-y-0.5 rounded-[2rem] bg-white dark:bg-neutral-900 shadow-neo hover:shadow-neo-lg text-black dark:text-white ${
+                  isEditing ? "border-black dark:border-white ring-2 ring-black dark:ring-white" : "border-black dark:border-neutral-700"
+                }`}
               >
                 <div
-                  className={`absolute -top-3 left-6 px-3 py-1 font-code text-[10px] uppercase border ${isActive
-                      ? "bg-primary text-on-primary border-primary"
-                      : "bg-surface-container-high text-primary border-primary"
-                    }`}
+                  className={`absolute -top-3.5 left-6 px-3 py-1 font-mono text-[10px] uppercase border-2 rounded-full font-bold shadow-neo-btn ${
+                    isActive
+                      ? "bg-black dark:bg-white text-white dark:text-black border-black dark:border-neutral-700"
+                      : "bg-neutral-100 dark:bg-neutral-800 text-neutral-500 border-black dark:border-neutral-700"
+                  }`}
                 >
                   {statusLabel} [{String(index + 1).padStart(2, "0")}]
                 </div>
 
                 <div className="flex justify-between items-start mb-6 mt-2">
                   <div>
-                    <h3 className="font-headline-md text-headline-md font-bold text-primary">
+                    <h3 className="text-xl font-bold leading-snug">
                       {exp.jobTitle}
                     </h3>
-                    <p className="font-code text-body-md text-secondary">
+                    <p className="font-mono text-xs text-neutral-400 mt-1">
                       {exp.company} // {exp.period}
                     </p>
                   </div>
                   <div className="flex gap-2 shrink-0">
                     <button
                       onClick={() => handleEdit(exp)}
-                      className="p-1 hover:text-primary transition-colors flex items-center gap-1 cursor-pointer"
+                      className="px-2.5 py-1 border-2 border-black dark:border-neutral-700 bg-white dark:bg-neutral-900 text-black dark:text-white text-[10px] font-bold uppercase rounded-lg shadow-neo-btn cursor-pointer flex items-center justify-center"
                       title="Edit Entry"
                     >
-                      <span className="material-symbols-outlined text-[18px]">
-                        edit
-                      </span>
+                      <span className="material-symbols-outlined text-[16px]">edit</span>
                     </button>
                     <button
                       onClick={() => handleDelete(exp.id)}
-                      className="p-1 hover:text-error transition-colors flex items-center gap-1 cursor-pointer text-secondary hover:text-error"
+                      className="px-2.5 py-1 border-2 border-red-500 bg-white dark:bg-neutral-900 text-red-500 text-[10px] font-bold uppercase rounded-lg shadow-neo-btn cursor-pointer flex items-center justify-center"
                       title="Remove Entry"
                     >
-                      <span className="material-symbols-outlined text-[18px]">
-                        delete
-                      </span>
+                      <span className="material-symbols-outlined text-[16px]">delete</span>
                     </button>
                   </div>
                 </div>
 
-                <ul className="font-code text-body-md space-y-2 mb-6 text-on-surface">
+                <ul className="font-mono text-xs space-y-2 mb-6 text-neutral-600 dark:text-neutral-300">
                   {exp.responsibilities.map((resp, i) => (
-                    <li key={i}>&gt; {resp}</li>
+                    <li key={i} className="leading-relaxed">&gt; {resp}</li>
                   ))}
                 </ul>
 
-                <div className="flex flex-wrap gap-2 pt-4 border-t border-primary/10">
+                <div className="flex flex-wrap gap-1.5 pt-4 border-t border-neutral-100 dark:border-neutral-800">
                   {exp.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-2 py-1 border border-primary text-[10px] font-code"
+                      className="text-[9px] font-bold px-2 py-0.5 border border-black dark:border-neutral-600 rounded bg-white dark:bg-neutral-800 uppercase"
                     >
                       {tag}
                     </span>
@@ -457,7 +455,7 @@ export default function AdminExperiencePage() {
           })}
 
           {experiences.length === 0 && (
-            <div className="border border-primary border-dashed p-12 text-center text-secondary font-code">
+            <div className="border-4 border-dashed border-black dark:border-neutral-700 p-12 text-center text-neutral-400 font-mono rounded-[2rem]">
               NO_EXPERIENCE_RECORDS_FOUND
             </div>
           )}

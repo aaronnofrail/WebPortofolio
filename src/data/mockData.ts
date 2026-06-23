@@ -40,6 +40,11 @@ export interface Project {
     solution: string;
     result: string;
   };
+  metrics?: {
+    perf: string;
+    sec: string;
+    rel: string;
+  };
 }
 
 export interface FAQ {
@@ -157,7 +162,13 @@ export const mockProjects: Project[] = [
     tags: ["Rust", "Redis", "gRPC"],
     githubUrl: "https://github.com/aaronnofrail/nexus-core",
     demoUrl: "#",
-    status: "Active"
+    status: "Active",
+    metrics: { perf: ">98%", sec: "95%", rel: "99%" },
+    caseStudy: {
+      problem: "Legacy message brokers suffered from delivery overhead and message latency on high-throughput nodes.",
+      solution: "Engineered a custom binary message broker in Rust over TCP using custom serialization. Implemented sub-millisecond delivery with Redis caching.",
+      result: "Reduced server memory footprint by 65% and delivery latency by 85%."
+    }
   },
   {
     id: "proj_2",
@@ -167,7 +178,13 @@ export const mockProjects: Project[] = [
     tags: ["React", "CSS", "NPM"],
     githubUrl: "https://github.com/aaronnofrail/terminal-ui",
     demoUrl: "https://terminal-ui.aaronnofrail.dev",
-    status: "Completed"
+    status: "Completed",
+    metrics: { perf: "100%", sec: "90%", rel: "92%" },
+    caseStudy: {
+      problem: "Modern UI libraries import bulky stylesheets and JavaScript runtime, causing slow first contentful paint (FCP).",
+      solution: "Designed a keyboard-first CSS-in-JS brutalist UI library using pure CSS variables and zero-runtime styles.",
+      result: "Achieved 100/100 Lighthouse performance score with 0KB JS runtime overhead."
+    }
   },
   {
     id: "proj_3",
@@ -177,7 +194,13 @@ export const mockProjects: Project[] = [
     tags: ["Solidity", "Go", "Cryptography"],
     githubUrl: "https://github.com/aaronnofrail/omega-protocol",
     demoUrl: "https://omega-protocol.aaronnofrail.dev",
-    status: "Archived"
+    status: "Archived",
+    metrics: { perf: "85%", sec: "99%", rel: "95%" },
+    caseStudy: {
+      problem: "Online identity verification methods rely on centralized databases vulnerable to credential harvesting.",
+      solution: "Implemented decentralized identity protocol on Ethereum using zero-knowledge snarks to verify claims offline.",
+      result: "Completely secured user details while verifying authenticity in under 12 seconds."
+    }
   },
   {
     id: "proj_4",
@@ -187,7 +210,13 @@ export const mockProjects: Project[] = [
     tags: ["Python", "Bash", "CLI"],
     githubUrl: "https://github.com/aaronnofrail/void-mapper",
     demoUrl: "#",
-    status: "In Progress"
+    status: "In Progress",
+    metrics: { perf: "94%", sec: "85%", rel: "90%" },
+    caseStudy: {
+      problem: "Visualizing heavy server directory tree hierarchies and file ownership takes too long over SSH terminals.",
+      solution: "Built a Python command line interface tool utilizing binary tree traversal and custom ASCII table builders to visualize memory mapping.",
+      result: "Reduced file indexing time by 90% using multithreading indexing queues."
+    }
   }
 ];
 

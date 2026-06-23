@@ -22,6 +22,9 @@ export default function AdminProjectsPage() {
   const [problem, setProblem] = useState("");
   const [solution, setSolution] = useState("");
   const [result, setResult] = useState("");
+  const [perfMetric, setPerfMetric] = useState("90%");
+  const [secMetric, setSecMetric] = useState("90%");
+  const [relMetric, setRelMetric] = useState("90%");
   const [saveStatus, setSaveStatus] = useState<"IDLE" | "SAVING" | "SAVED" | "ERROR">("IDLE");
 
   useEffect(() => {
@@ -45,6 +48,7 @@ export default function AdminProjectsPage() {
                 demoUrl: item.demoUrl || "",
                 status: item.status || "Active",
                 caseStudy: item.caseStudy || undefined,
+                metrics: item.metrics || undefined,
               }));
               setProjects(mapped);
             } else {
@@ -90,6 +94,9 @@ export default function AdminProjectsPage() {
     setProblem("");
     setSolution("");
     setResult("");
+    setPerfMetric("90%");
+    setSecMetric("90%");
+    setRelMetric("90%");
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -150,6 +157,12 @@ export default function AdminProjectsPage() {
       result: result.trim(),
     };
 
+    const metrics = {
+      perf: perfMetric.trim() || "90%",
+      sec: secMetric.trim() || "90%",
+      rel: relMetric.trim() || "90%",
+    };
+
     try {
       if (editingId) {
         // Edit
@@ -162,6 +175,7 @@ export default function AdminProjectsPage() {
           tags,
           status: statusVal,
           caseStudy,
+          metrics,
         };
 
         const res = await updateProjectAction(editingId, updatedNode);
@@ -196,6 +210,7 @@ export default function AdminProjectsPage() {
           tags,
           status: statusVal,
           caseStudy,
+          metrics,
         };
 
         const res = await createProjectAction(newProj);
@@ -237,6 +252,11 @@ export default function AdminProjectsPage() {
     setSolution(proj.caseStudy?.solution || "");
     setResult(proj.caseStudy?.result || "");
     
+    const fallbackMetrics = mockProjects.find(p => p.id === proj.id)?.metrics || { perf: "90%", sec: "90%", rel: "90%" };
+    setPerfMetric(proj.metrics?.perf || fallbackMetrics.perf);
+    setSecMetric(proj.metrics?.sec || fallbackMetrics.sec);
+    setRelMetric(proj.metrics?.rel || fallbackMetrics.rel);
+    
     // Scroll to form
     const formElement = document.getElementById("project-form-section");
     if (formElement) {
@@ -269,12 +289,12 @@ export default function AdminProjectsPage() {
   return (
     <div className="space-y-12">
       {/* Page Header */}
-      <section className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-primary pb-8">
+      <section className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b-2 border-black dark:border-neutral-700 pb-8">
         <div>
-          <h2 className="font-headline-lg text-headline-lg uppercase tracking-tighter mb-2">
+          <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-2 text-black dark:text-white">
             Project Repository
           </h2>
-          <p className="text-body-lg opacity-70 max-w-2xl">
+          <p className="text-sm text-neutral-500 dark:text-neutral-400 max-w-2xl font-mono leading-relaxed">
             Manage operational entities and deployment status of internal architectures. Access source protocols and live demonstrations via the terminal grid.
           </p>
         </div>
@@ -284,103 +304,108 @@ export default function AdminProjectsPage() {
             const formElement = document.getElementById("project-form-section");
             formElement?.scrollIntoView({ behavior: "smooth" });
           }}
-          className="px-8 py-4 bg-primary text-on-primary border border-primary font-bold text-body-md hover:bg-background hover:text-primary transition-all flex items-center gap-3 cursor-pointer shrink-0"
+          className="px-6 py-3 bg-black dark:bg-white text-white dark:text-black border-2 border-black dark:border-transparent font-bold text-xs uppercase tracking-widest rounded-xl hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-all shadow-neo-btn cursor-pointer flex items-center gap-1.5 shrink-0"
         >
-          <span className="material-symbols-outlined">add</span>
-          {/* Add New Project */}
+          <span className="material-symbols-outlined text-[16px] font-bold">add</span>
           ADD NEW PROJECTS
         </button>
       </section>
 
       {/* Projects Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
         {projects.map((proj) => {
           const isEditing = editingId === proj.id;
+          const projMetrics = proj.metrics || mockProjects.find(p => p.id === proj.id)?.metrics || { perf: "90%", sec: "90%", rel: "90%" };
           
           return (
             <article
               key={proj.id}
-              className={`border transition-all bg-surface ${
-                isEditing ? "admin-project-card-editing" : "border-primary admin-project-card-hover"
+              className={`group border-2 border-black dark:border-neutral-700 bg-white dark:bg-neutral-900 rounded-[2rem] p-6 flex flex-col hover:shadow-neo-lg transition-all duration-300 relative ${
+                isEditing ? "ring-2 ring-black dark:ring-white border-black dark:border-white shadow-neo-lg" : "shadow-neo"
               }`}
             >
-              <div className="aspect-video overflow-hidden border-b border-primary bg-primary-container relative flex items-center justify-center">
+              <div className="mb-6 border-2 border-black dark:border-neutral-700 aspect-video overflow-hidden rounded-xl bg-neutral-100 dark:bg-neutral-800 relative flex items-center justify-center">
                 <img
                   alt={proj.title}
-                  className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity grayscale"
+                  className="w-full h-full object-cover block filter grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500 opacity-90 group-hover:opacity-100"
                   src={proj.image}
                   onError={(e) => {
-                    // Fallback if local image doesn't exist
                     (e.target as HTMLImageElement).src = "/assets/01_cat.png";
                   }}
                 />
-                <div className="absolute top-2 right-2 flex gap-1 font-code z-10">
+                <div className="absolute top-3 right-3 flex gap-2 font-mono z-10">
                   <button
                     onClick={() => handleEdit(proj)}
-                    className="bg-background text-primary border border-primary px-2.5 py-1 text-xs font-bold hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
+                    className="px-3 py-1 border-2 border-black dark:border-neutral-700 bg-white dark:bg-neutral-900 text-black dark:text-white text-[10px] font-bold uppercase tracking-widest rounded-lg hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors flex items-center gap-1 shadow-neo-btn cursor-pointer"
                   >
                     EDIT
                   </button>
                   <button
                     onClick={() => handleDelete(proj.id)}
-                    className="bg-background text-error border border-error px-2.5 py-1 text-xs font-bold hover:bg-error hover:text-on-error transition-colors cursor-pointer"
+                    className="px-3 py-1 border-2 border-red-500 bg-white dark:bg-neutral-900 text-red-500 hover:bg-red-500 hover:text-white transition-colors text-[10px] font-bold uppercase tracking-widest rounded-lg shadow-neo-btn cursor-pointer"
                   >
                     DEL
                   </button>
                 </div>
               </div>
               
-              <div className="p-6">
+              <div className="flex-grow flex flex-col">
                 <div className="flex justify-between items-start mb-4">
-                  <h3 className="font-headline-md text-headline-md uppercase break-all">
+                  <h3 className="text-2xl md:text-3xl font-black uppercase text-black dark:text-white leading-tight break-all">
                     {proj.title}
                   </h3>
-                  <span className={`px-3 py-1 border border-primary text-label-sm font-bold uppercase tracking-widest ${
-                    proj.status === "Active" 
-                      ? "bg-primary text-on-primary" 
-                      : proj.status === "Completed"
-                      ? "bg-surface text-primary"
-                      : "bg-surface-container-high text-secondary"
-                  }`}>
+                  <span className="text-[9px] font-bold px-2.5 py-1 bg-black text-white dark:bg-white dark:text-black rounded-full uppercase tracking-wider">
                     {proj.status}
                   </span>
                 </div>
                 
-                <p className="text-body-md opacity-70 mb-6 line-clamp-3 h-[60px]">
+                <p className="text-neutral-500 dark:text-neutral-400 text-xs leading-relaxed mb-6 line-clamp-3 h-[54px] overflow-hidden">
                   {proj.description}
                 </p>
                 
-                <div className="flex flex-wrap gap-2 mb-6 h-[64px] overflow-y-auto custom-scrollbar">
+                <div className="flex flex-wrap gap-1.5 mb-6 h-[48px] overflow-y-auto custom-scrollbar">
                   {proj.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-label-sm px-2 py-1 border border-primary uppercase font-code"
+                      className="text-[9px] font-bold px-2 py-0.5 border border-black dark:border-neutral-500 rounded bg-white dark:bg-neutral-800 uppercase"
                     >
                       #{tag}
                     </span>
                   ))}
                 </div>
+
+                {/* Metric list on project card */}
+                <div className="grid grid-cols-3 gap-3 border-l-2 border-black dark:border-neutral-500 pl-4 mb-6">
+                  <div>
+                    <p className="text-sm font-black text-black dark:text-white">{projMetrics.perf}</p>
+                    <p className="text-[8px] text-neutral-400 uppercase tracking-widest">PERF</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-black text-black dark:text-white">{projMetrics.sec}</p>
+                    <p className="text-[8px] text-neutral-400 uppercase tracking-widest">SECURITY</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-black text-black dark:text-white">{projMetrics.rel}</p>
+                    <p className="text-[8px] text-neutral-400 uppercase tracking-widest">RELIABILITY</p>
+                  </div>
+                </div>
                 
-                <div className="flex justify-between items-center border-t border-primary pt-4 font-code">
+                <div className="flex justify-between items-center border-t border-neutral-100 dark:border-neutral-800 pt-4 font-mono text-xs mt-auto">
                   <span
-                    className={`text-label-sm font-bold underline flex items-center gap-1 ${
-                      proj.demoUrl === "#" ? "opacity-45 cursor-not-allowed" : "hover:text-secondary"
+                    className={`font-bold underline flex items-center gap-1 ${
+                      proj.demoUrl === "#" ? "opacity-45 cursor-not-allowed text-neutral-400" : "hover:text-neutral-500 text-black dark:text-white"
                     }`}
                   >
-                    <span className="material-symbols-outlined text-[16px]">
-                      link
-                    </span>{" "}
-                    VIEW DEMO
+                    <span className="material-symbols-outlined text-[16px]">link</span>
+                    DEMO
                   </span>
                   <span
-                    className={`text-label-sm font-bold underline flex items-center gap-1 ${
-                      proj.githubUrl === "#" ? "opacity-45 cursor-not-allowed" : "hover:text-secondary"
+                    className={`font-bold underline flex items-center gap-1 ${
+                      proj.githubUrl === "#" ? "opacity-45 cursor-not-allowed text-neutral-400" : "hover:text-neutral-500 text-black dark:text-white"
                     }`}
                   >
-                    <span className="material-symbols-outlined text-[16px]">
-                      code
-                    </span>{" "}
-                    REPOSITORY
+                    <span className="material-symbols-outlined text-[16px]">code</span>
+                    GITHUB
                   </span>
                 </div>
               </div>
@@ -389,7 +414,7 @@ export default function AdminProjectsPage() {
         })}
 
         {projects.length === 0 && (
-          <div className="border border-primary border-dashed p-12 text-center text-secondary font-code md:col-span-2">
+          <div className="border-4 border-dashed border-black dark:border-neutral-700 p-12 text-center text-neutral-500 font-mono rounded-[2rem] md:col-span-2">
             NO_PROJECTS_DEFINED
           </div>
         )}
@@ -398,26 +423,26 @@ export default function AdminProjectsPage() {
       {/* Configuration Form */}
       <section
         id="project-form-section"
-        className="border-2 border-primary bg-surface mb-16 overflow-hidden"
+        className="border-4 border-black dark:border-neutral-700 bg-white dark:bg-neutral-900 mb-16 overflow-hidden rounded-[2.5rem] shadow-neo-lg"
       >
-        <div className="bg-primary text-on-primary p-4 flex justify-between items-center font-code">
-          <h3 className="font-headline-md text-headline-md uppercase tracking-tight">
+        <div className="bg-black dark:bg-neutral-800 text-white p-5 flex justify-between items-center border-b-2 border-black dark:border-neutral-700 font-mono">
+          <h3 className="text-lg font-bold uppercase tracking-tight">
             {editingId ? "Edit Project Configuration" : "Project Configuration"}
           </h3>
-          <span className="text-label-sm opacity-60">
+          <span className="text-xs opacity-60">
             {editingId ? `PROJECT_ID: ${editingId}` : "FORM_ID: P-9982-CONFIG"}
           </span>
         </div>
 
-        <div className="p-8">
-          <form onSubmit={handleSubmit} className="font-code">
+        <div className="p-6 md:p-8">
+          <form onSubmit={handleSubmit} className="font-mono">
             <fieldset disabled={saveStatus === "SAVING"} className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
             <div className="flex flex-col gap-2">
-              <label className="text-label-sm font-bold uppercase tracking-widest opacity-60">
+              <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-neutral-300">
                 Project Name
               </label>
               <input
-                className="font-body-lg p-2 border-b border-primary focus:border-b-2 outline-none"
+                className="p-3 border-2 border-black dark:border-neutral-700 rounded-xl bg-white dark:bg-neutral-900 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
                 placeholder="NAME"
                 type="text"
                 value={title}
@@ -427,11 +452,11 @@ export default function AdminProjectsPage() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-label-sm font-bold uppercase tracking-widest opacity-60">
+              <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-neutral-300">
                 Project Status
               </label>
               <select
-                className="font-body-lg p-2 bg-transparent border-b border-primary outline-none cursor-pointer"
+                className="p-3 border-2 border-black dark:border-neutral-700 rounded-xl bg-white dark:bg-neutral-900 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white cursor-pointer"
                 value={statusVal}
                 onChange={(e) => setStatusVal(e.target.value as Project["status"])}
               >
@@ -443,37 +468,37 @@ export default function AdminProjectsPage() {
             </div>
 
             <div className="flex flex-col gap-2 md:col-span-2">
-              <label className="text-label-sm font-bold uppercase tracking-widest opacity-60">
+              <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-neutral-300">
                 Project Image / Vector Illustration
               </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-2">
+              <div className="grid grid-cols-1 sm:grid-cols-5 gap-4 mb-2">
                 {presetImages.map((pImg) => (
                   <button
                     key={pImg.path}
                     type="button"
                     onClick={() => setImageVal(pImg.path)}
-                    className={`border p-2 flex flex-col items-center gap-2 cursor-pointer bg-surface hover:bg-surface-container ${
-                      imageVal === pImg.path ? "border-2 border-primary" : "border-primary opacity-60"
+                    className={`border-2 rounded-xl p-2 flex flex-col items-center gap-2 cursor-pointer transition-all bg-white dark:bg-neutral-900 hover:scale-[1.02] shadow-neo-btn ${
+                      imageVal === pImg.path ? "border-black dark:border-white ring-2 ring-black dark:ring-white" : "border-black/30 dark:border-neutral-700 opacity-60"
                     }`}
                   >
-                    <div className="w-full h-16 overflow-hidden flex items-center justify-center bg-primary-container">
+                    <div className="w-full h-12 overflow-hidden flex items-center justify-center bg-neutral-100 dark:bg-neutral-800 rounded-lg">
                       <img src={pImg.path} className="w-full h-full object-cover grayscale" alt={pImg.name} />
                     </div>
-                    <span className="text-[10px] text-center font-bold truncate w-full">{pImg.name}</span>
+                    <span className="text-[8px] text-center font-bold truncate w-full">{pImg.name}</span>
                   </button>
                 ))}
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
                 <input
-                  className="font-body-lg p-2 border-b border-primary focus:border-b-2 outline-none flex-grow"
+                  className="p-3 border-2 border-black dark:border-neutral-700 rounded-xl bg-white dark:bg-neutral-900 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white flex-grow"
                   placeholder="Or enter custom URL/path..."
                   type="text"
                   value={imageVal}
                   onChange={(e) => setImageVal(e.target.value)}
                 />
                 
-                <label className="px-6 py-3 border border-primary text-xs font-bold uppercase cursor-pointer hover:bg-primary hover:text-on-primary transition-all font-code text-center shrink-0 flex items-center justify-center">
+                <label className="px-6 py-3.5 border-2 border-black dark:border-neutral-700 text-xs font-bold uppercase cursor-pointer hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all text-center shrink-0 flex items-center justify-center rounded-xl shadow-neo-btn bg-white dark:bg-neutral-900">
                   UPLOAD IMAGE
                   <input
                     type="file"
@@ -484,18 +509,18 @@ export default function AdminProjectsPage() {
                 </label>
               </div>
               {imageVal.startsWith("data:") && (
-                <span className="text-[10px] font-bold text-green-600 uppercase font-code">
+                <span className="text-[10px] font-bold text-green-600 uppercase">
                   [ Custom Base64 Image Loaded ]
                 </span>
               )}
             </div>
 
             <div className="flex flex-col gap-2 md:col-span-2">
-              <label className="text-label-sm font-bold uppercase tracking-widest opacity-60">
+              <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-neutral-300">
                 Description
               </label>
               <textarea
-                className="font-body-lg p-2 resize-none border border-primary outline-none"
+                className="p-3 border-2 border-black dark:border-neutral-700 rounded-xl bg-white dark:bg-neutral-900 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white resize-none"
                 placeholder="SYSTEM_MANIFESTO..."
                 rows={4}
                 value={description}
@@ -505,11 +530,11 @@ export default function AdminProjectsPage() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-label-sm font-bold uppercase tracking-widest opacity-60">
+              <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-neutral-300">
                 GitHub URL
               </label>
               <input
-                className="font-body-lg p-2 border-b border-primary focus:border-b-2 outline-none"
+                className="p-3 border-2 border-black dark:border-neutral-700 rounded-xl bg-white dark:bg-neutral-900 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
                 placeholder="https://github.com/..."
                 type="text"
                 value={githubUrl}
@@ -518,11 +543,11 @@ export default function AdminProjectsPage() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-label-sm font-bold uppercase tracking-widest opacity-60">
+              <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-neutral-300">
                 Live Demo URL
               </label>
               <input
-                className="font-body-lg p-2 border-b border-primary focus:border-b-2 outline-none"
+                className="p-3 border-2 border-black dark:border-neutral-700 rounded-xl bg-white dark:bg-neutral-900 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
                 placeholder="https://demo.io/..."
                 type="text"
                 value={demoUrl}
@@ -531,11 +556,11 @@ export default function AdminProjectsPage() {
             </div>
 
             <div className="flex flex-col gap-2 md:col-span-2">
-              <label className="text-label-sm font-bold uppercase tracking-widest opacity-60">
+              <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-neutral-300">
                 Tags (comma separated)
               </label>
               <input
-                className="font-body-lg p-2 border-b border-primary focus:border-b-2 outline-none"
+                className="p-3 border-2 border-black dark:border-neutral-700 rounded-xl bg-white dark:bg-neutral-900 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
                 placeholder="rust, webgpu, graphics..."
                 type="text"
                 value={tagsText}
@@ -543,18 +568,66 @@ export default function AdminProjectsPage() {
               />
             </div>
 
+            {/* Performance, Security, Reliability Metrics Section */}
+            <div className="md:col-span-2 border-t-2 border-black dark:border-neutral-700 pt-8 mt-4">
+              <h4 className="text-lg font-black uppercase mb-6 text-black dark:text-white">
+                PROJECT METRICS & SCORES
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-neutral-300">
+                    Performance Score
+                  </label>
+                  <input
+                    className="p-3 border-2 border-black dark:border-neutral-700 rounded-xl bg-white dark:bg-neutral-900 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+                    placeholder="e.g. 100%, >98%"
+                    type="text"
+                    value={perfMetric}
+                    onChange={(e) => setPerfMetric(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-neutral-300">
+                    Security Score
+                  </label>
+                  <input
+                    className="p-3 border-2 border-black dark:border-neutral-700 rounded-xl bg-white dark:bg-neutral-900 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+                    placeholder="e.g. 90%"
+                    type="text"
+                    value={secMetric}
+                    onChange={(e) => setSecMetric(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-neutral-300">
+                    Reliability Score
+                  </label>
+                  <input
+                    className="p-3 border-2 border-black dark:border-neutral-700 rounded-xl bg-white dark:bg-neutral-900 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white"
+                    placeholder="e.g. 92%"
+                    type="text"
+                    value={relMetric}
+                    onChange={(e) => setRelMetric(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
             {/* Case Study Section */}
-            <div className="md:col-span-2 border-t border-primary/20 pt-8 mt-4">
-              <h4 className="font-headline-md text-headline-md uppercase mb-6 text-primary">
+            <div className="md:col-span-2 border-t-2 border-black dark:border-neutral-700 pt-8 mt-4">
+              <h4 className="text-lg font-black uppercase mb-6 text-black dark:text-white">
                 Case Study Details (Optional)
               </h4>
               <div className="grid grid-cols-1 gap-6">
                 <div className="flex flex-col gap-2">
-                  <label className="text-label-sm font-bold uppercase tracking-widest opacity-60">
+                  <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-neutral-300">
                     The Challenge (Problem)
                   </label>
                   <textarea
-                    className="font-body-lg p-2 resize-none border border-primary outline-none"
+                    className="p-3 border-2 border-black dark:border-neutral-700 rounded-xl bg-white dark:bg-neutral-900 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white resize-none"
                     placeholder="Describe the challenge or problem solved..."
                     rows={2}
                     value={problem}
@@ -562,11 +635,11 @@ export default function AdminProjectsPage() {
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-label-sm font-bold uppercase tracking-widest opacity-60">
+                  <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-neutral-300">
                     The Execution (Solution)
                   </label>
                   <textarea
-                    className="font-body-lg p-2 resize-none border border-primary outline-none"
+                    className="p-3 border-2 border-black dark:border-neutral-700 rounded-xl bg-white dark:bg-neutral-900 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white resize-none"
                     placeholder="Describe the technical solution or execution..."
                     rows={2}
                     value={solution}
@@ -574,11 +647,11 @@ export default function AdminProjectsPage() {
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <label className="text-label-sm font-bold uppercase tracking-widest opacity-60">
+                  <label className="text-xs font-bold uppercase tracking-widest text-black dark:text-neutral-300">
                     The Outcome (Result)
                   </label>
                   <textarea
-                    className="font-body-lg p-2 resize-none border border-primary outline-none"
+                    className="p-3 border-2 border-black dark:border-neutral-700 rounded-xl bg-white dark:bg-neutral-900 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white resize-none"
                     placeholder="Describe the outcome or final result..."
                     rows={2}
                     value={result}
@@ -590,7 +663,7 @@ export default function AdminProjectsPage() {
 
             <div className="md:col-span-2 pt-6 flex justify-end gap-4">
               <button
-                className="px-8 py-3 border border-primary hover:bg-primary hover:text-on-primary transition-all font-bold uppercase tracking-widest cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-8 py-3.5 border-2 border-black dark:border-neutral-700 bg-white dark:bg-neutral-900 text-black dark:text-white font-bold uppercase tracking-widest cursor-pointer rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all shadow-neo-btn disabled:opacity-50 disabled:cursor-not-allowed"
                 type="button"
                 onClick={handleClear}
                 disabled={saveStatus === "SAVING"}
@@ -598,7 +671,7 @@ export default function AdminProjectsPage() {
                 Clear / Cancel
               </button>
               <button
-                className="px-10 py-3 bg-primary text-on-primary border border-primary hover:bg-background hover:text-primary transition-all font-bold uppercase tracking-widest cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-10 py-3.5 bg-black dark:bg-white text-white dark:text-black border-2 border-black dark:border-transparent font-bold uppercase tracking-widest cursor-pointer rounded-xl hover:bg-neutral-850 dark:hover:bg-neutral-100 transition-all shadow-neo-btn disabled:opacity-50 disabled:cursor-not-allowed"
                 type="submit"
                 disabled={saveStatus === "SAVING"}
               >

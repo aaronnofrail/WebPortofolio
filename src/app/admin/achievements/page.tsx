@@ -201,13 +201,13 @@ export default function AdminAchievementsPage() {
   };
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 text-black dark:text-white">
       {/* Page Header */}
-      <div className="border-l-4 border-primary pl-6">
-        <h2 className="font-headline-lg text-headline-lg uppercase mb-2">
+      <div className="border-l-4 border-black dark:border-neutral-700 pl-6">
+        <h2 className="text-4xl font-black uppercase mb-2">
           ACHIEVEMENTS CATALOGUE
         </h2>
-        <p className="font-body-lg text-body-lg opacity-70">
+        <p className="text-sm text-neutral-500 dark:text-neutral-400 font-mono">
           Configure professional validation metrics, awards, and certification logs.
         </p>
       </div>
@@ -215,20 +215,20 @@ export default function AdminAchievementsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         {/* Left Side: ACHIEVEMENT_REGISTRY */}
         <section className="lg:col-span-5 space-y-8">
-          <div className="border border-primary p-6 bg-surface">
-            <header className="border-b border-primary pb-4 mb-8">
-              <h2 className="font-headline-md text-headline-md font-bold uppercase tracking-tight">
+          <div className="border-4 border-black dark:border-neutral-700 p-6 md:p-8 bg-white dark:bg-neutral-900 rounded-[2.5rem] shadow-neo-lg">
+            <header className="border-b-2 border-black/10 dark:border-white/10 pb-4 mb-6">
+              <h2 className="text-2xl font-black uppercase">
                 {editingId ? "EDIT REGISTRY" : "ACHIEVEMENT REGISTRY"}
               </h2>
             </header>
             
-            <form onSubmit={handleSubmit} className="space-y-8 font-code">
+            <form onSubmit={handleSubmit} className="space-y-6 font-mono">
               <div className="space-y-2">
-                <label className="block text-label-sm font-bold uppercase tracking-wider">
+                <label className="block text-xs font-bold uppercase tracking-wider">
                   Achievement Title
                 </label>
                 <input
-                  className="w-full bg-transparent border-t-0 border-l-0 border-r-0 border-b border-primary px-0 py-2 font-code focus:ring-0 outline-none focus:border-b-2"
+                  className="w-full bg-white dark:bg-neutral-900 border-2 border-black dark:border-neutral-700 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-black dark:text-white"
                   placeholder="e.g. AWS_CERTIFIED_SOLUTIONS_ARCHITECT"
                   type="text"
                   value={title}
@@ -238,11 +238,11 @@ export default function AdminAchievementsPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-label-sm font-bold uppercase tracking-wider">
+                <label className="block text-xs font-bold uppercase tracking-wider">
                   Description
                 </label>
                 <textarea
-                  className="w-full bg-transparent border border-primary p-3 font-code focus:ring-0 outline-none"
+                  className="w-full bg-white dark:bg-neutral-900 border-2 border-black dark:border-neutral-700 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-black dark:text-white resize-none"
                   placeholder="Detailed logs of the achievement..."
                   rows={4}
                   value={description}
@@ -252,38 +252,38 @@ export default function AdminAchievementsPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-label-sm font-bold uppercase tracking-wider">
+                <label className="block text-xs font-bold uppercase tracking-wider">
                   Badge Type / Icon
                 </label>
-                <div className="grid grid-cols-4 gap-2 mb-2">
+                <div className="grid grid-cols-4 gap-3 mb-3">
                   {["military_tech", "workspace_premium", "star", "emoji_events"].map((icon) => (
                     <button
                       key={icon}
                       type="button"
                       onClick={() => setImageVal(icon)}
-                      className={`border p-2 flex items-center justify-center cursor-pointer ${
+                      className={`border-2 rounded-xl p-2.5 flex items-center justify-center cursor-pointer transition-all bg-white dark:bg-neutral-900 text-black dark:text-white hover:scale-[1.02] shadow-neo-btn ${
                         imageVal === icon
-                          ? "bg-primary text-on-primary border-primary"
-                          : "border-primary hover:bg-surface-container"
+                          ? "border-black dark:border-white ring-2 ring-black dark:ring-white"
+                          : "border-black/30 dark:border-neutral-700 opacity-60"
                       }`}
                     >
-                      <span className="material-symbols-outlined text-2xl">{icon}</span>
+                      <span className="material-symbols-outlined text-2xl font-bold">{icon}</span>
                     </button>
                   ))}
                 </div>
-                <div className="text-xs text-secondary opacity-60 mb-2">
+                <div className="text-xs text-neutral-400 opacity-80 mb-2">
                   Or enter image URL:
                 </div>
                 <div className="flex flex-col gap-4">
                   <input
-                    className="w-full bg-transparent border-t-0 border-l-0 border-r-0 border-b border-primary px-0 py-2 font-code focus:ring-0 outline-none focus:border-b-2"
+                    className="w-full bg-white dark:bg-neutral-900 border-2 border-black dark:border-neutral-700 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-black dark:text-white"
                     placeholder="https://... or custom icon name"
                     type="text"
                     value={imageVal}
                     onChange={(e) => setImageVal(e.target.value)}
                   />
                   
-                  <label className="px-4 py-2 border border-primary text-xs font-bold uppercase cursor-pointer hover:bg-primary hover:text-on-primary transition-all font-code text-center">
+                  <label className="px-4 py-2.5 border-2 border-black dark:border-neutral-700 rounded-xl text-xs font-bold uppercase cursor-pointer hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all font-mono text-center shadow-neo-btn bg-white dark:bg-neutral-900">
                     UPLOAD IMAGE FILE
                     <input
                       type="file"
@@ -294,18 +294,18 @@ export default function AdminAchievementsPage() {
                   </label>
                 </div>
                 {imageVal.startsWith("data:") && (
-                  <span className="text-[10px] font-bold text-green-600 uppercase font-code block mt-2">
+                  <span className="text-[10px] font-bold text-green-600 uppercase block mt-2">
                     [ Custom Base64 Image Loaded ]
                   </span>
                 )}
               </div>
 
               <div className="space-y-2">
-                <label className="block text-label-sm font-bold uppercase tracking-wider">
+                <label className="block text-xs font-bold uppercase tracking-wider">
                   Credential URL (Optional)
                 </label>
                 <input
-                  className="w-full bg-transparent border-t-0 border-l-0 border-r-0 border-b border-primary px-0 py-2 font-code focus:ring-0 outline-none focus:border-b-2"
+                  className="w-full bg-white dark:bg-neutral-900 border-2 border-black dark:border-neutral-700 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-black dark:text-white"
                   placeholder="https://credentials.com/..."
                   type="text"
                   value={credentialUrl}
@@ -314,11 +314,11 @@ export default function AdminAchievementsPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-label-sm font-bold uppercase tracking-wider">
+                <label className="block text-xs font-bold uppercase tracking-wider">
                   Tags (Comma Separated)
                 </label>
                 <input
-                  className="w-full bg-transparent border-t-0 border-l-0 border-r-0 border-b border-primary px-0 py-2 font-code focus:ring-0 outline-none focus:border-b-2"
+                  className="w-full bg-white dark:bg-neutral-900 border-2 border-black dark:border-neutral-700 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-black dark:text-white"
                   placeholder="CLOUD, INFRA, SECURITY"
                   type="text"
                   value={tagsText}
@@ -328,10 +328,10 @@ export default function AdminAchievementsPage() {
 
               <div className="pt-4 flex gap-4">
                 <button
-                  className="flex-1 bg-primary text-on-primary py-4 font-bold font-code flex justify-center items-center gap-2 hover:bg-surface hover:text-primary border border-primary transition-all cursor-pointer"
+                  className="flex-1 bg-black dark:bg-white text-white dark:text-black border-2 border-black dark:border-transparent py-3.5 rounded-xl font-bold font-mono text-xs flex justify-center items-center gap-2 hover:bg-neutral-850 dark:hover:bg-neutral-100 transition-all shadow-neo-btn cursor-pointer"
                   type="submit"
                 >
-                  <span className="material-symbols-outlined">
+                  <span className="material-symbols-outlined font-bold text-sm">
                     {editingId ? "save" : "add_circle"}
                   </span>
                   {editingId ? "COMMIT CHANGES" : "COMMIT TO REGISTRY"}
@@ -340,7 +340,7 @@ export default function AdminAchievementsPage() {
                   <button
                     type="button"
                     onClick={handleClear}
-                    className="border border-primary px-4 py-4 font-bold font-code hover:bg-primary hover:text-on-primary transition-all cursor-pointer"
+                    className="border-2 border-black dark:border-neutral-700 bg-white dark:bg-neutral-900 text-black dark:text-white px-4 py-3.5 font-bold font-mono text-xs rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all shadow-neo-btn cursor-pointer"
                   >
                     CANCEL
                   </button>
@@ -349,9 +349,9 @@ export default function AdminAchievementsPage() {
             </form>
           </div>
 
-          <div className="p-6 border border-primary bg-secondary-container font-code">
-            <h3 className="font-code font-bold mb-2">SYSTEM_NOTICE</h3>
-            <p className="text-body-md opacity-70">
+          <div className="p-6 border-2 border-black dark:border-neutral-700 bg-neutral-100 dark:bg-neutral-800 rounded-[2rem] font-mono shadow-neo relative overflow-hidden">
+            <h3 className="font-bold mb-2 text-xs">SYSTEM_NOTICE</h3>
+            <p className="text-[11px] opacity-70 leading-relaxed">
               New records are instantly indexed but require a full &apos;DEPLOY_CHANGES&apos; action to propagate to the public API nodes.
             </p>
           </div>
@@ -359,18 +359,18 @@ export default function AdminAchievementsPage() {
 
         {/* Right Side: ACHIEVEMENT_LIST */}
         <section className="lg:col-span-7 space-y-6">
-          <header className="flex justify-between border-b-2 border-primary pb-4 items-center">
+          <header className="flex justify-between border-b-2 border-black dark:border-neutral-700 pb-4 items-center">
             <div>
-              <h2 className="font-headline-md text-headline-md font-bold uppercase tracking-tight">
+              <h2 className="text-2xl font-black uppercase tracking-tight">
                 ACHIEVEMENT LIST
               </h2>
-              <p className="text-label-sm opacity-60 font-code">
+              <p className="text-[10px] opacity-60 font-mono font-bold uppercase tracking-wider mt-1">
                 COUNT: {String(achievements.length).padStart(2, "0")} ACTIVE RECORDS
               </p>
             </div>
           </header>
 
-          <div className="space-y-4 max-h-[750px] overflow-y-auto pr-2 custom-scrollbar">
+          <div className="space-y-6 max-h-[750px] overflow-y-auto pr-2 custom-scrollbar">
             {achievements.map((ach) => {
               const isEditing = editingId === ach.id;
               const hasIcon = isIcon(ach.image);
@@ -378,15 +378,15 @@ export default function AdminAchievementsPage() {
               return (
                 <div
                   key={ach.id}
-                  className={`border p-6 bg-surface transition-all group ${
-                    isEditing ? "border-2 border-primary" : "border-primary hover:bg-secondary-container"
+                  className={`border-2 p-6 bg-white dark:bg-neutral-900 rounded-[2.5rem] transition-all group shadow-neo hover:shadow-neo-lg ${
+                    isEditing ? "border-black dark:border-white ring-2 ring-black dark:ring-white" : "border-black dark:border-neutral-700"
                   }`}
                 >
                   <div className="flex gap-6 items-start">
-                    <div className="w-24 h-24 border border-primary flex items-center justify-center bg-white shrink-0 overflow-hidden">
+                    <div className="w-20 h-20 border-2 border-black dark:border-neutral-700 rounded-2xl flex items-center justify-center bg-neutral-50 dark:bg-neutral-800 shrink-0 overflow-hidden relative shadow-neo-btn">
                       {hasIcon ? (
                         <span
-                          className="material-symbols-outlined text-5xl text-primary"
+                          className="material-symbols-outlined text-4xl text-black dark:text-white"
                           style={{ fontVariationSettings: "'FILL' 1" }}
                         >
                           {ach.image || "military_tech"}
@@ -402,34 +402,34 @@ export default function AdminAchievementsPage() {
                     
                     <div className="flex-grow flex flex-col min-w-0">
                       <div className="flex justify-between items-start gap-4">
-                        <h3 className="font-headline-md font-bold leading-tight break-words uppercase">
+                        <h3 className="text-lg font-bold leading-snug break-words uppercase">
                           {ach.title}
                         </h3>
-                        <div className="flex gap-2 shrink-0 font-code">
+                        <div className="flex gap-2 shrink-0 font-mono text-[10px]">
                           <button
                             onClick={() => handleEdit(ach)}
-                            className="text-label-sm font-bold border border-primary px-2 py-1 hover:bg-primary hover:text-white transition-all cursor-pointer"
+                            className="px-2.5 py-1 border-2 border-black dark:border-neutral-700 bg-white dark:bg-neutral-900 text-black dark:text-white font-bold uppercase rounded-lg shadow-neo-btn cursor-pointer"
                           >
                             EDIT
                           </button>
                           <button
                             onClick={() => handleDelete(ach.id)}
-                            className="text-label-sm font-bold border border-primary px-2 py-1 text-error hover:bg-error hover:text-white transition-all cursor-pointer"
+                            className="px-2.5 py-1 border-2 border-red-500 bg-white dark:bg-neutral-900 text-red-500 font-bold uppercase rounded-lg shadow-neo-btn cursor-pointer"
                           >
                             REMOVE
                           </button>
                         </div>
                       </div>
                       
-                      <p className="text-body-md font-code mt-3 opacity-80 whitespace-pre-line">
+                      <p className="font-mono text-xs mt-3 opacity-80 leading-relaxed whitespace-pre-line text-neutral-600 dark:text-neutral-300">
                         {ach.description}
                       </p>
                       
-                      <div className="mt-4 pt-4 border-t border-primary/10 flex flex-wrap gap-2">
+                      <div className="mt-4 pt-4 border-t border-neutral-100 dark:border-neutral-800 flex flex-wrap gap-1.5">
                         {ach.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="px-2 py-0.5 border border-primary text-label-sm uppercase font-bold font-code"
+                            className="text-[9px] font-bold px-2 py-0.5 border border-black dark:border-neutral-600 rounded bg-white dark:bg-neutral-800 uppercase"
                           >
                             {tag}
                           </span>
@@ -447,12 +447,12 @@ export default function AdminAchievementsPage() {
                 handleClear();
                 document.querySelector("input")?.focus();
               }}
-              className="border-2 border-dashed border-primary p-8 bg-transparent flex flex-col items-center justify-center opacity-40 hover:opacity-100 cursor-pointer transition-all h-36 font-code"
+              className="border-4 border-dashed border-black dark:border-neutral-700 rounded-[2.5rem] p-8 bg-transparent flex flex-col items-center justify-center opacity-40 hover:opacity-100 hover:scale-[1.01] cursor-pointer transition-all h-36 font-mono shadow-neo"
             >
-              <span className="material-symbols-outlined text-4xl mb-2">
+              <span className="material-symbols-outlined text-4xl mb-2 font-bold">
                 add_box
               </span>
-              <span className="font-bold uppercase tracking-widest">
+              <span className="font-bold uppercase tracking-widest text-xs">
                 INIT_NEW_RECORD
               </span>
             </div>

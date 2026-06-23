@@ -31,36 +31,36 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="w-full max-w-[440px] mx-auto space-y-8 font-code relative z-20">
+    <div className="w-full max-w-[440px] mx-auto space-y-8 font-mono relative z-20">
       {/* Security Sentinel Header */}
       <div className="text-center space-y-2">
-        <div className="border border-primary px-3 py-1 inline-block text-label-sm font-bold text-secondary uppercase tracking-widest bg-surface-container-low">
+        <div className="border-2 border-black dark:border-neutral-700 px-4 py-1.5 inline-block text-xs font-bold text-neutral-500 dark:text-neutral-400 uppercase tracking-widest bg-neutral-100 dark:bg-neutral-900 rounded-lg shadow-neo-btn">
           [ secure_gateway ]
         </div>
-        <h1 className="font-headline-lg text-headline-lg font-bold uppercase tracking-tighter mt-4">
+        <h1 className="text-5xl font-black uppercase tracking-tighter mt-4 text-black dark:text-white">
           LOGIN
         </h1>
       </div>
 
       {/* Login Prompt Form */}
-      <div className="border border-primary bg-background p-6 md:p-8 space-y-8 relative overflow-hidden">
+      <div className="border-4 border-black dark:border-neutral-700 bg-white dark:bg-neutral-900 p-6 md:p-8 space-y-8 relative overflow-hidden rounded-[2.5rem] shadow-neo-lg">
         {/* Decorative Terminal Header */}
-        <div className="absolute top-0 left-0 w-full h-8 bg-primary text-on-primary flex items-center px-4 justify-between select-none">
-          <span className="font-code text-[10px] uppercase tracking-tighter">
+        <div className="absolute top-0 left-0 w-full h-10 bg-black dark:bg-neutral-800 text-white flex items-center px-6 justify-between select-none border-b-2 border-black dark:border-neutral-700">
+          <span className="font-mono text-[10px] font-bold uppercase tracking-wider">
             auth.terminal_v1.0.4
           </span>
           <div className="flex gap-1.5">
-            <div className="w-2 h-2 bg-on-primary rounded-full opacity-50 animate-pulse"></div>
-            <div className="w-2 h-2 bg-on-primary rounded-full opacity-50"></div>
-            <div className="w-2 h-2 bg-on-primary rounded-full opacity-50"></div>
+            <div className="w-2.5 h-2.5 bg-red-500 rounded-full"></div>
+            <div className="w-2.5 h-2.5 bg-yellow-500 rounded-full"></div>
+            <div className="w-2.5 h-2.5 bg-green-500 rounded-full"></div>
           </div>
         </div>
 
-        <form onSubmit={handleLogin} className="pt-6 space-y-6">
+        <form onSubmit={handleLogin} className="pt-8 space-y-6">
           {/* Identifier Field */}
           <div className="space-y-2">
             <label
-              className="font-label-sm text-label-sm text-primary flex items-center gap-2 font-bold"
+              className="text-xs text-black dark:text-white flex items-center gap-2 font-bold uppercase tracking-wider"
               htmlFor="identifier"
             >
               <span className="material-symbols-outlined text-[16px]">person</span>
@@ -68,7 +68,7 @@ export default function AdminLoginPage() {
             </label>
             <input
               autoComplete="off"
-              className="w-full bg-transparent border-0 border-b border-primary p-2 font-code text-body-md focus:ring-0 placeholder:opacity-35 outline-none focus:border-b-2"
+              className="w-full bg-transparent border-0 border-b-2 border-black dark:border-neutral-700 p-2 font-mono text-sm focus:ring-0 placeholder:opacity-35 outline-none focus:border-b-3 text-black dark:text-white"
               id="identifier"
               name="identifier"
               placeholder="username"
@@ -82,14 +82,14 @@ export default function AdminLoginPage() {
           {/* Access Code Field */}
           <div className="space-y-2">
             <label
-              className="font-label-sm text-label-sm text-primary flex items-center gap-2 font-bold"
+              className="text-xs text-black dark:text-white flex items-center gap-2 font-bold uppercase tracking-wider"
               htmlFor="access_code"
             >
               <span className="material-symbols-outlined text-[16px]">lock</span>
               ACCESS_CODE:
             </label>
             <input
-              className="w-full bg-transparent border-0 border-b border-primary p-2 font-code text-body-md focus:ring-0 placeholder:opacity-35 outline-none focus:border-b-2"
+              className="w-full bg-transparent border-0 border-b-2 border-black dark:border-neutral-700 p-2 font-mono text-sm focus:ring-0 placeholder:opacity-35 outline-none focus:border-b-3 text-black dark:text-white"
               id="access_code"
               name="access_code"
               placeholder="••••••••"
@@ -102,8 +102,8 @@ export default function AdminLoginPage() {
 
           {/* Error Message */}
           {errorMsg && (
-            <div className="text-error font-bold text-label-sm border border-error bg-error-container p-3 flex items-center gap-2 animate-shake">
-              <span className="material-symbols-outlined text-sm">warning</span>
+            <div className="text-red-500 font-bold text-xs border-2 border-red-500 bg-red-500/10 p-3 flex items-center gap-2 animate-shake rounded-xl">
+              <span className="material-symbols-outlined text-sm font-bold">warning</span>
               {errorMsg}
             </div>
           )}
@@ -112,21 +112,17 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="group w-full border border-primary bg-primary text-on-primary py-4 px-6 font-code text-body-md hover:bg-background hover:text-primary transition-all duration-200 active:scale-95 flex items-center justify-center gap-4 cursor-pointer disabled:opacity-45"
+            className="group w-full border-2 border-black dark:border-neutral-700 bg-black dark:bg-white text-white dark:text-black py-3.5 px-6 font-mono text-xs font-bold uppercase tracking-widest rounded-xl hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-all shadow-neo-btn active:scale-95 flex items-center justify-center gap-4 cursor-pointer disabled:opacity-45"
           >
-            <span className="font-bold tracking-widest uppercase">
+            <span>
               {loading ? "AUTHORIZING..." : "access"}
-            </span>
-            <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">
-              {/* arrow_forward */}
             </span>
           </button>
         </form>
 
         {/* Terminal Footnote */}
-        <div className="border-t border-primary/10 pt-4 flex justify-between items-center text-[10px] text-secondary">
-          {/* <span>HOST: GATEWAY_NODE_01</span> */}
-          {/* <span className="font-bold">KEYS: admin // admin</span> */}
+        <div className="border-t border-neutral-200 dark:border-neutral-800 pt-4 flex justify-between items-center text-[10px] text-neutral-400">
+          <span>HOST: GATEWAY_NODE_01</span>
         </div>
       </div>
     </div>

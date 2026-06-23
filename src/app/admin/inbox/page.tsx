@@ -134,39 +134,39 @@ export default function AdminInboxPage() {
   const unreadCount = messages.filter((m) => !m.read).length;
 
   return (
-    <div className="flex-grow flex flex-col md:flex-row border border-primary bg-surface h-[80vh] overflow-hidden -m-6 md:-m-8">
+    <div className="flex-grow flex flex-col md:flex-row border-2 border-black dark:border-neutral-700 bg-white dark:bg-neutral-900 text-black dark:text-white h-[75vh] rounded-[2rem] overflow-hidden shadow-neo-lg font-mono">
       {/* Messages Table List */}
-      <div className="w-full md:w-2/3 flex flex-col border-r border-primary h-full overflow-hidden">
+      <div className="w-full md:w-2/3 flex flex-col border-r-2 border-black dark:border-neutral-700 h-full overflow-hidden">
         {/* Inbox Toolbar */}
-        <div className="p-4 border-b border-primary bg-surface-container-low flex flex-col sm:flex-row justify-between sm:items-center gap-4 shrink-0 font-code">
+        <div className="p-4 border-b-2 border-black dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-800/50 flex flex-col sm:flex-row justify-between sm:items-center gap-4 shrink-0 font-mono">
           <div className="flex gap-2">
             <button
               onClick={handleMarkRead}
               disabled={checkedIds.length === 0}
-              className="border border-primary px-3 py-1.5 flex items-center gap-2 hover:bg-primary hover:text-on-primary disabled:opacity-45 disabled:hover:bg-transparent disabled:hover:text-primary transition-colors text-code uppercase font-bold cursor-pointer"
+              className="border-2 border-black dark:border-neutral-700 bg-white dark:bg-neutral-900 text-black dark:text-white px-3 py-1.5 flex items-center gap-2 hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-45 disabled:hover:bg-transparent disabled:hover:text-current transition-colors text-xs uppercase font-bold cursor-pointer shadow-neo-btn rounded-xl"
             >
-              <span className="material-symbols-outlined text-sm">done_all</span>
+              <span className="material-symbols-outlined text-sm font-bold">done_all</span>
               Mark Read
             </button>
             <button
               onClick={handleDeleteMessages}
               disabled={checkedIds.length === 0}
-              className="border border-primary px-3 py-1.5 flex items-center gap-2 hover:bg-error hover:text-on-error disabled:opacity-45 disabled:hover:bg-transparent disabled:hover:text-primary transition-colors text-code uppercase font-bold text-error cursor-pointer"
+              className="border-2 border-red-500 bg-white dark:bg-neutral-900 text-red-500 px-3 py-1.5 flex items-center gap-2 hover:bg-red-50 dark:hover:bg-red-950/20 disabled:opacity-45 disabled:hover:bg-transparent disabled:hover:text-red-500 transition-colors text-xs uppercase font-bold cursor-pointer shadow-neo-btn rounded-xl"
             >
-              <span className="material-symbols-outlined text-sm">delete</span>
+              <span className="material-symbols-outlined text-sm font-bold">delete</span>
               Delete
             </button>
           </div>
-          <div className="text-code text-on-surface-variant uppercase">
+          <div className="text-xs uppercase font-bold opacity-60">
             Showing {messages.length} Messages {unreadCount > 0 && `(${unreadCount} Unread)`}
           </div>
         </div>
 
         {/* Table Header */}
-        <div className="grid grid-cols-12 bg-surface-container-highest border-b border-primary px-4 py-2 font-code text-code font-bold uppercase shrink-0">
+        <div className="grid grid-cols-12 bg-neutral-100 dark:bg-neutral-800 border-b-2 border-black dark:border-neutral-700 px-4 py-2.5 font-mono text-xs font-black uppercase shrink-0">
           <div className="col-span-1 flex items-center">
             <input
-              className="rounded-none border-primary"
+              className="rounded border-2 border-black dark:border-neutral-700 cursor-pointer accent-black dark:accent-white w-4 h-4"
               type="checkbox"
               checked={messages.length > 0 && checkedIds.length === messages.length}
               onChange={handleToggleSelectAll}
@@ -178,7 +178,7 @@ export default function AdminInboxPage() {
         </div>
 
         {/* Scrollable Body */}
-        <div className="flex-grow overflow-y-auto custom-scrollbar">
+        <div className="flex-grow overflow-y-auto custom-scrollbar bg-white dark:bg-neutral-950">
           {messages.map((msg) => {
             const isSelected = selectedMsgId === msg.id;
             const isChecked = checkedIds.includes(msg.id);
@@ -188,9 +188,9 @@ export default function AdminInboxPage() {
               <div
                 key={msg.id}
                 onClick={() => handleSelectMessage(msg.id)}
-                className={`grid grid-cols-12 border-b border-primary px-4 py-4 font-code text-code cursor-pointer transition-colors ${isSelected
-                    ? "bg-primary text-on-primary"
-                    : "hover:bg-surface-container-high bg-surface"
+                className={`grid grid-cols-12 border-b border-neutral-200 dark:border-neutral-800 px-4 py-4 font-mono text-xs cursor-pointer transition-colors ${isSelected
+                    ? "bg-black dark:bg-white text-white dark:text-black font-bold"
+                    : "hover:bg-neutral-50 dark:hover:bg-neutral-800/40 bg-transparent"
                   }`}
               >
                 <div
@@ -198,22 +198,22 @@ export default function AdminInboxPage() {
                   onClick={(e) => e.stopPropagation()}
                 >
                   <input
-                    className={`rounded-none ${isSelected ? "border-white" : "border-primary"}`}
+                    className={`rounded cursor-pointer accent-black dark:accent-white w-4 h-4 ${isSelected ? "border-white" : "border-neutral-300 dark:border-neutral-600 border-2"}`}
                     type="checkbox"
                     checked={isChecked}
                     onChange={() => handleToggleCheck(msg.id)}
                   />
                 </div>
-                <div className={`col-span-3 break-all flex items-center ${isSelected ? "text-on-primary" : "text-secondary"}`}>
+                <div className={`col-span-3 break-all flex items-center ${isSelected ? "text-neutral-300 dark:text-neutral-700" : "text-neutral-500"}`}>
                   {msg.receivedAt.split(" ")[0]}
                 </div>
                 <div className={`col-span-3 truncate font-bold pr-2 flex items-center gap-1`}>
                   {!isRead && (
-                    <span className="w-2 h-2 rounded-full bg-error inline-block shrink-0 animate-pulse" />
+                    <span className="w-2 h-2 rounded-full bg-red-500 inline-block shrink-0 animate-pulse" />
                   )}
                   <span className="truncate">{msg.name.split("@")[0]}</span>
                 </div>
-                <div className={`col-span-5 truncate ${isRead ? "italic" : "font-bold"}`}>
+                <div className={`col-span-5 truncate ${isRead ? "opacity-60 italic font-normal" : "font-black"}`}>
                   {msg.subject || "(No Subject)"}
                 </div>
               </div>
@@ -221,69 +221,69 @@ export default function AdminInboxPage() {
           })}
 
           {messages.length === 0 && (
-            <div className="h-64 border-b border-primary/20 opacity-40 flex items-center justify-center font-code text-body-md text-secondary">
-              NO_MESSAGES_RECIEVED_YET
+            <div className="h-64 opacity-40 flex items-center justify-center font-mono text-sm">
+              NO_MESSAGES_RECEIVED_YET
             </div>
           )}
         </div>
       </div>
 
       {/* Detailed Message View */}
-      <div className="w-full md:w-1/3 flex flex-col bg-surface-container-low h-full overflow-hidden">
+      <div className="w-full md:w-1/3 flex flex-col bg-neutral-50 dark:bg-neutral-900 h-full overflow-hidden">
         {selectedMessage ? (
           <div className="flex-grow flex flex-col h-full overflow-hidden">
             <div className="p-6 overflow-y-auto custom-scrollbar flex-grow space-y-6">
-              <div className="border-b border-primary pb-4">
-                <h2 className="font-headline-md text-headline-md font-bold text-primary uppercase">
+              <div className="border-b-2 border-black dark:border-neutral-700 pb-4">
+                <h2 className="text-xl font-black uppercase tracking-tight">
                   Message Details
                 </h2>
-                <p className="font-code text-code text-on-surface-variant break-all">
+                <p className="font-mono text-[10px] opacity-50 break-all mt-1">
                   UID: {selectedMessage.id}
                 </p>
               </div>
 
-              <div className="space-y-4 font-code text-code">
+              <div className="space-y-3 font-mono text-xs">
                 <div className="grid grid-cols-3 gap-2">
-                  <span className="text-on-surface-variant">FROM:</span>
-                  <span className="col-span-2 font-bold break-all">{selectedMessage.name}</span>
+                  <span className="opacity-60 uppercase font-bold">FROM:</span>
+                  <span className="col-span-2 font-black break-all">{selectedMessage.name}</span>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
-                  <span className="text-on-surface-variant">EMAIL:</span>
-                  <span className="col-span-2 underline break-all">{selectedMessage.email}</span>
+                  <span className="opacity-60 uppercase font-bold">EMAIL:</span>
+                  <span className="col-span-2 underline break-all font-bold">{selectedMessage.email}</span>
                 </div>
                 <div className="grid grid-cols-3 gap-2">
-                  <span className="text-on-surface-variant">SUBJECT:</span>
-                  <span className="col-span-2 break-words">{selectedMessage.subject || "(No Subject)"}</span>
+                  <span className="opacity-60 uppercase font-bold">SUBJECT:</span>
+                  <span className="col-span-2 break-words font-bold">{selectedMessage.subject || "(No Subject)"}</span>
                 </div>
-                <div className="grid grid-cols-3 gap-2 border-b border-primary/20 pb-4">
-                  <span className="text-on-surface-variant">TIMESTAMP:</span>
-                  <span className="col-span-2 opacity-60 break-words">{selectedMessage.receivedAt}</span>
+                <div className="grid grid-cols-3 gap-2 border-b border-black/10 dark:border-white/10 pb-4">
+                  <span className="opacity-60 uppercase font-bold">DATE:</span>
+                  <span className="col-span-2 opacity-80 break-words">{selectedMessage.receivedAt}</span>
                 </div>
               </div>
 
-              <div className="space-y-4 font-code">
-                <h3 className="text-code font-bold uppercase bg-primary text-on-primary px-2 py-1 w-fit">
+              <div className="space-y-3 font-mono">
+                <h3 className="text-xs font-black uppercase bg-black dark:bg-white text-white dark:text-black px-2.5 py-1 rounded w-fit">
                   Body Content
                 </h3>
-                <div className="p-4 border border-primary bg-white min-h-[150px] text-code leading-relaxed whitespace-pre-wrap break-words">
+                <div className="p-4 border-2 border-black dark:border-neutral-700 bg-white dark:bg-neutral-950 rounded-2xl min-h-[150px] text-xs leading-relaxed whitespace-pre-wrap break-words text-black dark:text-white">
                   {selectedMessage.message}
                 </div>
               </div>
 
               {/* Reply Box */}
-              <div className="pt-4 border-t border-primary/10 space-y-4 font-code">
-                <h3 className="text-code font-bold uppercase">REPLY</h3>
+              <div className="pt-4 border-t border-black/10 dark:border-white/10 space-y-4 font-mono">
+                <h3 className="text-xs font-black uppercase">Send Reply</h3>
                 {replySentStatus === "SENT" ? (
-                  <div className="border border-primary bg-secondary-container p-4 text-code text-primary font-bold animate-pulse">
+                  <div className="border-2 border-black dark:border-neutral-700 bg-green-500/10 dark:bg-green-500/20 p-4 text-xs text-green-600 dark:text-green-400 font-black rounded-2xl animate-pulse">
                     &gt; TRANSMISSION ENCRYPTED AND DISPATCHED [OK]
                   </div>
                 ) : (
-                  <form onSubmit={handleSendReply} className="space-y-2">
+                  <form onSubmit={handleSendReply} className="space-y-3">
                     <textarea
                       value={replyText}
                       onChange={(e) => setReplyText(e.target.value)}
                       placeholder="Type reply here..."
-                      className="w-full border border-primary p-2 text-code bg-white h-24 outline-none resize-none"
+                      className="w-full border-2 border-black dark:border-neutral-700 p-3 text-xs bg-white dark:bg-neutral-950 text-black dark:text-white h-24 outline-none resize-none rounded-xl focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent transition-all"
                       disabled={replySentStatus === "SENDING"}
                       required
                     />
@@ -291,14 +291,14 @@ export default function AdminInboxPage() {
                       <button
                         type="submit"
                         disabled={replySentStatus === "SENDING" || !replyText.trim()}
-                        className="flex-1 bg-primary text-on-primary border border-primary py-2 text-code font-bold uppercase hover:bg-surface hover:text-primary transition-all cursor-pointer disabled:opacity-45"
+                        className="flex-1 bg-black dark:bg-white text-white dark:text-black border-2 border-black dark:border-transparent py-2.5 text-xs font-black uppercase rounded-xl hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-all cursor-pointer disabled:opacity-45 shadow-neo-btn"
                       >
                         {replySentStatus === "SENDING" ? "ENCRYPTING..." : "DISPATCH REPLY"}
                       </button>
                       <button
                         type="button"
                         onClick={() => handleDeleteSingle(selectedMessage.id)}
-                        className="border border-error text-error py-2 px-3 text-code font-bold uppercase hover:bg-error hover:text-on-error transition-all cursor-pointer"
+                        className="border-2 border-red-500 text-red-500 py-2.5 px-3.5 text-xs font-black uppercase rounded-xl hover:bg-red-50 dark:hover:bg-red-950/20 transition-all cursor-pointer shadow-neo-btn"
                       >
                         PURGE
                       </button>
@@ -309,7 +309,7 @@ export default function AdminInboxPage() {
             </div>
           </div>
         ) : (
-          <div className="flex-grow flex items-center justify-center p-8 text-center font-code text-secondary opacity-60">
+          <div className="flex-grow flex items-center justify-center p-8 text-center font-mono text-xs opacity-50">
             NO_MESSAGE_SELECTED
           </div>
         )}

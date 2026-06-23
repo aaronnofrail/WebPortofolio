@@ -141,18 +141,18 @@ export default function AdminSettingsPage() {
   };
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-12 text-black dark:text-white font-mono">
       {/* Page Header */}
-      <section className="border-b-2 border-primary pb-8 flex justify-between items-center">
+      <section className="border-b-2 border-black dark:border-neutral-700 pb-8 flex justify-between items-center">
         <div className="space-y-2">
-          <h2 className="font-headline-lg text-headline-lg font-bold uppercase tracking-tight">
+          <h2 className="text-3xl font-black uppercase tracking-tight">
             SYSTEM_CONFIGURATION
           </h2>
-          <p className="font-code text-body-md text-secondary uppercase tracking-tight">
+          <p className="text-xs opacity-60 uppercase tracking-tight">
             MANAGE CORE INTERFACE AND SECURITY PARAMETERS
           </p>
         </div>
-        <div className="w-12 h-12 opacity-40 grayscale">
+        <div className="w-12 h-12 opacity-40 grayscale shrink-0">
           <img
             alt="Mascot"
             className="w-full h-full object-contain dark:invert"
@@ -163,24 +163,24 @@ export default function AdminSettingsPage() {
 
       {/* Save Success Toast */}
       {showNotification && (
-        <div className="border border-primary bg-surface p-4 flex items-center justify-between animate-pulse font-code text-body-md">
+        <div className="border-2 border-black dark:border-neutral-700 bg-white dark:bg-neutral-900 p-4 rounded-[2rem] shadow-neo flex items-center justify-between animate-pulse text-xs font-bold">
           <span className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-green-600">verified_user</span>
+            <span className="material-symbols-outlined text-green-600 font-bold">verified_user</span>
             {saveSuccess ? "SYS_CONF_UPDATE: SUCCESSFUL_COMMIT" : "SYS_CONF_RESET: RESTORING_KERNEL_DEFAULTS..."}
           </span>
-          <span className="text-[10px] text-secondary">OS_STATUS: OK</span>
+          <span className="text-[10px] opacity-50">OS_STATUS: OK</span>
         </div>
       )}
 
       {/* Grid Layout */}
-      <div className="flex flex-col gap-16 max-w-3xl mx-auto">
-        <div className="col-span-12 space-y-12">
+      <div className="flex flex-col gap-12 max-w-3xl mx-auto">
+        <div className="space-y-12">
           {/* Sanity CMS Sync Section */}
-          <section className="mb-8 border-2 border-primary/30 p-6 rounded-2xl bg-surface">
-            <h3 className="text-headline-md font-headline-md font-bold border-b border-primary/20 pb-2 mb-4">
+          <section className="border-2 border-black dark:border-neutral-700 p-6 md:p-8 rounded-[2.5rem] bg-white dark:bg-neutral-900 shadow-neo-lg">
+            <h3 className="text-lg font-black border-b-2 border-black/10 dark:border-white/10 pb-2 mb-4 uppercase">
               SANITY_CMS_SYNCHRONIZATION
             </h3>
-            <p className="font-code text-body-md text-secondary uppercase tracking-tight mb-6">
+            <p className="text-xs opacity-60 uppercase tracking-tight mb-6">
               Migrate your local device configurations and cache data to the online Sanity database.
             </p>
 
@@ -188,32 +188,32 @@ export default function AdminSettingsPage() {
               type="button"
               disabled={syncing}
               onClick={handleSync}
-              className="px-8 py-3.5 bg-primary text-on-primary font-bold font-code text-body-sm border border-primary hover:bg-background hover:text-primary transition-all active:scale-95 cursor-pointer uppercase tracking-wider disabled:opacity-50"
+              className="px-8 py-3.5 bg-black dark:bg-white text-white dark:text-black border-2 border-black dark:border-transparent rounded-xl font-bold text-xs uppercase hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-all cursor-pointer shadow-neo-btn disabled:opacity-50"
             >
               {syncing ? "SYNCING..." : "SYNC LOCAL CACHE TO SANITY"}
             </button>
 
             {syncResult && (
-              <div className="mt-4 p-3 border border-primary/20 bg-background font-code text-body-sm text-secondary break-all">
+              <div className="mt-4 p-4 border-2 border-black dark:border-neutral-700 bg-neutral-50 dark:bg-neutral-950 font-mono text-xs rounded-xl break-all">
                 &gt;&gt;&gt; {syncResult}
               </div>
             )}
           </section>
 
           {/* Security Protocol Section */}
-          <section className="mb-8">
-            <h3 className="text-headline-md font-headline-md font-bold border-b border-primary/20 pb-2 mb-8">
-              SETTINGS
+          <section className="border-2 border-black dark:border-neutral-700 p-6 md:p-8 rounded-[2.5rem] bg-white dark:bg-neutral-900 shadow-neo-lg">
+            <h3 className="text-lg font-black border-b-2 border-black/10 dark:border-white/10 pb-2 mb-6 uppercase">
+              Security Protocol & Settings
             </h3>
             
-            <form onSubmit={handleSave} className="space-y-8">
+            <form onSubmit={handleSave} className="space-y-6">
               {/* Admin Username */}
               <div className="space-y-2">
-                <label className="block font-code text-label-sm uppercase opacity-60">
+                <label className="block text-xs font-bold uppercase opacity-60">
                   Admin Username
                 </label>
                 <input
-                  className="w-full bg-surface border border-primary px-4 py-3 font-code focus:ring-0 outline-none text-body-lg"
+                  className="w-full bg-white dark:bg-neutral-950 border-2 border-black dark:border-neutral-700 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-sm"
                   placeholder="ENTER ADMIN USERNAME"
                   type="text"
                   value={username}
@@ -224,11 +224,11 @@ export default function AdminSettingsPage() {
 
               {/* Admin Password */}
               <div className="space-y-2">
-                <label className="block font-code text-label-sm uppercase opacity-60">
+                <label className="block text-xs font-bold uppercase opacity-60">
                   New Password
                 </label>
                 <input
-                  className="w-full bg-surface border border-primary px-4 py-3 font-code focus:ring-0 outline-none text-body-lg"
+                  className="w-full bg-white dark:bg-neutral-950 border-2 border-black dark:border-neutral-700 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white text-sm"
                   placeholder="ENTER NEW CODE"
                   type="password"
                   value={password}
@@ -238,17 +238,17 @@ export default function AdminSettingsPage() {
               </div>
 
               {/* Footer Actions inside form */}
-              <div className="mt-24 pt-12 border-t-2 border-primary flex flex-col md:flex-row justify-center gap-6">
+              <div className="pt-8 border-t-2 border-black/10 dark:border-white/10 flex flex-col sm:flex-row justify-center gap-4">
                 <button
                   type="button"
                   onClick={handleReset}
-                  className="px-8 py-4 border border-primary font-code text-body-md hover:bg-secondary-container transition-all active:scale-95 w-full md:w-64 cursor-pointer font-bold uppercase tracking-wider"
+                  className="px-8 py-3.5 border-2 border-red-500 bg-white dark:bg-neutral-900 text-red-500 font-bold text-xs uppercase hover:bg-red-50 dark:hover:bg-red-950/20 transition-all rounded-xl cursor-pointer shadow-neo-btn w-full sm:w-1/2"
                 >
                   RESET TO DEFAULTS
                 </button>
                 <button
                   type="submit"
-                  className="px-12 py-4 bg-primary text-on-primary font-bold font-code text-body-md border border-primary hover:bg-background hover:text-primary transition-all active:scale-95 settings-save-button w-full md:w-80 cursor-pointer uppercase tracking-wider"
+                  className="px-12 py-3.5 bg-black dark:bg-white text-white dark:text-black border-2 border-black dark:border-transparent font-bold text-xs uppercase hover:bg-neutral-800 dark:hover:bg-neutral-100 transition-all rounded-xl cursor-pointer shadow-neo-btn w-full sm:w-1/2"
                 >
                   SAVE CHANGES
                 </button>

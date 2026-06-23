@@ -26,6 +26,26 @@ const projectSchema = {
           { title: 'In Progress', value: 'In Progress' }
         ]
       }
+    },
+    {
+      name: 'caseStudy',
+      title: 'Case Study',
+      type: 'object',
+      fields: [
+        { name: 'problem', title: 'Problem/Challenge', type: 'text' },
+        { name: 'solution', title: 'Solution/Execution', type: 'text' },
+        { name: 'result', title: 'Result/Outcome', type: 'text' }
+      ]
+    },
+    {
+      name: 'metrics',
+      title: 'Metrics / Key Stats',
+      type: 'object',
+      fields: [
+        { name: 'perf', title: 'Performance Score (e.g. 100% or >98%)', type: 'string' },
+        { name: 'sec', title: 'Security Score (e.g. 90%)', type: 'string' },
+        { name: 'rel', title: 'Reliability Score (e.g. 92%)', type: 'string' }
+      ]
     }
   ]
 };

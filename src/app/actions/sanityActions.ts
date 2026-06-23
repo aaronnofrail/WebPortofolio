@@ -157,7 +157,6 @@ export async function deleteAchievementAction(id: string) {
     return { success: false, error: error.message };
   }
 }
-
 // --- PROJECT ACTIONS ---
 export async function createProjectAction(proj: any) {
   if (!hasWriteToken()) {
@@ -173,6 +172,8 @@ export async function createProjectAction(proj: any) {
       demoUrl: proj.demoUrl,
       tags: proj.tags,
       status: proj.status,
+      caseStudy: proj.caseStudy || undefined,
+      metrics: proj.metrics || undefined,
     });
     return { success: true };
   } catch (error: any) {
@@ -196,13 +197,13 @@ export async function updateProjectAction(id: string, proj: any) {
       tags: proj.tags,
       status: proj.status,
       caseStudy: proj.caseStudy || undefined,
+      metrics: proj.metrics || undefined,
     });
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message };
   }
 }
-
 export async function deleteProjectAction(id: string) {
   if (!hasWriteToken()) {
     return { success: false, error: "SANITY_API_WRITE_TOKEN_MISSING" };

@@ -11,9 +11,9 @@ export default function AdminHeader() {
   const pathLabel = `admin / ${segment}`;
 
   return (
-    <header className="h-16 flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop border-b border-primary bg-surface sticky top-0 z-40 shrink-0">
+    <header className="h-16 flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop border-b-2 border-black dark:border-neutral-700 bg-white dark:bg-black sticky top-0 z-40 shrink-0 transition-colors duration-300">
       <div className="flex items-center gap-2">
-        <span className="font-code text-code font-bold text-primary uppercase">
+        <span className="font-mono text-xs font-bold text-black dark:text-white uppercase tracking-wider">
           &gt; {pathLabel}
         </span>
         <span className="terminal-caret"></span>

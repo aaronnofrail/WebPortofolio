@@ -39,6 +39,7 @@ export default function ProjectsPage() {
                 demoUrl: item.demoUrl || "",
                 status: item.status || "Active",
                 caseStudy: item.caseStudy || undefined,
+                metrics: item.metrics || undefined,
               }));
               setProjects(mapped);
             } else {
@@ -203,9 +204,9 @@ export default function ProjectsPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
             {filteredProjects.map((project) => {
-              const details = projectDetails[project.id] || {
-                metrics: { perf: "90%", sec: "90%", rel: "90%" },
-                caseStudy: { problem: "", solution: "", result: "" }
+              const details = {
+                metrics: project.metrics || projectDetails[project.id]?.metrics || { perf: "90%", sec: "90%", rel: "90%" },
+                caseStudy: project.caseStudy || projectDetails[project.id]?.caseStudy || { problem: "", solution: "", result: "" }
               };
 
               return (

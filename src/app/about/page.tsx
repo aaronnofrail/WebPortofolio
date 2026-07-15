@@ -56,7 +56,7 @@ export default function AboutPage() {
       <PortfolioGate>
         <Navbar />
         <main className="flex-grow w-full max-w-7xl mx-auto px-6 py-24 md:py-32 font-mono flex items-center justify-center min-h-[50vh] bg-white dark:bg-black text-black dark:text-white">
-          <div className="text-xl font-bold animate-pulse">&gt; LOADING_BIO_PERSONA...</div>
+          <div className="text-xl font-bold animate-pulse">&gt; Loading Biography...</div>
         </main>
         <Footer />
       </PortfolioGate>

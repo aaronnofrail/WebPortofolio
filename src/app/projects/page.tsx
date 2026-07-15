@@ -95,7 +95,7 @@ export default function ProjectsPage() {
       <PortfolioGate>
         <Navbar />
         <main className="flex-grow w-full max-w-7xl mx-auto px-6 py-24 md:py-32 font-mono flex items-center justify-center min-h-[50vh] bg-white dark:bg-black text-black dark:text-white">
-          <div className="text-xl font-bold animate-pulse">&gt; INITIALIZING_PROJECT_MODULES...</div>
+          <div className="text-xl font-bold animate-pulse">&gt; Loading Projects...</div>
         </main>
         <Footer />
       </PortfolioGate>

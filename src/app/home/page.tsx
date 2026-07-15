@@ -32,19 +32,19 @@ export default function HomePage() {
     <PortfolioGate>
       <Navbar />
       <main className="w-full min-h-[100dvh] bg-white dark:bg-black font-mono overflow-hidden transition-colors duration-300 relative flex flex-col justify-between pt-20">
-        
+
         {/* Decorative background grid pattern */}
         <div className="absolute inset-0 z-0 opacity-[0.02] dark:opacity-[0.03] pointer-events-none" style={{ backgroundImage: "linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px)", backgroundSize: "32px 32px" }}></div>
 
         {/* Hero Section Container */}
         <div className="flex-grow flex flex-col justify-center items-center relative z-10 px-4 mb-20">
-          
+
           {/* Centered Large Typographic Name Banner */}
           <div className="w-full select-none my-auto flex justify-center items-center">
             <div className="overflow-hidden relative group h-[11vw] w-full cursor-default">
               <div className="flex flex-col transition-transform duration-700 ease-in-out transform group-hover:-translate-y-1/2">
-                <h1 className="text-[12vw] leading-[0.8] font-black tracking-tighter text-black dark:text-white text-center uppercase h-[11vw] flex items-center justify-center">
-                  AARONNOFRAIL
+                <h1 className="text-[12vw] leading-[0.8] font-black tracking-tighter text-black dark:text-white text-center h-[11vw] flex items-center justify-center">
+                  aaronnofrail
                 </h1>
                 <h1 className="text-[9vw] leading-[0.8] font-black tracking-tighter text-black dark:text-white text-center normal-case h-[11vw] flex items-center justify-center whitespace-nowrap">
                   Arundaffa Nahara
@@ -62,11 +62,10 @@ export default function HomePage() {
               return (
                 <div key={skill} className={rotation}>
                   <div
-                    className={`flex items-center justify-center whitespace-nowrap transition-transform duration-300 ease-out hover:scale-105 font-bold text-[10px] md:text-xs uppercase rounded-full px-5 py-2.5 border-2 border-black dark:border-neutral-700 shadow-neo ${
-                      isAccent
+                    className={`flex items-center justify-center whitespace-nowrap transition-transform duration-300 ease-out hover:scale-105 font-bold text-[10px] md:text-xs uppercase rounded-full px-5 py-2.5 border-2 border-black dark:border-neutral-700 shadow-neo ${isAccent
                         ? "bg-white dark:bg-neutral-900 text-black dark:text-white"
                         : "bg-black dark:bg-white text-white dark:text-black hover:bg-neutral-900 dark:hover:bg-neutral-100"
-                    }`}
+                      }`}
                   >
                     {skill}
                     {index % 3 === 0 && <span className="ml-1 text-red-500">✦</span>}
@@ -80,7 +79,7 @@ export default function HomePage() {
         {/* Neo-brutalist Bottom Status Bar */}
         <div className="w-full border-t-0.1 border-black dark:border-neutral-700 bg-white dark:bg-neutral-950 text-black dark:text-white font-mono text-[10px] md:text-xs uppercase tracking-wider z-20 relative transition-colors duration-300">
           <div className="grid grid-cols-1 md:grid-cols-1 divide-x-2 divide-black dark:divide-neutral-700 text-center md:text-center">
-            
+
             {/* Status 1: Open to Work */}
             {/* <div className="p-4 flex items-center justify-center md:justify-start gap-3 hover:bg-black dark:hover:bg-white hover:text-white dark:hover:text-black transition-colors cursor-default group">
               <span className="relative flex h-2.5 w-2.5">

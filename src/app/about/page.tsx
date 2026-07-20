@@ -45,7 +45,7 @@ export default function AboutPage() {
             setBioDescription(parsed.description);
             return;
           }
-        } catch (e) {}
+        } catch (e) { }
       }
       setBioDescription(t.about.bio);
     }
@@ -71,7 +71,7 @@ export default function AboutPage() {
     <PortfolioGate>
       <Navbar />
       <main className="flex-grow w-full max-w-7xl mx-auto px-6 py-24 md:py-32 font-mono transition-colors duration-300 bg-white dark:bg-black text-black dark:text-white">
-        
+
         {/* Header */}
         <header className="mb-12 md:mb-16">
           <h2 className="text-4xl md:text-7xl font-black uppercase tracking-tighter text-center md:text-left">
@@ -81,7 +81,7 @@ export default function AboutPage() {
 
         {/* Bento Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(180px,auto)]">
-          
+
           {/* Card 1: 👋 Intro Card */}
           <div className="relative border-2 border-black dark:border-neutral-700 rounded-[2rem] p-6 flex flex-col justify-between hover:shadow-neo transition-all duration-300 overflow-hidden md:col-span-2 bg-white dark:bg-neutral-900 min-h-[280px] md:min-h-[300px]">
             <div className="space-y-4">
@@ -92,7 +92,7 @@ export default function AboutPage() {
                 {bioDescription || t.about.bio}
               </p>
             </div>
-            
+
             <div className="pt-6">
               <a
                 href="#"
@@ -141,7 +141,7 @@ export default function AboutPage() {
                   {t.about.graduated}
                 </span>
               </div>
-              
+
               <div className="space-y-3">
                 <div>
                   <h5 className="text-[10px] font-bold text-neutral-500 dark:text-neutral-400 uppercase flex items-center gap-1 mb-1">
@@ -151,7 +151,7 @@ export default function AboutPage() {
                     {t.about.major}
                   </h4>
                 </div>
-                
+
                 <div className="space-y-1">
                   <p className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider">
                     {t.about.coursework}
@@ -171,7 +171,7 @@ export default function AboutPage() {
 
               <div className="pt-2 border-t border-neutral-300 dark:border-neutral-600">
                 <div className="flex items-end gap-2">
-                  <span className="text-3xl font-black">3.81</span>
+                  <span className="text-3xl font-black">3.75</span>
                   <div className="flex flex-col justify-end pb-1">
                     <span className="text-[9px] font-bold uppercase text-blue-800 dark:text-blue-400 leading-tight">
                       {t.about.gpaStatus}
@@ -195,7 +195,7 @@ export default function AboutPage() {
                 {t.about.techTitle}
               </h3>
             </div>
-            
+
             <div className="flex flex-col gap-5">
               <div>
                 <h4 className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-2">
@@ -212,7 +212,7 @@ export default function AboutPage() {
                   ))}
                 </div>
               </div>
-              
+
               <div>
                 <h4 className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-2">
                   {t.about.techSubFrameworks}
@@ -228,7 +228,7 @@ export default function AboutPage() {
                   ))}
                 </div>
               </div>
-              
+
               <div>
                 <h4 className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-2">
                   {t.about.techSubTools}
@@ -286,7 +286,7 @@ export default function AboutPage() {
                   Combining System Architecture with robust cybersecurity protocols to design lightweight and resilient systems.
                 </p>
               </div>
-              
+
               <div className="flex gap-3 justify-start md:justify-end flex-wrap">
                 <div className="flex items-center gap-2 px-4 py-2.5 border border-neutral-800 dark:border-neutral-200 rounded-xl bg-neutral-900 dark:bg-neutral-100 hover:border-white dark:hover:border-black transition-colors duration-300 group">
                   <span className="material-symbols-outlined text-[18px] text-neutral-400 dark:text-neutral-600 block">dns</span>
